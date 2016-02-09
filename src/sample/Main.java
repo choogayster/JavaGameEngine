@@ -4,6 +4,7 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -22,13 +23,11 @@ public class Main extends Application {
     double yPos = 100;
 
     EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
-
         @Override
         public void handle(MouseEvent mouseEvent) {
             xPos = mouseEvent.getSceneX();
             yPos = mouseEvent.getSceneY();
         }
-
     };
 
     @Override
@@ -40,6 +39,7 @@ public class Main extends Application {
         primaryStage.setScene( theScene );
 
         theScene.setOnMouseMoved(mouseHandler);
+        theScene.setCursor(Cursor.NONE);
         Canvas canvas = new Canvas( 512, 512 );
         root.getChildren().add( canvas );
 
