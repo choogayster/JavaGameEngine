@@ -38,7 +38,7 @@ public class Main extends Application {
     double xDeltaPos = 10;
     double yDeltaPos = 10;
 
-    double L = 30; // range between center of camera and user
+    double L = 20; // range between center of camera and user
 
     EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
         @Override
@@ -48,21 +48,21 @@ public class Main extends Application {
 
             alfa = Math.atan( (yWindowCenter - (yWindowSize-yPos)) / (xWindowCenter - xPos));
 
-            xDeltaPos = Math.abs(L * Math.cos(alfa));
-            yDeltaPos = Math.abs(L * Math.sin(alfa));
-
             if (xPos > xWindowCenter && (yWindowSize-yPos) > yWindowCenter ) {
-                xDeltaPos = -xDeltaPos;
-                yDeltaPos = yDeltaPos;
-            } else if (xPos < xWindowCenter && (yWindowSize-yPos) > yWindowCenter ) {
-                xDeltaPos = xDeltaPos;
-                yDeltaPos = yDeltaPos;
-            } else if (xPos < xWindowCenter && (yWindowSize-yPos) < yWindowCenter ) {
-                xDeltaPos = xDeltaPos;
-                yDeltaPos = -yDeltaPos;
-            } else if (xPos > xWindowCenter && (yWindowSize-yPos) < yWindowCenter ) {
-                xDeltaPos = -xDeltaPos;
-                yDeltaPos = -yDeltaPos;
+                xDeltaPos = -Math.abs(L * Math.cos(alfa));;
+                yDeltaPos = Math.abs(L * Math.sin(alfa));
+            }
+            else if (xPos < xWindowCenter && (yWindowSize-yPos) > yWindowCenter ) {
+                xDeltaPos = Math.abs(L * Math.cos(alfa));;
+                yDeltaPos = Math.abs(L * Math.sin(alfa));
+            }
+            else if (xPos < xWindowCenter && (yWindowSize-yPos) < yWindowCenter ) {
+                xDeltaPos = Math.abs(L * Math.cos(alfa));;
+                yDeltaPos = -Math.abs(L * Math.sin(alfa));
+            }
+            else if (xPos > xWindowCenter && (yWindowSize-yPos) < yWindowCenter ) {
+                xDeltaPos = -Math.abs(L * Math.cos(alfa));;
+                yDeltaPos = -Math.abs(L * Math.sin(alfa));
             }
         }
     };
