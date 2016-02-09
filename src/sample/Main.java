@@ -3,19 +3,13 @@ package sample;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
@@ -82,7 +76,7 @@ public class Main extends Application {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        Image aim = new Image(getClass().getResource( "textures/aim.png").toExternalForm());
+        Image aim = new Image(getClass().getResource( "textures/aim/aim.png").toExternalForm());
         Image texture1 = new Image(getClass().getResource( "textures/texture01.jpg").toExternalForm());
         Image texture2 = new Image(getClass().getResource( "textures/texture02.jpg").toExternalForm());
         Image texture3 = new Image(getClass().getResource( "textures/texture03.jpg").toExternalForm());
@@ -96,6 +90,8 @@ public class Main extends Application {
             }
         }
 
+        SpriteManagerAim sma = new SpriteManagerAim();
+        sma.setDuration(0.2);
 
         final long startNanoTime = System.nanoTime();
 
@@ -127,10 +123,11 @@ public class Main extends Application {
                         xPos - 200 / 2,
                         yPos - 200 / 2,
                         200, 200);
-                gc.drawImage(aim,
-                        xPos - 30 / 2,
-                        yPos - 30 / 2,
-                        30, 30);
+                gc.drawImage(sma.getSprite(t),
+                        xPos - sma.getSize()[0] / 2,
+                        yPos - sma.getSize()[1] / 2,
+                        sma.getSize()[0],
+                        sma.getSize()[1]);
                 gc.restore();
             }
         }.start();
