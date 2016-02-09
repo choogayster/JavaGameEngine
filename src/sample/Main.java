@@ -59,7 +59,7 @@ public class Main extends Application {
         Image light = new Image(getClass().getResource( "textures/light.png").toExternalForm());
 
         Random random = new Random();
-        int [][] map = new int[10][10];
+        int [][] map = new int[11][11];
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
                 map[i][j] = random.nextInt(3);
