@@ -1,4 +1,4 @@
-package sample;
+package sample.old;
 
 import java.awt.*;
 
@@ -8,7 +8,7 @@ public class Tile {
 	private int speedX;
 	private int type;
 	private Image tileImage;
-	private Robot robot = StartingClass.getRobot();
+	private sample.old.Robot robot = StartingClass.getRobot();
 	private Background bg = StartingClass.getBg1();
 	
 	private Rectangle r;
@@ -39,9 +39,9 @@ public class Tile {
 		speedX = bg.getSpeedX()*5;
 		tileX += speedX;
 		r.setBounds(tileX, tileY, 40, 40);
-		if(r.intersects(Robot.yellowRed) && type != 0) {
-			checkVerticalCollision(Robot.rect, Robot.rect2);
-			checkSideCollision(Robot.rect3, Robot.rect4, Robot.footleft, Robot.footright);
+		if(r.intersects(sample.old.Robot.yellowRed) && type != 0) {
+			checkVerticalCollision(sample.old.Robot.rect, sample.old.Robot.rect2);
+			checkSideCollision(sample.old.Robot.rect3, sample.old.Robot.rect4, sample.old.Robot.footleft, sample.old.Robot.footright);
 			
 		}
 	}

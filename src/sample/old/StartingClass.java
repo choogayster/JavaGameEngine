@@ -1,4 +1,4 @@
-package sample;
+package sample.old;
 
 import java.applet.Applet;
 import java.awt.*;
@@ -18,7 +18,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	
 	GameState state = GameState.Running;
 	
-	private static Robot robot;
+	private static sample.old.Robot robot;
 	public static Heliboy hb, hb2;
 	private Image image;
 	private Image currentSprite;
@@ -101,7 +101,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	public void start() {
 		bg1 = new Background(0, 0);
 		bg2 = new Background(2160, 0);
-		robot = new Robot();
+		robot = new sample.old.Robot();
 		
 		try {
 			loadMap("map1.txt");
@@ -337,7 +337,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		return bg2;
 	}
 	
-	public static Robot getRobot() {
+	public static sample.old.Robot getRobot() {
 		return robot;
 	}
 	

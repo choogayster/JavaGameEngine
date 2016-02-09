@@ -1,4 +1,4 @@
-package sample;
+package sample.old;
 
 public class Background {
 	private int bgX;
