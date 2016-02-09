@@ -24,16 +24,46 @@ import java.util.Random;
 
 public class Main extends Application {
 
+    int xWindowSize = 700;
+    int yWindowSize = 700;
+
+    double xWindowCenter = xWindowSize/2;
+    double yWindowCenter = yWindowSize/2;
+
+    double alfa = 0;
+
     double xPos = 100;
     double yPos = 100;
+
+    double xDeltaPos = 10;
+    double yDeltaPos = 10;
+
+    double L = 30; // range between center of camera and user
 
     EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
-           /* xPos = mouseEvent.getSceneX();
-            yPos = mouseEvent.getSceneY();*/
             xPos = mouseEvent.getSceneX();
             yPos = mouseEvent.getSceneY();
+
+            alfa = Math.atan( (yWindowCenter - (yWindowSize-yPos)) / (xWindowCenter - xPos));
+
+            xDeltaPos = Math.abs(L * Math.cos(alfa));
+            yDeltaPos = Math.abs(L * Math.sin(alfa));
+
+            if (xPos > xWindowCenter && (yWindowSize-yPos) > yWindowCenter ) {
+                xDeltaPos = -xDeltaPos;
+                yDeltaPos = yDeltaPos;
+            } else if (xPos < xWindowCenter && (yWindowSize-yPos) > yWindowCenter ) {
+                xDeltaPos = xDeltaPos;
+                yDeltaPos = yDeltaPos;
+            } else if (xPos < xWindowCenter && (yWindowSize-yPos) < yWindowCenter ) {
+                xDeltaPos = xDeltaPos;
+                yDeltaPos = -yDeltaPos;
+            } else if (xPos > xWindowCenter && (yWindowSize-yPos) < yWindowCenter ) {
+                xDeltaPos = -xDeltaPos;
+                yDeltaPos = -yDeltaPos;
+            }
         }
     };
 
@@ -47,7 +77,7 @@ public class Main extends Application {
 
         theScene.setOnMouseMoved(mouseHandler);
         theScene.setCursor(Cursor.NONE);
-        Canvas canvas = new Canvas( 700, 700 );
+        Canvas canvas = new Canvas( xWindowSize, yWindowSize );
         root.getChildren().add( canvas );
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -59,7 +89,7 @@ public class Main extends Application {
         Image light = new Image(getClass().getResource( "textures/light.png").toExternalForm());
 
         Random random = new Random();
-        int [][] map = new int[11][11];
+        int [][] map = new int[20][20];
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
                 map[i][j] = random.nextInt(3);
@@ -75,7 +105,7 @@ public class Main extends Application {
                 double t = (currentNanoTime - startNanoTime) / 1000000000.0;
 
                 // Clear the screen before rendering
-                gc.clearRect(0, 0, 700, 700);
+                gc.clearRect(0, 0, xWindowSize, yWindowSize);
 
                 int numberOfRectsOnVertical = 1 + (int) (canvas.getHeight() / texture1.getHeight());
                 int numberOfRectsOnHorizontal = 1 + (int) (canvas.getWidth() / texture1.getWidth());
@@ -84,19 +114,19 @@ public class Main extends Application {
                     for (int j = 0; j < map[0].length; j++) {
                         switch (map[i][j]) {
                             case 0:
-                                gc.drawImage(texture1, i * 70 - 10, j * 70 - 10, 70, 70); break;
+                                gc.drawImage(texture1, i * 70 - 100 + xDeltaPos, j * 70 - 100 + yDeltaPos, 70, 70); break;
                             case 1:
-                                gc.drawImage(texture2, i * 70 - 10, j * 70 - 10, 70, 70); break;
+                                gc.drawImage(texture2, i * 70 - 100 + xDeltaPos, j * 70 - 100 + yDeltaPos, 70, 70); break;
                             case 2:
-                                gc.drawImage(texture3, i * 70 - 10, j * 70 - 10, 70, 70); break;
+                                gc.drawImage(texture3, i * 70 - 100 + xDeltaPos, j * 70 - 100 + yDeltaPos, 70, 70); break;
                         }
                     }
                 }
 
                 gc.drawImage(light,
-                        xPos - 150 / 2,
-                        yPos - 150 / 2,
-                        150, 150);
+                        xPos - 200 / 2,
+                        yPos - 200 / 2,
+                        200, 200);
                 gc.drawImage(aim,
                         xPos - 30 / 2,
                         yPos - 30 / 2,
