@@ -15,10 +15,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import javax.imageio.ImageIO;
-import java.io.File;
-import java.util.Random;
-
 public class Main extends Application {
 
     int xWindowSize = 700;
@@ -35,7 +31,7 @@ public class Main extends Application {
     double xDeltaPos = 10;
     double yDeltaPos = 10;
 
-    double L = 55; // range between center of camera and user
+    double L = 70; // range between center of camera and user
 
     EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
         @Override
@@ -79,21 +75,12 @@ public class Main extends Application {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        Image texture1 = new Image(getClass().getResource( "textures/texture01.jpg").toExternalForm());
-        Image texture2 = new Image(getClass().getResource( "textures/texture02.jpg").toExternalForm());
-        Image texture3 = new Image(getClass().getResource( "textures/texture03.jpg").toExternalForm());
         Image light = new Image(getClass().getResource( "textures/light.png").toExternalForm());
         Image light01 = new Image(getClass().getResource( "textures/light01.png").toExternalForm());
         Image hero = new Image(getClass().getResource( "textures/hero.png").toExternalForm());
         ImageView heroView = new ImageView(hero);
 
-        Random random = new Random();
-        int [][] map = new int[20][20];
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
-                map[i][j] = random.nextInt(3);
-            }
-        }
+        GameWorld gw = new GameWorld();
 
         SpriteManagerAim sma = new SpriteManagerAim();
         sma.setDuration(0.2);
@@ -108,19 +95,13 @@ public class Main extends Application {
                 // Clear the screen before rendering
                 gc.clearRect(0, 0, xWindowSize, yWindowSize);
 
-                int numberOfRectsOnVertical = 1 + (int) (canvas.getHeight() / texture1.getHeight());
-                int numberOfRectsOnHorizontal = 1 + (int) (canvas.getWidth() / texture1.getWidth());
-
-                for (int i = 0; i < map.length; i++) {
-                    for (int j = 0; j < map[0].length; j++) {
-                        switch (map[i][j]) {
-                            case 0:
-                                gc.drawImage(texture1, i * 70 - 100 + xDeltaPos, j * 70 - 100 + yDeltaPos, 70, 70); break;
-                            case 1:
-                                gc.drawImage(texture2, i * 70 - 100 + xDeltaPos, j * 70 - 100 + yDeltaPos, 70, 70); break;
-                            case 2:
-                                gc.drawImage(texture3, i * 70 - 100 + xDeltaPos, j * 70 - 100 + yDeltaPos, 70, 70); break;
-                        }
+                for (int i = 0; i < gw.getSizeMapX(); i++) {
+                    for (int j = 0; j < gw.getSizeMapY(); j++) {
+                        gc.drawImage(gw.getTileImage(i,j),
+                                i * gw.getTileSize() - 40 + xDeltaPos,
+                                j * gw.getTileSize() - 40 + yDeltaPos,
+                                gw.getTileSize(),
+                                gw.getTileSize());
                     }
                 }
 
