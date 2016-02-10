@@ -20,16 +20,16 @@ public class Hero {
 
     public void update() {
         if (MoveLeft) {
-            xPos-=10;
+            xPos-=7;
         }
         if (MoveUp) {
-            yPos-=10;
+            yPos-=7;
         }
         if (MoveRight) {
-            xPos+=10;
+            xPos+=7;
         }
         if (MoveDown) {
-            yPos+=10;
+            yPos+=7;
         }
     }
 }

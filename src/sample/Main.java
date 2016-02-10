@@ -14,8 +14,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
+import java.io.File;
 
 public class Main extends Application {
     GameWorld gameWorld;
@@ -113,14 +119,13 @@ public class Main extends Application {
         primaryStage.setScene( theScene );
 
         theScene.setOnMouseMoved(mouseHandler);
-
         theScene.setOnKeyPressed(keyPressedHandler);
-
         theScene.setOnKeyReleased(keyReleasedHandler);
 
-
         theScene.setCursor(Cursor.NONE);
+
         Canvas canvas = new Canvas( xWindowSize, yWindowSize );
+
         root.getChildren().add( canvas );
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -130,10 +135,18 @@ public class Main extends Application {
         Image hero = new Image(getClass().getResource( "textures/hero.png").toExternalForm());
         ImageView heroView = new ImageView(hero);
 
+        //Playing audio
+        String musicFile = "src/sample/sounds/M.O.O.N. - Dust.mp3";     // For example
+        AudioClip plonkSound = new AudioClip(new File(musicFile).toURI().toString());
+        plonkSound.play();
+
         gameWorld = new GameWorld();
 
         SpriteManagerAim sma = new SpriteManagerAim();
         sma.setDuration(0.2);
+
+        SpriteManagerBg smb = new SpriteManagerBg();
+        smb.setDuration(0.2);
 
         final long startNanoTime = System.nanoTime();
 
@@ -147,6 +160,8 @@ public class Main extends Application {
 
                 // Update world
                 gameWorld.getHero().update();
+
+                gc.drawImage(smb.getSprite(t),0,0);
 
                 for (int i = 0; i < gameWorld.getSizeMapX(); i++) {
                     for (int j = 0; j < gameWorld.getSizeMapY(); j++) {
