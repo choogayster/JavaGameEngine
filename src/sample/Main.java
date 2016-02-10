@@ -6,10 +6,13 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
@@ -58,6 +61,7 @@ public class Main extends Application {
                 xDeltaPos = -Math.abs(L * Math.cos(alfa));;
                 yDeltaPos = -Math.abs(L * Math.sin(alfa));
             }
+            System.out.println(90 - alfa * 180/Math.PI);
         }
     };
 
@@ -76,11 +80,12 @@ public class Main extends Application {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        Image aim = new Image(getClass().getResource( "textures/aim/aim.png").toExternalForm());
         Image texture1 = new Image(getClass().getResource( "textures/texture01.jpg").toExternalForm());
         Image texture2 = new Image(getClass().getResource( "textures/texture02.jpg").toExternalForm());
         Image texture3 = new Image(getClass().getResource( "textures/texture03.jpg").toExternalForm());
         Image light = new Image(getClass().getResource( "textures/light.png").toExternalForm());
+        Image hero = new Image(getClass().getResource( "textures/hero.png").toExternalForm());
+        ImageView heroView = new ImageView(hero);
 
         Random random = new Random();
         int [][] map = new int[20][20];
@@ -128,6 +133,18 @@ public class Main extends Application {
                         yPos - sma.getSize()[1] / 2,
                         sma.getSize()[0],
                         sma.getSize()[1]);
+
+                double beta = Math.atan2( (yWindowCenter - (yWindowSize-yPos)), (xWindowCenter - xPos));
+
+                heroView.setRotate(270 - beta * 180/Math.PI);
+                SnapshotParameters params = new SnapshotParameters();
+                params.setFill(Color.TRANSPARENT);
+                Image rotatedImage = heroView.snapshot(params, null);
+                gc.drawImage(rotatedImage, (xWindowCenter + xDeltaPos) - rotatedImage.getWidth()*2/2,
+                        (yWindowCenter + yDeltaPos) - rotatedImage.getHeight()*2/2,
+                        rotatedImage.getWidth()*2, rotatedImage.getHeight()*2
+                );
+
                 gc.restore();
             }
         }.start();
