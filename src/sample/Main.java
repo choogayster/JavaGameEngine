@@ -61,7 +61,6 @@ public class Main extends Application {
                 xDeltaPos = -Math.abs(L * Math.cos(alfa));;
                 yDeltaPos = -Math.abs(L * Math.sin(alfa));
             }
-            System.out.println(90 - alfa * 180/Math.PI);
         }
     };
 
@@ -140,9 +139,9 @@ public class Main extends Application {
                 SnapshotParameters params = new SnapshotParameters();
                 params.setFill(Color.TRANSPARENT);
                 Image rotatedImage = heroView.snapshot(params, null);
-                gc.drawImage(rotatedImage, (xWindowCenter + xDeltaPos) - rotatedImage.getWidth()*2/2,
-                        (yWindowCenter + yDeltaPos) - rotatedImage.getHeight()*2/2,
-                        rotatedImage.getWidth()*2, rotatedImage.getHeight()*2
+                gc.drawImage(rotatedImage, (xWindowCenter + xDeltaPos) - rotatedImage.getWidth()*1.5/2,
+                        (yWindowCenter + yDeltaPos) - rotatedImage.getHeight()*1.5/2,
+                        rotatedImage.getWidth()*1.5, rotatedImage.getHeight()*1.5
                 );
 
                 gc.restore();
