@@ -35,7 +35,7 @@ public class Main extends Application {
     double xDeltaPos = 10;
     double yDeltaPos = 10;
 
-    double L = 20; // range between center of camera and user
+    double L = 55; // range between center of camera and user
 
     EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
         @Override
@@ -83,6 +83,7 @@ public class Main extends Application {
         Image texture2 = new Image(getClass().getResource( "textures/texture02.jpg").toExternalForm());
         Image texture3 = new Image(getClass().getResource( "textures/texture03.jpg").toExternalForm());
         Image light = new Image(getClass().getResource( "textures/light.png").toExternalForm());
+        Image light01 = new Image(getClass().getResource( "textures/light01.png").toExternalForm());
         Image hero = new Image(getClass().getResource( "textures/hero.png").toExternalForm());
         ImageView heroView = new ImageView(hero);
 
@@ -133,18 +134,23 @@ public class Main extends Application {
                         sma.getSize()[0],
                         sma.getSize()[1]);
 
-                double beta = Math.atan2( (yWindowCenter - (yWindowSize-yPos)), (xWindowCenter - xPos));
+                gc.drawImage(light,
+                        (xWindowCenter + xDeltaPos) - light01.getWidth()*10/2,
+                        (yWindowCenter + yDeltaPos) - light01.getHeight()*10/2,
+                        light01.getWidth()*10,
+                        light01.getHeight()*10);
 
+                double beta = Math.atan2( (yWindowCenter - (yWindowSize-yPos)), (xWindowCenter - xPos));
                 heroView.setRotate(270 - beta * 180/Math.PI);
                 SnapshotParameters params = new SnapshotParameters();
                 params.setFill(Color.TRANSPARENT);
                 Image rotatedImage = heroView.snapshot(params, null);
-                gc.drawImage(rotatedImage, (xWindowCenter + xDeltaPos) - rotatedImage.getWidth()*1.5/2,
+                gc.drawImage(rotatedImage,
+                        (xWindowCenter + xDeltaPos) - rotatedImage.getWidth()*1.5/2,
                         (yWindowCenter + yDeltaPos) - rotatedImage.getHeight()*1.5/2,
-                        rotatedImage.getWidth()*1.5, rotatedImage.getHeight()*1.5
+                        rotatedImage.getWidth()*1.5,
+                        rotatedImage.getHeight()*1.5
                 );
-
-                gc.restore();
             }
         }.start();
 

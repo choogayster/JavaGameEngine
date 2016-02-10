@@ -22,7 +22,6 @@ public class SpriteManagerAim implements SpriteManager {
         size[0] = 40;
         size[1] = 40;
         loadImages();
-
     }
 
     @Override
