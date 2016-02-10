@@ -14,11 +14,13 @@ public class GameWorld {
     private int [][] tileMap;
     private int tileSize;
     private List<Image> textures;
+    private Hero hero;
 
     public GameWorld() {
-        tileMap = new int[20][20];
+        tileMap = new int[10][10];
         tileSize = 67;
         textures = new ArrayList<>();
+        hero = new Hero();
         loadTextures();
         fillTileMap();
     }
@@ -58,4 +60,9 @@ public class GameWorld {
     public int getSizeMapY() {
         return tileMap[0].length;
     }
+
+    public Hero getHero() {
+        return hero;
+    }
+
 }

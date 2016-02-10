@@ -11,11 +11,14 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+    GameWorld gameWorld;
 
     int xWindowSize = 700;
     int yWindowSize = 700;
@@ -60,6 +63,47 @@ public class Main extends Application {
         }
     };
 
+    EventHandler<KeyEvent> keyPressedHandler = new EventHandler<KeyEvent>() {
+        @Override
+        public void handle(KeyEvent event) {
+            switch (event.getCode()) {
+                case A:
+                    gameWorld.getHero().MoveLeft = true;
+                    break;
+                case W:
+                    gameWorld.getHero().MoveUp = true;
+                    break;
+                case D:
+                    gameWorld.getHero().MoveRight = true;
+                    break;
+                case S:
+                    gameWorld.getHero().MoveDown = true;
+                    break;
+            }
+        }
+    };
+
+    EventHandler<KeyEvent> keyReleasedHandler = new EventHandler<KeyEvent>() {
+        @Override
+        public void handle(KeyEvent event) {
+            switch (event.getCode()) {
+                case A:
+                    gameWorld.getHero().MoveLeft = false;
+                    break;
+                case W:
+                    gameWorld.getHero().MoveUp = false;
+                    break;
+                case D:
+                    gameWorld.getHero().MoveRight = false;
+                    break;
+                case S:
+                    gameWorld.getHero().MoveDown = false;
+                    break;
+            }
+
+        }
+    };
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         primaryStage.setTitle( "AnimatedImage Example" );
@@ -69,6 +113,12 @@ public class Main extends Application {
         primaryStage.setScene( theScene );
 
         theScene.setOnMouseMoved(mouseHandler);
+
+        theScene.setOnKeyPressed(keyPressedHandler);
+
+        theScene.setOnKeyReleased(keyReleasedHandler);
+
+
         theScene.setCursor(Cursor.NONE);
         Canvas canvas = new Canvas( xWindowSize, yWindowSize );
         root.getChildren().add( canvas );
@@ -80,7 +130,7 @@ public class Main extends Application {
         Image hero = new Image(getClass().getResource( "textures/hero.png").toExternalForm());
         ImageView heroView = new ImageView(hero);
 
-        GameWorld gw = new GameWorld();
+        gameWorld = new GameWorld();
 
         SpriteManagerAim sma = new SpriteManagerAim();
         sma.setDuration(0.2);
@@ -95,13 +145,16 @@ public class Main extends Application {
                 // Clear the screen before rendering
                 gc.clearRect(0, 0, xWindowSize, yWindowSize);
 
-                for (int i = 0; i < gw.getSizeMapX(); i++) {
-                    for (int j = 0; j < gw.getSizeMapY(); j++) {
-                        gc.drawImage(gw.getTileImage(i,j),
-                                i * gw.getTileSize() - 40 + xDeltaPos,
-                                j * gw.getTileSize() - 40 + yDeltaPos,
-                                gw.getTileSize(),
-                                gw.getTileSize());
+                // Update world
+                gameWorld.getHero().update();
+
+                for (int i = 0; i < gameWorld.getSizeMapX(); i++) {
+                    for (int j = 0; j < gameWorld.getSizeMapY(); j++) {
+                        gc.drawImage(gameWorld.getTileImage(i,j),
+                                i * gameWorld.getTileSize() - gameWorld.getHero().xPos + xWindowCenter + xDeltaPos,
+                                j * gameWorld.getTileSize() - gameWorld.getHero().yPos + yWindowCenter + yDeltaPos,
+                                gameWorld.getTileSize(),
+                                gameWorld.getTileSize());
                     }
                 }
 
