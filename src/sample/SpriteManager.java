@@ -10,9 +10,9 @@ import java.util.List;
  */
 public abstract class SpriteManager {
 
-    List<Image> sprites;
-    double duration;
-    int size[];
+    protected List<Image> sprites;
+    protected double duration;
+    protected int size[];
 
     public SpriteManager() {
         sprites = new ArrayList<>();
