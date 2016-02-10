@@ -177,6 +177,14 @@ public class Main extends Application {
                         xPos - 200 / 2,
                         yPos - 200 / 2,
                         200, 200);
+
+                for (Wall wall : gameWorld.getWallMap()) {
+                    gc.drawImage(wall.getImage(),
+                            wall.getCoord()[0] - gameWorld.getHero().xPos + xWindowCenter + xDeltaPos,
+                            wall.getCoord()[1] - gameWorld.getHero().yPos + yWindowCenter + yDeltaPos,
+                            30, 30);
+                }
+
                 gc.drawImage(sma.getSprite(t),
                         xPos - sma.getSize()[0] / 2,
                         yPos - sma.getSize()[1] / 2,
