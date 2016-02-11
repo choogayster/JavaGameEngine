@@ -5,8 +5,8 @@ package sample;
  */
 public class Hero {
 
-    public int xPos;
-    public int yPos;
+    public int xPosHero;
+    public int yPosHero;
 
     public boolean MoveLeft;
     public boolean MoveUp;
@@ -14,22 +14,22 @@ public class Hero {
     public boolean MoveDown;
 
     public Hero() {
-        xPos = 300;
-        yPos = 300;
+        xPosHero = 300;
+        yPosHero = 300;
     }
 
     public void update() {
         if (MoveLeft) {
-            xPos-=7;
+            xPosHero-=8;
         }
         if (MoveUp) {
-            yPos-=7;
+            yPosHero-=8;
         }
         if (MoveRight) {
-            xPos+=7;
+            xPosHero+=8;
         }
         if (MoveDown) {
-            yPos+=7;
+            yPosHero+=8;
         }
     }
 }

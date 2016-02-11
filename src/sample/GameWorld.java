@@ -1,6 +1,8 @@
 package sample;
 
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 import java.util.*;
 
@@ -11,9 +13,12 @@ public class GameWorld {
 
     private int [][] tileMap;
     private int tileSize;
+    private Image heroTexture;
     private List<Image> textures;
     private List<Image> wallTextures;
     private List<Wall> wallMap;
+    private List<Rectangle> colliders;
+    private Rectangle heroCollider;
     private Hero hero;
 
     public GameWorld() {
@@ -22,11 +27,36 @@ public class GameWorld {
         textures = new ArrayList<>();
         wallTextures = new ArrayList<>();
         wallMap = new ArrayList<>();
+        colliders = new ArrayList<>();
         hero = new Hero();
+        heroTexture = new Image(getClass().getResource( "textures/hero.png ").toExternalForm());
+        heroCollider = new Rectangle(
+                hero.xPosHero - heroTexture.getWidth()/2 ,
+                hero.yPosHero - heroTexture.getHeight()/2 ,
+                heroTexture.getWidth(),
+                heroTexture.getHeight());
         loadTextures();
         loadWalls();
         fillTileMap();
         buildWall();
+
+        // Colliders initializing
+        Rectangle rect = new Rectangle(-15, -15, 30, 30);
+        colliders.add(rect);
+        rect = new Rectangle (15, -15, 585, 30);
+        colliders.add(rect);
+        rect = new Rectangle (585, -15, 30, 30);
+        colliders.add(rect);
+        rect = new Rectangle (585, 15, 30, 585);
+        colliders.add(rect);
+        rect = new Rectangle (585, 585, 30, 30);
+        colliders.add(rect);
+        rect = new Rectangle (15, 585, 585, 30);
+        colliders.add(rect);
+        rect = new Rectangle (-15, 585, 30, 30);
+        colliders.add(rect);
+        rect = new Rectangle (-15, 15, 30, 585);
+        colliders.add(rect);
     }
 
     private void fillTileMap() {
@@ -86,6 +116,35 @@ public class GameWorld {
         textures.add(image);
     }
 
+    //  UPDATE GAME WORLD!!!
+    public void update() {
+        Rectangle heroColliderCheck = new Rectangle(
+                hero.xPosHero - heroCollider.getWidth()/2,
+                hero.yPosHero - heroCollider.getHeight()/2,
+                heroCollider.getWidth(),
+                heroCollider.getHeight());
+        if (hero.MoveLeft) {
+            heroColliderCheck.setX(heroColliderCheck.getX()-10);
+        }
+        if (hero.MoveRight) {
+            heroColliderCheck.setX(heroColliderCheck.getX()+10);
+        }
+        if (hero.MoveUp) {
+            heroColliderCheck.setY(heroColliderCheck.getY()-10);
+        }
+        if (hero.MoveDown) {
+            heroColliderCheck.setY(heroColliderCheck.getY()+10);
+        }
+        for (Rectangle rect_ : colliders) {
+            if (heroColliderCheck.getBoundsInParent().intersects(rect_.getBoundsInParent())) {
+                hero.MoveLeft = hero.MoveDown = hero.MoveRight = hero.MoveUp = false;
+                return;
+            }
+        }
+        hero.update();
+
+    }
+
     public Image getTileImage(int x, int y) {
         return textures.get( tileMap[x][y] );
     }
@@ -110,4 +169,25 @@ public class GameWorld {
         return hero;
     }
 
+    public void setHeroNewCollider() {
+        heroCollider = new Rectangle(
+                hero.xPosHero - heroTexture.getHeight()/2,
+                hero.yPosHero - heroTexture.getWidth()/2,
+                heroTexture.getHeight(),
+                heroTexture.getWidth());
+    }
+
+    public Image getHeroTexture () {
+        return heroTexture;
+    }
+
+
+/*  DEBUG ONLY!!!
+    public Rectangle getHeroColliderRect () {
+        return heroCollider;
+    }
+
+    public Rectangle getWallColliderRect () {
+        return colliders.get(0);
+    }*/
 }

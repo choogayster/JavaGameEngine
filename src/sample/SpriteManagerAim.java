@@ -24,5 +24,4 @@ public class SpriteManagerAim extends SpriteManager {
         addSprite("textures/aim/aim2.png");
         addSprite("textures/aim/aim1.png");
     }
-
 }

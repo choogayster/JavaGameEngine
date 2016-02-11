@@ -18,6 +18,7 @@ import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -130,23 +131,24 @@ public class Main extends Application {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
+        gameWorld = new GameWorld();
+
         Image light = new Image(getClass().getResource( "textures/light.png").toExternalForm());
         Image light01 = new Image(getClass().getResource( "textures/light01.png").toExternalForm());
-        Image hero = new Image(getClass().getResource( "textures/hero.png").toExternalForm());
-        ImageView heroView = new ImageView(hero);
+        //Image hero = new Image(getClass().getResource( "textures/hero.png").toExternalForm());
+        ImageView heroView = new ImageView(gameWorld.getHeroTexture());
+
+
+        SpriteManagerAim sma = new SpriteManagerAim();
+        sma.setDuration(0.25);
+
+        SpriteManagerBg smb = new SpriteManagerBg();
+        smb.setDuration(0.25);
 
         //Playing audio
         String musicFile = "src/sample/sounds/M.O.O.N. - Dust.mp3";     // For example
         AudioClip plonkSound = new AudioClip(new File(musicFile).toURI().toString());
-        plonkSound.play();
-
-        gameWorld = new GameWorld();
-
-        SpriteManagerAim sma = new SpriteManagerAim();
-        sma.setDuration(0.2);
-
-        SpriteManagerBg smb = new SpriteManagerBg();
-        smb.setDuration(0.2);
+        //plonkSound.play();
 
         final long startNanoTime = System.nanoTime();
 
@@ -159,29 +161,29 @@ public class Main extends Application {
                 gc.clearRect(0, 0, xWindowSize, yWindowSize);
 
                 // Update world
-                gameWorld.getHero().update();
+                gameWorld.update();
 
                 gc.drawImage(smb.getSprite(t),0,0);
 
                 for (int i = 0; i < gameWorld.getSizeMapX(); i++) {
                     for (int j = 0; j < gameWorld.getSizeMapY(); j++) {
                         gc.drawImage(gameWorld.getTileImage(i,j),
-                                i * gameWorld.getTileSize() - gameWorld.getHero().xPos + xWindowCenter + xDeltaPos,
-                                j * gameWorld.getTileSize() - gameWorld.getHero().yPos + yWindowCenter + yDeltaPos,
+                                i * gameWorld.getTileSize() - gameWorld.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                                j * gameWorld.getTileSize() - gameWorld.getHero().yPosHero + yWindowCenter + yDeltaPos,
                                 gameWorld.getTileSize(),
                                 gameWorld.getTileSize());
                     }
                 }
 
-                gc.drawImage(light,
+                /*gc.drawImage(light,
                         xPos - 200 / 2,
                         yPos - 200 / 2,
-                        200, 200);
+                        200, 200);*/
 
                 for (Wall wall : gameWorld.getWallMap()) {
                     gc.drawImage(wall.getImage(),
-                            wall.getCoord()[0] - gameWorld.getHero().xPos + xWindowCenter + xDeltaPos,
-                            wall.getCoord()[1] - gameWorld.getHero().yPos + yWindowCenter + yDeltaPos,
+                            wall.getCoord()[0] - gameWorld.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                            wall.getCoord()[1] - gameWorld.getHero().yPosHero + yWindowCenter + yDeltaPos,
                             30, 30);
                 }
 
@@ -197,16 +199,34 @@ public class Main extends Application {
                         light01.getWidth()*10,
                         light01.getHeight()*10);
 
+                // DEBUG ONLY Collider debbugger
+                /*Rectangle heroCollider = gameWorld.getHeroColliderRect();
+                gc.setFill(Color.GREEN);
+                gc.fillRect(heroCollider.getX()  - gameWorld.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                        heroCollider.getY() - gameWorld.getHero().yPosHero + yWindowCenter + yDeltaPos,
+                        heroCollider.getHeight(),
+                        heroCollider.getWidth());
+
+                Rectangle wallCollider = gameWorld.getWallColliderRect();
+                gc.setFill(Color.GREEN);
+                gc.fillRect(wallCollider.getX()  - gameWorld.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                        wallCollider.getY() - gameWorld.getHero().yPosHero + yWindowCenter + yDeltaPos,
+                        wallCollider.getHeight(),
+                        wallCollider.getWidth());*/
+                // DEBUG ONLY
+
+
                 double beta = Math.atan2( (yWindowCenter - (yWindowSize-yPos)), (xWindowCenter - xPos));
                 heroView.setRotate(270 - beta * 180/Math.PI);
                 SnapshotParameters params = new SnapshotParameters();
                 params.setFill(Color.TRANSPARENT);
                 Image rotatedImage = heroView.snapshot(params, null);
+                gameWorld.setHeroNewCollider();
                 gc.drawImage(rotatedImage,
-                        (xWindowCenter + xDeltaPos) - rotatedImage.getWidth()*1.5/2,
-                        (yWindowCenter + yDeltaPos) - rotatedImage.getHeight()*1.5/2,
-                        rotatedImage.getWidth()*1.5,
-                        rotatedImage.getHeight()*1.5
+                        (xWindowCenter + xDeltaPos) - rotatedImage.getWidth()*2/2,
+                        (yWindowCenter + yDeltaPos) - rotatedImage.getHeight()*2/2,
+                        rotatedImage.getWidth()*2,
+                        rotatedImage.getHeight()*2
                 );
             }
         }.start();

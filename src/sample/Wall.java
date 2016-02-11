@@ -6,8 +6,10 @@ import javafx.scene.image.Image;
  * Created by Vlad on 10.02.2016.
  */
 public class Wall {
-    Image image;
-    int[] coord;
+    private Image image;
+    private int[] coord;
+    private int xSizeWall;
+    private int ySizeWall;
 
     public Image getImage() {
         return image;
@@ -30,6 +32,7 @@ public class Wall {
         coord[0] = x;
         coord[1] = y;
         this.image = image;
-
+        xSizeWall = 30;
+        ySizeWall = 30;
     }
 }
