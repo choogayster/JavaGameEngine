@@ -21,6 +21,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import sample.level.Level;
 
 import java.io.File;
 
@@ -135,7 +136,6 @@ public class Main extends Application {
 
         Image light = new Image(getClass().getResource( "textures/light.png").toExternalForm());
         Image light01 = new Image(getClass().getResource( "textures/light01.png").toExternalForm());
-        //Image hero = new Image(getClass().getResource( "textures/hero.png").toExternalForm());
         ImageView heroView = new ImageView(gameWorld.getHeroTexture());
 
 
@@ -165,26 +165,12 @@ public class Main extends Application {
 
                 gc.drawImage(smb.getSprite(t),0,0);
 
-                for (int i = 0; i < gameWorld.getSizeMapX(); i++) {
-                    for (int j = 0; j < gameWorld.getSizeMapY(); j++) {
-                        gc.drawImage(gameWorld.getTileImage(i,j),
-                                i * gameWorld.getTileSize() - gameWorld.getHero().xPosHero + xWindowCenter + xDeltaPos,
-                                j * gameWorld.getTileSize() - gameWorld.getHero().yPosHero + yWindowCenter + yDeltaPos,
-                                gameWorld.getTileSize(),
-                                gameWorld.getTileSize());
-                    }
-                }
-
-                /*gc.drawImage(light,
-                        xPos - 200 / 2,
-                        yPos - 200 / 2,
-                        200, 200);*/
-
-                for (Wall wall : gameWorld.getWallMap()) {
-                    gc.drawImage(wall.getImage(),
-                            wall.getCoord()[0] - gameWorld.getHero().xPosHero + xWindowCenter + xDeltaPos,
-                            wall.getCoord()[1] - gameWorld.getHero().yPosHero + yWindowCenter + yDeltaPos,
-                            30, 30);
+                for (Level.Ground ground : gameWorld.level.grounds) {
+                    gc.drawImage(ground.getTexture(),
+                            ground.getxCoord() - gameWorld.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                            ground.getyCoord() - gameWorld.getHero().yPosHero + yWindowCenter + yDeltaPos,
+                            ground.getWidth(),
+                            ground.getHeight());
                 }
 
                 gc.drawImage(sma.getSprite(t),
@@ -215,19 +201,26 @@ public class Main extends Application {
                         wallCollider.getWidth());*/
                 // DEBUG ONLY
 
-
                 double beta = Math.atan2( (yWindowCenter - (yWindowSize-yPos)), (xWindowCenter - xPos));
-                heroView.setRotate(270 - beta * 180/Math.PI);
+                heroView.setRotate(90 - beta * 180/Math.PI);
                 SnapshotParameters params = new SnapshotParameters();
                 params.setFill(Color.TRANSPARENT);
                 Image rotatedImage = heroView.snapshot(params, null);
                 gameWorld.setHeroNewCollider();
                 gc.drawImage(rotatedImage,
-                        (xWindowCenter + xDeltaPos) - rotatedImage.getWidth()*2/2,
-                        (yWindowCenter + yDeltaPos) - rotatedImage.getHeight()*2/2,
-                        rotatedImage.getWidth()*2,
-                        rotatedImage.getHeight()*2
+                        (xWindowCenter + xDeltaPos) - rotatedImage.getWidth()/2,
+                        (yWindowCenter + yDeltaPos) - rotatedImage.getHeight()/2,
+                        rotatedImage.getWidth(),
+                        rotatedImage.getHeight()
                 );
+
+                for (Level.Wall wall : gameWorld.level.walls) {
+                    gc.drawImage(wall.getTexture(),
+                            wall.getxCoord() - gameWorld.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                            wall.getyCoord() - gameWorld.getHero().yPosHero + yWindowCenter + yDeltaPos,
+                            wall.getWidth(),
+                            wall.getHeight());
+                }
             }
         }.start();
 

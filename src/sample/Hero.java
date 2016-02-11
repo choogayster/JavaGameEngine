@@ -14,8 +14,8 @@ public class Hero {
     public boolean MoveDown;
 
     public Hero() {
-        xPosHero = 300;
-        yPosHero = 300;
+        xPosHero = 500;
+        yPosHero = 399;
     }
 
     public void update() {
