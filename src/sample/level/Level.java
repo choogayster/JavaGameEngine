@@ -2,6 +2,8 @@ package sample.level;
 
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
+import sample.Enemy;
+import sample.EnemyRails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,16 +16,22 @@ public abstract class Level {
     public List<Image> textureGrounds;
     public List<Ground> grounds;
     public List<Wall> walls;
+    public List<EnemyRails> rails;
+    public List<Enemy> enemies;
 
     public Level () {
         textureWalls = new ArrayList<>();
         textureGrounds = new ArrayList<>();
         grounds = new ArrayList<>();
         walls = new ArrayList<>();
+        rails = new ArrayList<>();
+        enemies = new ArrayList<>();
         loadGroundTextures();
         loadWallTextures();
         createWalls();
         createGrounds();
+        createEnemyRails();
+        createEnemies();
     }
 
     public abstract void loadGroundTextures();
@@ -33,6 +41,10 @@ public abstract class Level {
     public abstract void createWalls();
 
     public abstract void createGrounds();
+
+    public abstract void createEnemyRails();
+
+    public abstract void createEnemies();
 
     public void loadGroundTexture(String textureName) {
         Image image = new Image(getClass().getResource( textureName ).toExternalForm());

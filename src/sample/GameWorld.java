@@ -40,22 +40,36 @@ public class GameWorld {
     //  UPDATE GAME WORLD!!!
     public void update(double time) {
 
+        for (Enemy enemy : level.enemies) {
+            enemy.update();
+            //System.out.println(enemy.getxPos() + " " + enemy.getyPos());
+        }
+
         for (Bullet bullet : bullets) {
             bullet.move(time);
         }
 
+        boolean flagOfMustRemoved;
         for (int i = 0; i < bullets.size(); i++) {
+            flagOfMustRemoved = false;
             for (Level.Wall wall : level.walls) {
                 Rectangle rect = wall.getCollider();
                 if (bullets.get(i).collider.getBoundsInParent().intersects(rect.getBoundsInParent())) {
-                    bullets.remove(i);
-                    return;
+                    flagOfMustRemoved = true;
                 }
             }
-        }
-
-        for (int i = 0; i < bullets.size(); i++) {
+            for (Enemy enemy : level.enemies) {
+                Rectangle rect = enemy.getCollider();
+                if (bullets.get(i).collider.getBoundsInParent().intersects(rect.getBoundsInParent())) {
+                    System.out.println("intesect");
+                    flagOfMustRemoved = true;
+                }
+            }
             if (bullets.get(i).xPos > 1000 || bullets.get(i).yPos > 1000 || bullets.get(i).xPos < 0 || bullets.get(i).yPos < 0) {
+                flagOfMustRemoved = true;
+                //bullets.remove(i);
+            }
+            if (flagOfMustRemoved) {
                 bullets.remove(i);
             }
         }
@@ -66,7 +80,7 @@ public class GameWorld {
                 heroCollider.getWidth(),
                 heroCollider.getHeight());
 
-        if (hero.MoveLeft) {
+        /*if (hero.MoveLeft) {
             heroColliderCheck.setX(heroColliderCheck.getX()-10);
         }
         if (hero.MoveRight) {
@@ -83,6 +97,46 @@ public class GameWorld {
             if (heroColliderCheck.getBoundsInParent().intersects(rect.getBoundsInParent())) {
                 hero.MoveLeft = hero.MoveDown = hero.MoveRight = hero.MoveUp = false;
                 return;
+            }
+        }*/
+        if (hero.MoveLeft) {
+            heroColliderCheck.setX(heroColliderCheck.getX()-8);
+            for (Level.Wall wall : level.walls) {
+                Rectangle rect = wall.getCollider();
+                if (heroColliderCheck.getBoundsInParent().intersects(rect.getBoundsInParent())) {
+                    hero.MoveLeft = false;
+                    //return;
+                }
+            }
+        }
+        if (hero.MoveRight) {
+            heroColliderCheck.setX(heroColliderCheck.getX()+8);
+            for (Level.Wall wall : level.walls) {
+                Rectangle rect = wall.getCollider();
+                if (heroColliderCheck.getBoundsInParent().intersects(rect.getBoundsInParent())) {
+                    hero.MoveRight = false;
+                    //return;
+                }
+            }
+        }
+        if (hero.MoveUp) {
+            heroColliderCheck.setY(heroColliderCheck.getY()-8);
+            for (Level.Wall wall : level.walls) {
+                Rectangle rect = wall.getCollider();
+                if (heroColliderCheck.getBoundsInParent().intersects(rect.getBoundsInParent())) {
+                    hero.MoveUp = false;
+                    //return;
+                }
+            }
+        }
+        if (hero.MoveDown) {
+            heroColliderCheck.setY(heroColliderCheck.getY()+8);
+            for (Level.Wall wall : level.walls) {
+                Rectangle rect = wall.getCollider();
+                if (heroColliderCheck.getBoundsInParent().intersects(rect.getBoundsInParent())) {
+                    hero.MoveDown = false;
+                    //return;
+                }
             }
         }
         hero.update();

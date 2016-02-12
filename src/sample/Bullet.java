@@ -13,7 +13,7 @@ public class Bullet {
     public double yPos;
     public Rectangle collider;
     private double time;
-    private final double velocity = 3000;
+    private final double velocity = 2000;
     private final int colliderSize = 6;
 
 

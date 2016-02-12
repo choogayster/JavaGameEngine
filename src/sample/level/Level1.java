@@ -1,6 +1,8 @@
 package sample.level;
 
 import javafx.scene.shape.Rectangle;
+import sample.Enemy;
+import sample.EnemyRails;
 
 /**
  * Created by Vlad on 11.02.2016.
@@ -22,6 +24,22 @@ public class Level1 extends Level {
         loadWallTexture("level1/wall2.png");
         loadWallTexture("level1/wall3.png");
         loadWallTexture("level1/wall4.png");
+    }
+
+    @Override
+    public void createEnemyRails() {
+        EnemyRails rail = new EnemyRails();
+        rail.addPoint(480, 360);
+        rail.addPoint(780, 360);
+        //rail.addPoint(780, 360);
+        //rail.bind(rail.getPoint(0), rail.getPoint(1));
+        rails.add(rail);
+    }
+
+    @Override
+    public void createEnemies() {
+        Enemy enemy = new Enemy(40, 40, rails.get(0));
+        enemies.add(enemy);
     }
 
     @Override

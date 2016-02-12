@@ -1,4 +1,4 @@
-package sample;
+package sample.spriteManagers;
 
 import javafx.scene.image.Image;
 
