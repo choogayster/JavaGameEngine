@@ -24,7 +24,7 @@ public class GameWorld {
         level = new Level1();
         level = new Level1();
         hero = new Hero();
-        heroTexture = new Image(getClass().getResource( "textures/hero.png ").toExternalForm());
+        heroTexture = new Image(getClass().getResource( "textures/hero02.png ").toExternalForm());
         heroCollider = new Rectangle(
                 hero.xPosHero - heroTexture.getWidth()/2 ,
                 hero.yPosHero - heroTexture.getHeight()/2 ,
@@ -38,7 +38,21 @@ public class GameWorld {
     }
 
     //  UPDATE GAME WORLD!!!
-    public void update() {
+    public void update(double time) {
+
+        for (Bullet bullet : bullets) {
+            bullet.move(time);
+        }
+
+        for (int i = 0; i < bullets.size(); i++) {
+            for (Level.Wall wall : level.walls) {
+                Rectangle rect = wall.getCollider();
+                if (bullets.get(i).collider.getBoundsInParent().intersects(rect.getBoundsInParent())) {
+                    bullets.remove(i);
+                    return;
+                }
+            }
+        }
 
         for (int i = 0; i < bullets.size(); i++) {
             if (bullets.get(i).xPos > 1000 || bullets.get(i).yPos > 1000 || bullets.get(i).xPos < 0 || bullets.get(i).yPos < 0) {
@@ -46,12 +60,12 @@ public class GameWorld {
             }
         }
 
-
         Rectangle heroColliderCheck = new Rectangle(
                 hero.xPosHero - heroCollider.getWidth()/2,
                 hero.yPosHero - heroCollider.getHeight()/2,
                 heroCollider.getWidth(),
                 heroCollider.getHeight());
+
         if (hero.MoveLeft) {
             heroColliderCheck.setX(heroColliderCheck.getX()-10);
         }

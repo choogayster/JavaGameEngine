@@ -1,5 +1,7 @@
 package sample;
 
+import javafx.scene.shape.Rectangle;
+
 /**
  * Created by Vlad on 11.02.2016.
  */
@@ -9,8 +11,11 @@ public class Bullet {
     public double angle;
     public double xPos;
     public double yPos;
+    public Rectangle collider;
     private double time;
-    private double velocity;
+    private final double velocity = 3000;
+    private final int colliderSize = 6;
+
 
     public Bullet (double time, double xPos, double yPos, double angle) {
         this.time = time;
@@ -19,12 +24,14 @@ public class Bullet {
         this.xPos = xPos;
         this.yPos = yPos;
         this.angle = angle;
-        velocity = 3700;
+        collider = new Rectangle(xPos-colliderSize/2, yPos-colliderSize/2, colliderSize, colliderSize);
     }
 
     public void move(double time) {
         xPos = xPosHero + velocity * (this.time - time) * Math.sin(angle);
         yPos = yPosHero + velocity * (this.time - time) * Math.cos(angle);
+        collider.setX(xPos);
+        collider.setY(yPos);
     }
 
     public double[] getPosition () {

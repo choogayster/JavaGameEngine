@@ -13,27 +13,32 @@ public class Hero {
     public boolean MoveRight;
     public boolean MoveDown;
 
+    public boolean ShotState;
+    public int spentTimeShot;
+
     public Hero() {
         xPosHero = 500;
         yPosHero = 399;
     }
 
     public void update() {
+        if (spentTimeShot > 0) {
+            spentTimeShot--;
+        } else {
+            ShotState = false;
+        }
         if (MoveLeft) {
-                xPosHero -= 8;
-
+            xPosHero -= 8;
         }
         if (MoveUp) {
-                yPosHero -= 8;
-
+            yPosHero -= 8;
         }
         if (MoveRight) {
-                xPosHero += 8;
+            xPosHero += 8;
         }
 
         if (MoveDown) {
-                yPosHero += 8;
-
+            yPosHero += 8;
         }
     }
 }

@@ -113,10 +113,12 @@ public class Main extends Application {
     EventHandler<MouseEvent> mouseClickHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
-            gameWorld.addBullet(new Bullet(time, gameWorld.getHero().xPosHero, gameWorld.getHero().yPosHero, 90-0.434+beta));
+            gameWorld.addBullet(new Bullet(time, gameWorld.getHero().xPosHero, gameWorld.getHero().yPosHero, Math.PI/2+beta));
+            gameWorld.getHero().ShotState = true;
+            gameWorld.getHero().spentTimeShot = 3;
             shot.setPan(0);
             System.out.println(beta);
-            //shot.play();
+            shot.play();
         }
     };
 
@@ -149,13 +151,18 @@ public class Main extends Application {
         Image bullet = new Image(getClass().getResource( "textures/bullet.png").toExternalForm());
 
         ImageView heroView = new ImageView(gameWorld.getHeroTexture());
+        ImageView heroShotView = new ImageView();
         ImageView bulletView = new ImageView(bullet);
 
+        // Create sprite managers
         SpriteManagerAim sma = new SpriteManagerAim();
         sma.setDuration(0.25);
 
         SpriteManagerBg smb = new SpriteManagerBg();
         smb.setDuration(0.25);
+
+        SpriteManagerShot1 sms1 = new SpriteManagerShot1();
+        smb.setDuration(0.5);
 
         //Playing audio
         //music.play();
@@ -172,10 +179,7 @@ public class Main extends Application {
                 gc.clearRect(0, 0, xWindowSize, yWindowSize);
 
                 // Update world
-                gameWorld.update();
-                for (Bullet bullet : gameWorld.bullets) {
-                    bullet.move(time);
-                }
+                gameWorld.update(time);
 
                 gc.drawImage(smb.getSprite(time),0,-150, 1200, 1200);
 
@@ -193,28 +197,8 @@ public class Main extends Application {
                         light01.getWidth()*10,
                         light01.getHeight()*10);
 
-                beta = Math.atan2( (yWindowCenter - (yWindowSize-yPos)), (xWindowCenter - xPos));
-                heroView.setRotate(90 - beta * 180/Math.PI);
+
                 SnapshotParameters params = new SnapshotParameters();
-                params.setFill(Color.TRANSPARENT);
-                Image rotatedImage = heroView.snapshot(params, null);
-                gameWorld.setHeroNewCollider();
-                gc.drawImage(rotatedImage,
-                        (xWindowCenter + xDeltaPos) - rotatedImage.getWidth()/2,
-                        (yWindowCenter + yDeltaPos) - rotatedImage.getHeight()/2,
-                        rotatedImage.getWidth(),
-                        rotatedImage.getHeight()
-                );
-
-                for (Level.Wall wall : gameWorld.level.walls) {
-                    gc.drawImage(wall.getTexture(),
-                            wall.getxCoord() - gameWorld.getHero().xPosHero + xWindowCenter + xDeltaPos,
-                            wall.getyCoord() - gameWorld.getHero().yPosHero + yWindowCenter + yDeltaPos,
-                            wall.getWidth(),
-                            wall.getHeight());
-                }
-
-
 
                 for (Bullet bullet_ : gameWorld.bullets) {
                     bulletView.setRotate(90 - bullet_.angle * 180/Math.PI);
@@ -224,6 +208,43 @@ public class Main extends Application {
                     gc.drawImage(bullet,
                             bullet_.xPos  - gameWorld.getHero().xPosHero + xWindowCenter + xDeltaPos,
                             bullet_.yPos  - gameWorld.getHero().yPosHero + yWindowCenter + yDeltaPos);
+                }
+
+                // If hero in shot state
+                if (gameWorld.getHero().ShotState) {
+                    heroShotView.setImage(sms1.getSprite(time));
+                    beta = Math.atan2( (yWindowCenter - (yWindowSize-yPos)), (xWindowCenter - xPos));
+                    heroShotView.setRotate(90 - beta * 180/Math.PI);
+                    params.setFill(Color.TRANSPARENT);
+                    Image rotatedImage = heroShotView.snapshot(params, null);
+                    gameWorld.setHeroNewCollider();
+                    gc.drawImage(rotatedImage,
+                            (xWindowCenter + xDeltaPos) - rotatedImage.getWidth()*2/2,
+                            (yWindowCenter + yDeltaPos) - rotatedImage.getHeight()*2/2,
+                            rotatedImage.getWidth()*2,
+                            rotatedImage.getHeight()*2
+                    );
+
+                } else {
+                    beta = Math.atan2((yWindowCenter - (yWindowSize - yPos)), (xWindowCenter - xPos));
+                    heroView.setRotate(90 - beta * 180 / Math.PI);
+                    params.setFill(Color.TRANSPARENT);
+                    Image rotatedImage = heroView.snapshot(params, null);
+                    gameWorld.setHeroNewCollider();
+                    gc.drawImage(rotatedImage,
+                            (xWindowCenter + xDeltaPos) - rotatedImage.getWidth() * 2 / 2,
+                            (yWindowCenter + yDeltaPos) - rotatedImage.getHeight() * 2 / 2,
+                            rotatedImage.getWidth() * 2,
+                            rotatedImage.getHeight() * 2
+                    );
+                }
+
+                for (Level.Wall wall : gameWorld.level.walls) {
+                    gc.drawImage(wall.getTexture(),
+                            wall.getxCoord() - gameWorld.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                            wall.getyCoord() - gameWorld.getHero().yPosHero + yWindowCenter + yDeltaPos,
+                            wall.getWidth(),
+                            wall.getHeight());
                 }
 
                 gc.drawImage(sma.getSprite(time),
