@@ -14,15 +14,15 @@ public class GameWorld {
 
     public Level level;
 
-    private int tileSize;
     private Image heroTexture;
     private Rectangle heroCollider;
     private Hero hero;
 
+    public List<Bullet> bullets;
+
     public GameWorld() {
         level = new Level1();
         level = new Level1();
-        tileSize = 60;
         hero = new Hero();
         heroTexture = new Image(getClass().getResource( "textures/hero.png ").toExternalForm());
         heroCollider = new Rectangle(
@@ -30,11 +30,23 @@ public class GameWorld {
                 hero.yPosHero - heroTexture.getHeight()/2 ,
                 heroTexture.getWidth(),
                 heroTexture.getHeight());
+        bullets = new ArrayList<>();
+    }
 
+    public void addBullet (Bullet bullet) {
+        bullets.add(bullet);
     }
 
     //  UPDATE GAME WORLD!!!
     public void update() {
+
+        for (int i = 0; i < bullets.size(); i++) {
+            if (bullets.get(i).xPos > 1000 || bullets.get(i).yPos > 1000 || bullets.get(i).xPos < 0 || bullets.get(i).yPos < 0) {
+                bullets.remove(i);
+            }
+        }
+
+
         Rectangle heroColliderCheck = new Rectangle(
                 hero.xPosHero - heroCollider.getWidth()/2,
                 hero.yPosHero - heroCollider.getHeight()/2,
@@ -63,34 +75,20 @@ public class GameWorld {
 
     }
 
-
-    public int getTileSize() {
-        return tileSize;
-    }
-
     public Hero getHero() {
         return hero;
     }
 
     public void setHeroNewCollider() {
         heroCollider = new Rectangle(
-                hero.xPosHero - heroTexture.getHeight()/2,
-                hero.yPosHero - heroTexture.getWidth()/2,
-                heroTexture.getHeight(),
-                heroTexture.getWidth());
+                hero.xPosHero - heroTexture.getHeight()/2/2,
+                hero.yPosHero - heroTexture.getWidth()/2/2,
+                heroTexture.getHeight()/2,
+                heroTexture.getWidth()/2);
     }
 
     public Image getHeroTexture () {
         return heroTexture;
     }
 
-
-/*  DEBUG ONLY!!!
-    public Rectangle getHeroColliderRect () {
-        return heroCollider;
-    }
-
-    public Rectangle getWallColliderRect () {
-        return colliders.get(0);
-    }*/
 }

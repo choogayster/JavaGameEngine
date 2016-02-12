@@ -11,38 +11,37 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.media.AudioClip;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import sample.level.Level;
 
 import java.io.File;
 
 public class Main extends Application {
+
     GameWorld gameWorld;
-
-    int xWindowSize = 700;
+    int xWindowSize = 1200;
     int yWindowSize = 700;
-
     double xWindowCenter = xWindowSize/2;
     double yWindowCenter = yWindowSize/2;
-
     double alfa = 0;
-
+    double beta = 0;
     double xPos = 100;
     double yPos = 100;
-
     double xDeltaPos = 10;
     double yDeltaPos = 10;
+    double L = 115; // range between center of camera and user
 
-    double L = 70; // range between center of camera and user
+    String musicFile = "src/sample/sounds/M.O.O.N. - Dust.mp3";
+    AudioClip music = new AudioClip(new File(musicFile).toURI().toString());
+
+    String shotFile = "src/sample/sounds/sub_machine_gun_single_shot.mp3";
+    AudioClip shot = new AudioClip(new File(shotFile).toURI().toString());
+
+    double time;
 
     EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
         @Override
@@ -53,19 +52,19 @@ public class Main extends Application {
             alfa = Math.atan( (yWindowCenter - (yWindowSize-yPos)) / (xWindowCenter - xPos));
 
             if (xPos > xWindowCenter && (yWindowSize-yPos) > yWindowCenter ) {
-                xDeltaPos = -Math.abs(L * Math.cos(alfa));;
+                xDeltaPos = -Math.abs(L * Math.cos(alfa));
                 yDeltaPos = Math.abs(L * Math.sin(alfa));
             }
             else if (xPos < xWindowCenter && (yWindowSize-yPos) > yWindowCenter ) {
-                xDeltaPos = Math.abs(L * Math.cos(alfa));;
+                xDeltaPos = Math.abs(L * Math.cos(alfa));
                 yDeltaPos = Math.abs(L * Math.sin(alfa));
             }
             else if (xPos < xWindowCenter && (yWindowSize-yPos) < yWindowCenter ) {
-                xDeltaPos = Math.abs(L * Math.cos(alfa));;
+                xDeltaPos = Math.abs(L * Math.cos(alfa));
                 yDeltaPos = -Math.abs(L * Math.sin(alfa));
             }
             else if (xPos > xWindowCenter && (yWindowSize-yPos) < yWindowCenter ) {
-                xDeltaPos = -Math.abs(L * Math.cos(alfa));;
+                xDeltaPos = -Math.abs(L * Math.cos(alfa));
                 yDeltaPos = -Math.abs(L * Math.sin(alfa));
             }
         }
@@ -108,7 +107,16 @@ public class Main extends Application {
                     gameWorld.getHero().MoveDown = false;
                     break;
             }
+        }
+    };
 
+    EventHandler<MouseEvent> mouseClickHandler = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent event) {
+            gameWorld.addBullet(new Bullet(time, gameWorld.getHero().xPosHero, gameWorld.getHero().yPosHero, 90-0.434+beta));
+            shot.setPan(0);
+            System.out.println(beta);
+            //shot.play();
         }
     };
 
@@ -121,8 +129,10 @@ public class Main extends Application {
         primaryStage.setScene( theScene );
 
         theScene.setOnMouseMoved(mouseHandler);
+        theScene.setOnMouseDragged(mouseHandler);
         theScene.setOnKeyPressed(keyPressedHandler);
         theScene.setOnKeyReleased(keyReleasedHandler);
+        theScene.setOnMousePressed(mouseClickHandler);
 
         theScene.setCursor(Cursor.NONE);
 
@@ -136,8 +146,10 @@ public class Main extends Application {
 
         Image light = new Image(getClass().getResource( "textures/light.png").toExternalForm());
         Image light01 = new Image(getClass().getResource( "textures/light01.png").toExternalForm());
-        ImageView heroView = new ImageView(gameWorld.getHeroTexture());
+        Image bullet = new Image(getClass().getResource( "textures/bullet.png").toExternalForm());
 
+        ImageView heroView = new ImageView(gameWorld.getHeroTexture());
+        ImageView bulletView = new ImageView(bullet);
 
         SpriteManagerAim sma = new SpriteManagerAim();
         sma.setDuration(0.25);
@@ -146,38 +158,34 @@ public class Main extends Application {
         smb.setDuration(0.25);
 
         //Playing audio
-        String musicFile = "src/sample/sounds/M.O.O.N. - Dust.mp3";     // For example
-        AudioClip plonkSound = new AudioClip(new File(musicFile).toURI().toString());
-        //plonkSound.play();
+        //music.play();
 
         final long startNanoTime = System.nanoTime();
+        ImageView textureView = new ImageView();
 
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
 
-                double t = (currentNanoTime - startNanoTime) / 1000000000.0;
+                time = (currentNanoTime - startNanoTime) / 1000000000.0;
 
                 // Clear the screen before rendering
                 gc.clearRect(0, 0, xWindowSize, yWindowSize);
 
                 // Update world
                 gameWorld.update();
+                for (Bullet bullet : gameWorld.bullets) {
+                    bullet.move(time);
+                }
 
-                gc.drawImage(smb.getSprite(t),0,0);
+                gc.drawImage(smb.getSprite(time),0,-150, 1200, 1200);
 
                 for (Level.Ground ground : gameWorld.level.grounds) {
                     gc.drawImage(ground.getTexture(),
                             ground.getxCoord() - gameWorld.getHero().xPosHero + xWindowCenter + xDeltaPos,
-                            ground.getyCoord() - gameWorld.getHero().yPosHero + yWindowCenter + yDeltaPos,
+                            ground.getyCoord() - gameWorld.getHero().yPosHero + yWindowCenter + yDeltaPos/*,
                             ground.getWidth(),
-                            ground.getHeight());
+                            ground.getHeight()*/);
                 }
-
-                gc.drawImage(sma.getSprite(t),
-                        xPos - sma.getSize()[0] / 2,
-                        yPos - sma.getSize()[1] / 2,
-                        sma.getSize()[0],
-                        sma.getSize()[1]);
 
                 gc.drawImage(light,
                         (xWindowCenter + xDeltaPos) - light01.getWidth()*10/2,
@@ -185,23 +193,7 @@ public class Main extends Application {
                         light01.getWidth()*10,
                         light01.getHeight()*10);
 
-                // DEBUG ONLY Collider debbugger
-                /*Rectangle heroCollider = gameWorld.getHeroColliderRect();
-                gc.setFill(Color.GREEN);
-                gc.fillRect(heroCollider.getX()  - gameWorld.getHero().xPosHero + xWindowCenter + xDeltaPos,
-                        heroCollider.getY() - gameWorld.getHero().yPosHero + yWindowCenter + yDeltaPos,
-                        heroCollider.getHeight(),
-                        heroCollider.getWidth());
-
-                Rectangle wallCollider = gameWorld.getWallColliderRect();
-                gc.setFill(Color.GREEN);
-                gc.fillRect(wallCollider.getX()  - gameWorld.getHero().xPosHero + xWindowCenter + xDeltaPos,
-                        wallCollider.getY() - gameWorld.getHero().yPosHero + yWindowCenter + yDeltaPos,
-                        wallCollider.getHeight(),
-                        wallCollider.getWidth());*/
-                // DEBUG ONLY
-
-                double beta = Math.atan2( (yWindowCenter - (yWindowSize-yPos)), (xWindowCenter - xPos));
+                beta = Math.atan2( (yWindowCenter - (yWindowSize-yPos)), (xWindowCenter - xPos));
                 heroView.setRotate(90 - beta * 180/Math.PI);
                 SnapshotParameters params = new SnapshotParameters();
                 params.setFill(Color.TRANSPARENT);
@@ -221,6 +213,25 @@ public class Main extends Application {
                             wall.getWidth(),
                             wall.getHeight());
                 }
+
+
+
+                for (Bullet bullet_ : gameWorld.bullets) {
+                    bulletView.setRotate(90 - bullet_.angle * 180/Math.PI);
+                    params = new SnapshotParameters();
+                    params.setFill(Color.TRANSPARENT);
+                    Image bullet = bulletView.snapshot(params, null);
+                    gc.drawImage(bullet,
+                            bullet_.xPos  - gameWorld.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                            bullet_.yPos  - gameWorld.getHero().yPosHero + yWindowCenter + yDeltaPos);
+                }
+
+                gc.drawImage(sma.getSprite(time),
+                        xPos - sma.getSize()[0] / 2,
+                        yPos - sma.getSize()[1] / 2,
+                        sma.getSize()[0],
+                        sma.getSize()[1]);
+
             }
         }.start();
 

@@ -20,16 +20,20 @@ public class Hero {
 
     public void update() {
         if (MoveLeft) {
-            xPosHero-=8;
+                xPosHero -= 8;
+
         }
         if (MoveUp) {
-            yPosHero-=8;
+                yPosHero -= 8;
+
         }
         if (MoveRight) {
-            xPosHero+=8;
+                xPosHero += 8;
         }
+
         if (MoveDown) {
-            yPosHero+=8;
+                yPosHero += 8;
+
         }
     }
 }
