@@ -38,7 +38,7 @@ public class Main extends Application {
     double yDeltaPos = 10;
     double L = 115; // range between center of camera and user
 
-    String musicFile = "src/sample/sounds/M.O.O.N. - Dust.mp3";
+    String musicFile = "src/sample/sounds/KDrew - Bullseye.mp3";
     AudioClip music = new AudioClip(new File(musicFile).toURI().toString());
 
     String shotFile = "src/sample/sounds/sub_machine_gun_single_shot.mp3";
@@ -120,10 +120,9 @@ public class Main extends Application {
     EventHandler<MouseEvent> mouseClickHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
-            gameWorld.addBullet(new Bullet(time, gameWorld.getHero().xPosHero, gameWorld.getHero().yPosHero, Math.PI/2+beta));
+            gameWorld.addBullet(new Bullet(time, gameWorld.getHero().xPosHero, gameWorld.getHero().yPosHero, -beta));
             gameWorld.getHero().ShotState = true;
             gameWorld.getHero().spentTimeShot = 3;
-            shot.setPan(0);
             shot.play();
         }
     };
@@ -168,10 +167,10 @@ public class Main extends Application {
         smb.setDuration(0.1);
 
         SpriteManagerShot1 sms1 = new SpriteManagerShot1();
-        smb.setDuration(0.8);
+        sms1.setDuration(0.8);
 
         //Playing audio
-        music.play();
+        //music.play();
 
         final long startNanoTime = System.nanoTime();
         ImageView textureView = new ImageView();
@@ -224,7 +223,9 @@ public class Main extends Application {
                     Image bullet = bulletView.snapshot(params, null);
                     gc.drawImage(bullet,
                             bullet_.xPos  - gameWorld.getHero().xPosHero + xWindowCenter + xDeltaPos,
-                            bullet_.yPos  - gameWorld.getHero().yPosHero + yWindowCenter + yDeltaPos);
+                            bullet_.yPos  - gameWorld.getHero().yPosHero + yWindowCenter + yDeltaPos,
+                            6,
+                            6);
                 }
 
                 // If hero is in shot state draw current shot sprite
@@ -234,7 +235,6 @@ public class Main extends Application {
                     heroShotView.setRotate(90 - beta * 180/Math.PI);
                     params.setFill(Color.TRANSPARENT);
                     Image rotatedImage = heroShotView.snapshot(params, null);
-                    gameWorld.setHeroNewCollider();
                     gc.drawImage(rotatedImage,
                             (xWindowCenter + xDeltaPos) - rotatedImage.getWidth() * 2 / 2,
                             (yWindowCenter + yDeltaPos) - rotatedImage.getHeight() * 2 / 2,
@@ -248,12 +248,9 @@ public class Main extends Application {
                     heroView.setRotate(90 - beta * 180 / Math.PI);
                     params.setFill(Color.TRANSPARENT);
                     Image rotatedImage = heroView.snapshot(params, null);
-                    gameWorld.setHeroNewCollider();
                     gc.drawImage(rotatedImage,
-                            (xWindowCenter + xDeltaPos) - rotatedImage.getWidth() * 2 / 2,
-                            (yWindowCenter + yDeltaPos) - rotatedImage.getHeight() * 2 / 2,
-                            rotatedImage.getWidth() * 2,
-                            rotatedImage.getHeight() * 2
+                            (xWindowCenter + xDeltaPos) - rotatedImage.getWidth() / 2,
+                            (yWindowCenter + yDeltaPos) - rotatedImage.getHeight() / 2
                     );
                 }
 

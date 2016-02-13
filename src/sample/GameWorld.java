@@ -42,100 +42,76 @@ public class GameWorld {
 
         for (Enemy enemy : level.enemies) {
             enemy.update();
-            //System.out.println(enemy.getxPos() + " " + enemy.getyPos());
         }
 
         for (Bullet bullet : bullets) {
             bullet.move(time);
         }
 
-        boolean flagOfMustRemoved;
+
+        // Check colision
         for (int i = 0; i < bullets.size(); i++) {
-            flagOfMustRemoved = false;
+            boolean flagOfMustRemoved = false;
+            // Check collision between bullet and walls
             for (Level.Wall wall : level.walls) {
                 Rectangle rect = wall.getCollider();
                 if (bullets.get(i).collider.getBoundsInParent().intersects(rect.getBoundsInParent())) {
                     flagOfMustRemoved = true;
                 }
             }
-            for (Enemy enemy : level.enemies) {
-                Rectangle rect = enemy.getCollider();
+            // Check collision between bullet and enemies
+            for (int j = 0; j < level.enemies.size(); j++) {
+                Rectangle rect = level.enemies.get(i).getCollider();
+                Enemy enemy = level.enemies.get(i);
                 if (bullets.get(i).collider.getBoundsInParent().intersects(rect.getBoundsInParent())) {
-                    System.out.println("intesect");
                     flagOfMustRemoved = true;
+                    level.enemies.remove(enemy);
                 }
             }
+
+            // Check collision between bullet and bounds of location
             if (bullets.get(i).xPos > 1000 || bullets.get(i).yPos > 1000 || bullets.get(i).xPos < 0 || bullets.get(i).yPos < 0) {
                 flagOfMustRemoved = true;
-                //bullets.remove(i);
             }
+            // Remove collistion if was collision
             if (flagOfMustRemoved) {
                 bullets.remove(i);
             }
         }
 
-        Rectangle heroColliderCheck = new Rectangle(
-                hero.xPosHero - heroCollider.getWidth()/2,
-                hero.yPosHero - heroCollider.getHeight()/2,
-                heroCollider.getWidth(),
-                heroCollider.getHeight());
 
-        /*if (hero.MoveLeft) {
-            heroColliderCheck.setX(heroColliderCheck.getX()-10);
-        }
-        if (hero.MoveRight) {
-            heroColliderCheck.setX(heroColliderCheck.getX()+10);
-        }
-        if (hero.MoveUp) {
-            heroColliderCheck.setY(heroColliderCheck.getY()-10);
-        }
-        if (hero.MoveDown) {
-            heroColliderCheck.setY(heroColliderCheck.getY()+10);
-        }
-        for (Level.Wall wall : level.walls) {
-            Rectangle rect = wall.getCollider();
-            if (heroColliderCheck.getBoundsInParent().intersects(rect.getBoundsInParent())) {
-                hero.MoveLeft = hero.MoveDown = hero.MoveRight = hero.MoveUp = false;
-                return;
-            }
-        }*/
+        // Check hero's collision
+        Rectangle heroColliderCheck = hero.collider;
+
         if (hero.MoveLeft) {
             heroColliderCheck.setX(heroColliderCheck.getX()-8);
             for (Level.Wall wall : level.walls) {
-                Rectangle rect = wall.getCollider();
-                if (heroColliderCheck.getBoundsInParent().intersects(rect.getBoundsInParent())) {
+                if (heroColliderCheck.getBoundsInParent().intersects(wall.getCollider().getBoundsInParent())) {
                     hero.MoveLeft = false;
-                    //return;
                 }
             }
         }
         if (hero.MoveRight) {
             heroColliderCheck.setX(heroColliderCheck.getX()+8);
             for (Level.Wall wall : level.walls) {
-                Rectangle rect = wall.getCollider();
-                if (heroColliderCheck.getBoundsInParent().intersects(rect.getBoundsInParent())) {
+                if (heroColliderCheck.getBoundsInParent().intersects(wall.getCollider().getBoundsInParent())) {
                     hero.MoveRight = false;
-                    //return;
                 }
             }
         }
         if (hero.MoveUp) {
             heroColliderCheck.setY(heroColliderCheck.getY()-8);
             for (Level.Wall wall : level.walls) {
-                Rectangle rect = wall.getCollider();
-                if (heroColliderCheck.getBoundsInParent().intersects(rect.getBoundsInParent())) {
+                if (heroColliderCheck.getBoundsInParent().intersects(wall.getCollider().getBoundsInParent())) {
                     hero.MoveUp = false;
-                    //return;
                 }
             }
         }
         if (hero.MoveDown) {
             heroColliderCheck.setY(heroColliderCheck.getY()+8);
             for (Level.Wall wall : level.walls) {
-                Rectangle rect = wall.getCollider();
-                if (heroColliderCheck.getBoundsInParent().intersects(rect.getBoundsInParent())) {
+                if (heroColliderCheck.getBoundsInParent().intersects(wall.getCollider().getBoundsInParent())) {
                     hero.MoveDown = false;
-                    //return;
                 }
             }
         }
@@ -145,14 +121,6 @@ public class GameWorld {
 
     public Hero getHero() {
         return hero;
-    }
-
-    public void setHeroNewCollider() {
-        heroCollider = new Rectangle(
-                hero.xPosHero - heroTexture.getHeight()/2/2,
-                hero.yPosHero - heroTexture.getWidth()/2/2,
-                heroTexture.getHeight()/2,
-                heroTexture.getWidth()/2);
     }
 
     public Image getHeroTexture () {

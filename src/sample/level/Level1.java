@@ -61,8 +61,8 @@ public class Level1 extends Level {
         walls.add(new Level.Wall(textureWalls.get(1), 630, 475, 210, 24, new Rectangle(630, 475, 210, 24) ));
 
         walls.add(new Level.Wall(textureWalls.get(2), 123, 502, 24, 210, new Rectangle(123, 502, 24, 210) ));
-        walls.add(new Level.Wall(textureWalls.get(2), 362, 262, 24, 210, new Rectangle(362, 262, 24, 210) ));
-        walls.add(new Level.Wall(textureWalls.get(2), 603 , 502, 24, 210, new Rectangle(601, 502, 24, 210) ));
+        walls.add(new Level.Wall(textureWalls.get(2), 363, 262, 24, 210, new Rectangle(363, 262, 24, 210) ));
+        walls.add(new Level.Wall(textureWalls.get(2), 603 , 502, 24, 210, new Rectangle(603, 502, 24, 210) ));
         walls.add(new Level.Wall(textureWalls.get(2), 843, 262, 24, 210, new Rectangle(843, 262, 24, 210) ));
 
     }
