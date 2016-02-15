@@ -16,6 +16,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import sample.level.Level;
 import sample.spriteManagers.SpriteManagerAim;
@@ -146,10 +147,17 @@ public class Main extends Application {
 
         theScene.setCursor(Cursor.NONE);
 
+
+        //set full screen
+        primaryStage.setFullScreen(true);
+        xWindowSize = (int)Screen.getPrimary().getVisualBounds().getWidth();
+        yWindowSize = (int)Screen.getPrimary().getVisualBounds().getHeight() + 50;
+        xWindowCenter = xWindowSize/2;
+        yWindowCenter = yWindowSize/2;
+
         Canvas canvas = new Canvas( xWindowSize, yWindowSize );
 
         root.getChildren().add( canvas );
-
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         gameWorld = new GameWorld();
@@ -190,7 +198,7 @@ public class Main extends Application {
                 gameWorld.update(time);
 
                 // Draw underground light
-                gc.drawImage(smb.getSprite(time),0,-150, 1200, 1200);
+                gc.drawImage(smb.getSprite(time),0,-200, xWindowSize, xWindowSize);
 
                 // Draw ground textures
 
