@@ -15,6 +15,11 @@ public class Hero {
     public boolean MoveRight;
     public boolean MoveDown;
 
+    public boolean stopMoveLeft = false;
+    public boolean stopMoveUp = false;
+    public boolean stopMoveRight = false;
+    public boolean stopMoveDown = false;
+
     public boolean ShotState;
     public int spentTimeShot;
     public Rectangle collider;
@@ -25,24 +30,24 @@ public class Hero {
         collider = new Rectangle(xPosHero-25, yPosHero-25, 50, 50);
     }
 
-    public void update() {
+    public void update(int heroSpeed) {
         if (spentTimeShot > 0) {
             spentTimeShot--;
         } else {
             ShotState = false;
         }
 
-        if (MoveLeft) {
-            xPosHero -= 8;
+        if (MoveLeft && !stopMoveLeft) {
+            xPosHero -= heroSpeed;
         }
-        if (MoveUp) {
-            yPosHero -= 8;
+        if (MoveUp && !stopMoveUp) {
+            yPosHero -= heroSpeed;
         }
-        if (MoveRight) {
-            xPosHero += 8;
+        if (MoveRight && !stopMoveRight) {
+            xPosHero += heroSpeed;
         }
-        if (MoveDown) {
-            yPosHero += 8;
+        if (MoveDown && !stopMoveDown) {
+            yPosHero += heroSpeed;
         }
 
         // Setting new collider's position

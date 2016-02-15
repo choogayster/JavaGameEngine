@@ -12,6 +12,8 @@ import java.util.*;
  */
 public class GameWorld {
 
+    private final int heroSpeed = 10;
+
     public Level level;
 
     private Image heroTexture;
@@ -21,7 +23,6 @@ public class GameWorld {
     public List<Bullet> bullets;
 
     public GameWorld() {
-        level = new Level1();
         level = new Level1();
         hero = new Hero();
         heroTexture = new Image(getClass().getResource( "textures/hero02.png ").toExternalForm());
@@ -61,11 +62,10 @@ public class GameWorld {
             }
             // Check collision between bullet and enemies
             for (int j = 0; j < level.enemies.size(); j++) {
-                Rectangle rect = level.enemies.get(i).getCollider();
-                Enemy enemy = level.enemies.get(i);
+                Rectangle rect = level.enemies.get(j).getCollider();
                 if (bullets.get(i).collider.getBoundsInParent().intersects(rect.getBoundsInParent())) {
                     flagOfMustRemoved = true;
-                    level.enemies.remove(enemy);
+                    level.enemies.remove(j);
                 }
             }
 
@@ -84,38 +84,66 @@ public class GameWorld {
         Rectangle heroColliderCheck = hero.collider;
 
         if (hero.MoveLeft) {
-            heroColliderCheck.setX(heroColliderCheck.getX()-8);
+            heroColliderCheck.setX(heroColliderCheck.getX()-heroSpeed);
+            boolean collision = false;
             for (Level.Wall wall : level.walls) {
                 if (heroColliderCheck.getBoundsInParent().intersects(wall.getCollider().getBoundsInParent())) {
-                    hero.MoveLeft = false;
+                    collision = true;
                 }
             }
+            if (collision) {
+                hero.stopMoveLeft = true;
+            } else {
+                hero.stopMoveLeft = false;
+            }
+            heroColliderCheck.setX(heroColliderCheck.getX()+heroSpeed);
         }
         if (hero.MoveRight) {
-            heroColliderCheck.setX(heroColliderCheck.getX()+8);
+            heroColliderCheck.setX(heroColliderCheck.getX()+heroSpeed);
+            boolean collision = false;
             for (Level.Wall wall : level.walls) {
                 if (heroColliderCheck.getBoundsInParent().intersects(wall.getCollider().getBoundsInParent())) {
-                    hero.MoveRight = false;
+                    collision = true;
                 }
             }
+            if (collision) {
+                hero.stopMoveRight = true;
+            } else {
+                hero.stopMoveRight = false;
+            }
+            heroColliderCheck.setX(heroColliderCheck.getX()-heroSpeed);
         }
         if (hero.MoveUp) {
-            heroColliderCheck.setY(heroColliderCheck.getY()-8);
+            heroColliderCheck.setY(heroColliderCheck.getY()-heroSpeed);
+            boolean collision = false;
             for (Level.Wall wall : level.walls) {
                 if (heroColliderCheck.getBoundsInParent().intersects(wall.getCollider().getBoundsInParent())) {
-                    hero.MoveUp = false;
+                    collision = true;
                 }
             }
+            if (collision) {
+                hero.stopMoveUp = true;
+            } else {
+                hero.stopMoveUp = false;
+            }
+            heroColliderCheck.setY(heroColliderCheck.getY()+heroSpeed);
         }
         if (hero.MoveDown) {
-            heroColliderCheck.setY(heroColliderCheck.getY()+8);
+            heroColliderCheck.setY(heroColliderCheck.getY()+heroSpeed);
+            boolean collision = false;
             for (Level.Wall wall : level.walls) {
                 if (heroColliderCheck.getBoundsInParent().intersects(wall.getCollider().getBoundsInParent())) {
-                    hero.MoveDown = false;
+                    collision = true;
                 }
             }
+            if (collision) {
+                hero.stopMoveDown = true;
+            } else {
+                hero.stopMoveDown = false;
+            }
+            heroColliderCheck.setY(heroColliderCheck.getY()-heroSpeed);
         }
-        hero.update();
+        hero.update(heroSpeed);
 
     }
 

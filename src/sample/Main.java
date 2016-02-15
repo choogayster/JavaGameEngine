@@ -11,6 +11,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.media.AudioClip;
@@ -76,23 +77,21 @@ public class Main extends Application {
     EventHandler<KeyEvent> keyPressedHandler = new EventHandler<KeyEvent>() {
         @Override
         public void handle(KeyEvent event) {
-            switch (event.getCode()) {
-                case A:
-                    gameWorld.getHero().MoveRight = false;
-                    gameWorld.getHero().MoveLeft = true;
-                    break;
-                case W:
-                    gameWorld.getHero().MoveDown = false;
-                    gameWorld.getHero().MoveUp = true;
-                    break;
-                case D:
-                    gameWorld.getHero().MoveLeft = false;
-                    gameWorld.getHero().MoveRight = true;
-                    break;
-                case S:
-                    gameWorld.getHero().MoveUp = false;
-                    gameWorld.getHero().MoveDown = true;
-                    break;
+            if (event.getCode() == KeyCode.A) {
+                gameWorld.getHero().MoveRight = false;
+                gameWorld.getHero().MoveLeft = true;
+            }
+            if (event.getCode() == KeyCode.W) {
+                gameWorld.getHero().MoveDown = false;
+                gameWorld.getHero().MoveUp = true;
+            }
+            if (event.getCode() == KeyCode.D) {
+                gameWorld.getHero().MoveLeft = false;
+                gameWorld.getHero().MoveRight = true;
+            }
+            if (event.getCode() == KeyCode.S) {
+                gameWorld.getHero().MoveUp = false;
+                gameWorld.getHero().MoveDown = true;
             }
         }
     };
@@ -120,10 +119,14 @@ public class Main extends Application {
     EventHandler<MouseEvent> mouseClickHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
-            gameWorld.addBullet(new Bullet(time, gameWorld.getHero().xPosHero, gameWorld.getHero().yPosHero, -beta));
+            gameWorld.addBullet(
+                    new Bullet(time, gameWorld.getHero().xPosHero, gameWorld.getHero().yPosHero, -beta));
+            /*gameWorld.addBullet(
+                    new Bullet(time, gameWorld.getHero().xPosHero-Math.cos(-beta)*4, gameWorld.getHero().yPosHero-Math.sin(-beta)*4, -beta));
+            gameWorld.addBullet(
+                    new Bullet(time, gameWorld.getHero().xPosHero-Math.cos(-beta)*8, gameWorld.getHero().yPosHero-Math.sin(-beta)*8, -beta));*/
             gameWorld.getHero().ShotState = true;
-            gameWorld.getHero().spentTimeShot = 3;
-            shot.play();
+            gameWorld.getHero().spentTimeShot = 3;//shot.play();
         }
     };
 
@@ -190,6 +193,7 @@ public class Main extends Application {
                 gc.drawImage(smb.getSprite(time),0,-150, 1200, 1200);
 
                 // Draw ground textures
+
                 for (Level.Ground ground : gameWorld.level.grounds) {
                     gc.drawImage(ground.getTexture(),
                             ground.getxCoord() - gameWorld.getHero().xPosHero + xWindowCenter + xDeltaPos,
