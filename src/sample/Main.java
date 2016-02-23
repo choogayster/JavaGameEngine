@@ -54,9 +54,9 @@ public class Main extends Application {
         public void handle(MouseEvent mouseEvent) {
             xPos = mouseEvent.getSceneX();
             yPos = mouseEvent.getSceneY();
-            alfa = Math.atan2( (yWindowCenter - (windowHeight-yPos)), (xWindowCenter - xPos));
-            xDeltaPos = L * Math.cos(-alfa);
-            yDeltaPos = L * Math.sin(-alfa);
+            alfa = -Math.atan2( (yWindowCenter - (windowHeight-yPos)), (xWindowCenter - xPos));
+            xDeltaPos = L * Math.cos(alfa);
+            yDeltaPos = L * Math.sin(alfa);
         }
     };
 
@@ -105,9 +105,8 @@ public class Main extends Application {
     EventHandler<MouseEvent> mouseClickHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
-            beta = Math.atan2( (yWindowCenter - (windowHeight-yPos)),(xWindowCenter - xPos));
             gameWorld.addBullet(
-                    new Bullet(time, gameWorld.getHero().xPosHero, gameWorld.getHero().yPosHero+20, -beta));
+                    new Bullet(time, gameWorld.getHero().xPosHero, gameWorld.getHero().yPosHero, alfa));
             gameWorld.getHero().ShotState = true;
             gameWorld.getHero().spentTimeShot = 3;
             shot.play();
@@ -128,6 +127,7 @@ public class Main extends Application {
         theScene.setOnKeyReleased(keyReleasedHandler);
         theScene.setOnMousePressed(mouseClickHandler);
 
+        // Invisible cursor
         theScene.setCursor(Cursor.NONE);
 
         //set full screen
@@ -138,12 +138,13 @@ public class Main extends Application {
         yWindowCenter = windowHeight/2;
 
         Canvas canvas = new Canvas( windowWidth, windowHeight );
-
         root.getChildren().add( canvas );
+        // Init graphics context
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
+        // Init gameworld
         gameWorld = new GameWorld();
-
+        // Init renderer
         renderer = new Renderer(gc, gameWorld);
 
         // Create sprite managers
@@ -157,16 +158,15 @@ public class Main extends Application {
         final long startNanoTime = System.nanoTime();
         ImageView textureView = new ImageView();
 
+        // Main Game Loop
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
-
+                // Get delta time
                 time = (currentNanoTime - startNanoTime) / 1000000000.0;
-
                 // Update world
                 gameWorld.update(time);
-
                 // Render world
-                renderer.render(windowWidth, windowHeight, time, xWindowCenter, yWindowCenter, xDeltaPos, yDeltaPos, xPos, yPos);
+                renderer.render(windowWidth, windowHeight, time, alfa, xWindowCenter, yWindowCenter, xDeltaPos, yDeltaPos, xPos, yPos);
 
             }
         }.start();

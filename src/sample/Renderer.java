@@ -47,6 +47,7 @@ public class Renderer {
             int windowWidth,
             int windowHeight,
             double time,
+            double alfa,
             double xWindowCenter,
             double yWindowCenter,
             double xDeltaPos,
@@ -55,7 +56,7 @@ public class Renderer {
             double yPos)
     {
         // Draw background
-        context.drawImage(spriteManagers.get(0).getSprite(time),0,0, windowWidth, windowHeight);
+        context.drawImage(spriteManagers.get(0).getSprite(time), 0, -100, windowWidth, windowHeight+200);
 
         // Draw ground textures
         for (Level.Ground ground : world.level.grounds) {
@@ -87,28 +88,27 @@ public class Renderer {
         // Draw bullet
         ImageView bulletView = new ImageView(staticImages.get(1));
         for (Bullet bullet_ : world.bullets) {
-            /*bulletView.setRotate(90 - bullet_.angle * 180/Math.PI);
-            params = new SnapshotParameters();
-            params.setFill(Color.TRANSPARENT);
-            Image bullet = bulletView.snapshot(params, null);*/
             context.drawImage(staticImages.get(1),
                     bullet_.xPos  - world.getHero().xPosHero + xWindowCenter + xDeltaPos,
-                    bullet_.yPos  - world.getHero().yPosHero + yWindowCenter + yDeltaPos,
-                    6,
-                    6);
+                    bullet_.yPos  - world.getHero().yPosHero + yWindowCenter + yDeltaPos);
         }
 
 
-        // If hero is in shot state draw current shot sprite
+        // HERO DRAWING
+        context.save();
+        // Set axis of rotation into center of hero sprite
+        context.translate((xWindowCenter + xDeltaPos) , (yWindowCenter + yDeltaPos) );
+        // Rotate hero sprite
+        context.rotate(alfa * 180/Math.PI);
         if (world.getHero().ShotState) {
             context.setFill(Color.GREEN);
-            context.fillRect((xWindowCenter + xDeltaPos) - 60 / 2, (yWindowCenter + yDeltaPos) - 60 / 2, 60, 60);
-        }
-        // If hero isn't shot state draw hero
-        else {
+            context.fillRect(-30, -30, 60, 60);
+
+        } else {
             context.setFill(Color.BLACK);
-            context.fillRect((xWindowCenter + xDeltaPos) - 60 / 2, (yWindowCenter + yDeltaPos) - 60 / 2, 60, 60);
+            context.fillRect(-30, -30, 60, 60);
         }
+        context.restore();
 
         // Draw walls
         for (Level.Wall wall : world.level.walls) {

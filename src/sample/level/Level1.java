@@ -29,10 +29,14 @@ public class Level1 extends Level {
     @Override
     public void createEnemyRails() {
         EnemyRails rail = new EnemyRails();
-        rail.addPoint(480, 360);
-        rail.addPoint(780, 360);
-        //rail.addPoint(780, 360);
-        //rail.bind(rail.getPoint(0), rail.getPoint(1));
+        rail.addPoint(480, 300);
+        rail.addPoint(780, 300);
+        rail.addPoint(780, 420);
+        rail.addPoint(480, 420);
+        rail.bindById(0, 1);
+        rail.bindById(1, 2);
+        rail.bindById(2, 3);
+        rail.bindById(3, 0);
         rails.add(rail);
     }
 

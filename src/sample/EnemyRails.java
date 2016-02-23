@@ -42,7 +42,7 @@ public class EnemyRails {
         // bind first point with second
         firstPoint.next.add(secondPoint);
         // bind second point with first
-        firstPoint.next.add(secondPoint);
+        secondPoint.next.add(firstPoint);
     }
 
     public void bindById(int firstId, int secondId) {
@@ -71,7 +71,6 @@ public class EnemyRails {
             this.x = x;
             this.y = y;
             this.next = new ArrayList<>();
-            this.next.add(this);
         }
     }
 }

@@ -2,6 +2,8 @@ package sample;
 
 import javafx.scene.shape.Rectangle;
 
+import java.util.Random;
+
 /**
  * Created by Vlad on 12.02.2016.
  */
@@ -15,7 +17,7 @@ public class Enemy {
     private double height;
     private Rectangle collider;
 
-    private double velocity = 5;
+    private double velocity = 2;
 
     public boolean MoveLeft;
     public boolean MoveUp;
@@ -43,13 +45,18 @@ public class Enemy {
     }
 
     public void update() {
+        if (Math.abs(currentPointOnRails.x - xPos) < 7) {
+            xPos = currentPointOnRails.x;
+        }
+        if (Math.abs(currentPointOnRails.y - yPos) < 7) {
+            yPos = currentPointOnRails.y;
+        }
         if (xPos == currentPointOnRails.x && yPos == currentPointOnRails.y) {
-            if (currentNumberOfPoint == enemyRails.size()) {
-                currentNumberOfPoint = 0;
-            }
-            currentPointOnRails = enemyRails.getPoint(currentNumberOfPoint);
-            //currentPointOnRails = currentPointOnRails.next.get(0);
-            currentNumberOfPoint++;
+            // If current point is reached, generate index of next point
+            Random rand = new Random();
+            int nextStep = rand.nextInt(2);
+            currentPointOnRails = currentPointOnRails.next.get(nextStep);
+
         } else {
             if (currentPointOnRails.x > xPos) {
                 MoveLeft = false;
