@@ -27,7 +27,7 @@ public class Hero {
     public Hero() {
         xPosHero = 500;
         yPosHero = 399;
-        collider = new Rectangle(xPosHero-25, yPosHero-25, 50, 50);
+        collider = new Rectangle(xPosHero-10, yPosHero-10, 25,35);
     }
 
     public void update(int heroSpeed) {
@@ -51,8 +51,8 @@ public class Hero {
         }
 
         // Setting new collider's position
-        collider.setX(xPosHero-25);
-        collider.setY(yPosHero-25);
+        collider.setX(xPosHero-10);
+        collider.setY(yPosHero-10);
 
     }
 }

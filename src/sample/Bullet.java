@@ -25,10 +25,10 @@ public class Bullet {
         this.yPos = yPos;
         this.angle = angle;
         collider = new Line(
-                xPos + 6*Math.cos(angle),
-                yPos + 6*Math.sin(angle),
-                xPos - 6*Math.cos(angle),
-                yPos - 6*Math.sin(angle));
+                xPos + Math.cos(angle),
+                yPos + Math.sin(angle),
+                xPos - Math.cos(angle),
+                yPos - Math.sin(angle));
     }
 
     public void move(double time) {
@@ -36,10 +36,10 @@ public class Bullet {
         xPos = xPosHero + velocity * (this.time - time) * Math.cos(angle);
         yPos = yPosHero + velocity * (this.time - time) * Math.sin(angle);
         // Set new collider's position
-        collider.setStartX(xPos + 6*Math.cos(angle));
-        collider.setStartY(yPos + 6*Math.sin(angle));
-        collider.setEndX(xPos - 6*Math.cos(angle));
-        collider.setEndY(yPos - 6*Math.sin(angle));
+        collider.setStartX(xPos + Math.cos(angle));
+        collider.setStartY(yPos + Math.sin(angle));
+        collider.setEndX(xPos - Math.cos(angle));
+        collider.setEndY(yPos - Math.sin(angle));
     }
 
 }

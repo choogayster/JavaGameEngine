@@ -57,12 +57,12 @@ public abstract class Level {
     }
 
     public class Ground {
-        private int xCoord;
-        private int yCoord;
-        private int width;
-        private int height;
+        private double xCoord;
+        private double yCoord;
+        private double width;
+        private double height;
         private Image texture;
-        public Ground (Image texture, int xCoord, int yCoord, int width, int height) {
+        public Ground (Image texture, double xCoord, double yCoord, double width, double height) {
             this.texture = texture;
             this.xCoord = xCoord;
             this.yCoord = yCoord;
@@ -70,7 +70,7 @@ public abstract class Level {
             this.height = height;
         }
 
-        public int getxCoord() {
+        public double getxCoord() {
             return xCoord;
         }
 
@@ -78,7 +78,7 @@ public abstract class Level {
             this.xCoord = xCoord;
         }
 
-        public int getyCoord() {
+        public double getyCoord() {
             return yCoord;
         }
 
@@ -86,7 +86,7 @@ public abstract class Level {
             this.yCoord = yCoord;
         }
 
-        public int getWidth() {
+        public double getWidth() {
             return width;
         }
 
@@ -94,7 +94,7 @@ public abstract class Level {
             this.width = width;
         }
 
-        public int getHeight() {
+        public double getHeight() {
             return height;
         }
 
