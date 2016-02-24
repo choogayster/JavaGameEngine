@@ -9,44 +9,48 @@ public class Hero {
 
     public int xPosHero;
     public int yPosHero;
+    public double angle;
 
-    public boolean MoveLeft;
-    public boolean MoveUp;
-    public boolean MoveRight;
-    public boolean MoveDown;
+    public boolean moveLeft;
+    public boolean moveUp;
+    public boolean moveRight;
+    public boolean moveDown;
 
     public boolean stopMoveLeft = false;
     public boolean stopMoveUp = false;
     public boolean stopMoveRight = false;
     public boolean stopMoveDown = false;
 
-    public boolean ShotState;
-    public int spentTimeShot;
+    public boolean attack;
+
     public Rectangle collider;
+
+    public Weapon weapon;
 
     public Hero() {
         xPosHero = 500;
         yPosHero = 399;
         collider = new Rectangle(xPosHero-10, yPosHero-10, 25,35);
+        weapon = new Weapon(0);
     }
 
     public void update(int heroSpeed) {
-        if (spentTimeShot > 0) {
+        /*if (spentTimeShot > 0) {
             spentTimeShot--;
         } else {
             ShotState = false;
-        }
+        }*/
 
-        if (MoveLeft && !stopMoveLeft) {
+        if (moveLeft && !stopMoveLeft) {
             xPosHero -= heroSpeed;
         }
-        if (MoveUp && !stopMoveUp) {
+        if (moveUp && !stopMoveUp) {
             yPosHero -= heroSpeed;
         }
-        if (MoveRight && !stopMoveRight) {
+        if (moveRight && !stopMoveRight) {
             xPosHero += heroSpeed;
         }
-        if (MoveDown && !stopMoveDown) {
+        if (moveDown && !stopMoveDown) {
             yPosHero += heroSpeed;
         }
 

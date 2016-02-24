@@ -39,10 +39,30 @@ public class GameWorld {
         bullets.add(bullet);
     }
 
-    //  UPDATE GAME WORLD!!!
+    /*This function update game world*/
     public void update(double time) {
 
-        // Enemy find hero around
+
+        checkHeroAroundEnemys();
+        checkBulletCollision();
+        checkHeroCollision();
+
+        for (Bullet bullet : bullets) {
+            bullet.move(time);
+        }
+
+        for (Enemy enemy : level.enemies) {
+            enemy.update();
+        }
+
+        hero.update(heroSpeed);
+
+        if (hero.attack == true) {
+            createAttack(time);
+        }
+    }
+
+    private void checkHeroAroundEnemys() {
         for (Enemy enemy : level.enemies) {
             // Create ray from enemy to hero
             Line line = new Line(enemy.getxPos(), enemy.getyPos(), hero.xPosHero, hero.yPosHero);
@@ -61,17 +81,9 @@ public class GameWorld {
                 enemy.setInAttackState(true);
             }
         }
+    }
 
-        for (Enemy enemy : level.enemies) {
-            enemy.update();
-        }
-
-        for (Bullet bullet : bullets) {
-            bullet.move(time);
-        }
-
-
-        // Check colision
+    private void checkBulletCollision() {
         for (int i = 0; i < bullets.size(); i++) {
             boolean flagOfMustRemoved = false;
             // Check collision between bullet and walls
@@ -94,17 +106,25 @@ public class GameWorld {
             if (bullets.get(i).xPos > 1000 || bullets.get(i).yPos > 1000 || bullets.get(i).xPos < 0 || bullets.get(i).yPos < 0) {
                 flagOfMustRemoved = true;
             }
-            // Remove collistion if was collision
+            // Remove bullet if was collision
             if (flagOfMustRemoved) {
                 bullets.remove(i);
             }
         }
+    }
 
-
-        // Check hero's collision
+    private void checkHeroCollision() {
         Rectangle heroColliderCheck = hero.collider;
 
-        if (hero.MoveLeft) {
+        checkLeftCollision(heroColliderCheck);
+        checkRightCollision(heroColliderCheck);
+        checkUpCollision(heroColliderCheck);
+        checkDownCollision(heroColliderCheck);
+
+    }
+
+    private void checkLeftCollision(Rectangle heroColliderCheck) {
+        if (hero.moveLeft) {
             heroColliderCheck.setX(heroColliderCheck.getX()-heroSpeed);
             boolean collision = false;
             for (Level.Wall wall : level.walls) {
@@ -119,7 +139,10 @@ public class GameWorld {
             }
             heroColliderCheck.setX(heroColliderCheck.getX()+heroSpeed);
         }
-        if (hero.MoveRight) {
+    }
+
+    private void checkRightCollision(Rectangle heroColliderCheck) {
+        if (hero.moveRight) {
             heroColliderCheck.setX(heroColliderCheck.getX()+heroSpeed);
             boolean collision = false;
             for (Level.Wall wall : level.walls) {
@@ -134,7 +157,10 @@ public class GameWorld {
             }
             heroColliderCheck.setX(heroColliderCheck.getX()-heroSpeed);
         }
-        if (hero.MoveUp) {
+    }
+
+    private void checkUpCollision(Rectangle heroColliderCheck) {
+        if (hero.moveUp) {
             heroColliderCheck.setY(heroColliderCheck.getY()-heroSpeed);
             boolean collision = false;
             for (Level.Wall wall : level.walls) {
@@ -149,7 +175,10 @@ public class GameWorld {
             }
             heroColliderCheck.setY(heroColliderCheck.getY()+heroSpeed);
         }
-        if (hero.MoveDown) {
+    }
+
+    private void checkDownCollision(Rectangle heroColliderCheck) {
+        if (hero.moveDown) {
             heroColliderCheck.setY(heroColliderCheck.getY()+heroSpeed);
             boolean collision = false;
             for (Level.Wall wall : level.walls) {
@@ -164,16 +193,14 @@ public class GameWorld {
             }
             heroColliderCheck.setY(heroColliderCheck.getY()-heroSpeed);
         }
-        hero.update(heroSpeed);
+    }
 
+    private void createAttack(double time) {
+        addBullet( new Bullet(time, hero.xPosHero, hero.yPosHero, hero.angle));
     }
 
     public Hero getHero() {
         return hero;
-    }
-
-    public Image getHeroTexture () {
-        return heroTexture;
     }
 
 }

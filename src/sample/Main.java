@@ -57,6 +57,8 @@ public class Main extends Application {
             alfa = -Math.atan2( (yWindowCenter - (windowHeight-yPos)), (xWindowCenter - xPos));
             xDeltaPos = L * Math.cos(alfa);
             yDeltaPos = L * Math.sin(alfa);
+            gameWorld.getHero().angle = alfa;
+            System.out.println(alfa);
         }
     };
 
@@ -64,20 +66,20 @@ public class Main extends Application {
         @Override
         public void handle(KeyEvent event) {
             if (event.getCode() == KeyCode.A) {
-                gameWorld.getHero().MoveRight = false;
-                gameWorld.getHero().MoveLeft = true;
+                gameWorld.getHero().moveRight = false;
+                gameWorld.getHero().moveLeft = true;
             }
             if (event.getCode() == KeyCode.W) {
-                gameWorld.getHero().MoveDown = false;
-                gameWorld.getHero().MoveUp = true;
+                gameWorld.getHero().moveDown = false;
+                gameWorld.getHero().moveUp = true;
             }
             if (event.getCode() == KeyCode.D) {
-                gameWorld.getHero().MoveLeft = false;
-                gameWorld.getHero().MoveRight = true;
+                gameWorld.getHero().moveLeft = false;
+                gameWorld.getHero().moveRight = true;
             }
             if (event.getCode() == KeyCode.S) {
-                gameWorld.getHero().MoveUp = false;
-                gameWorld.getHero().MoveDown = true;
+                gameWorld.getHero().moveUp = false;
+                gameWorld.getHero().moveDown = true;
             }
         }
     };
@@ -87,29 +89,38 @@ public class Main extends Application {
         public void handle(KeyEvent event) {
             switch (event.getCode()) {
                 case A:
-                    gameWorld.getHero().MoveLeft = false;
+                    gameWorld.getHero().moveLeft = false;
                     break;
                 case W:
-                    gameWorld.getHero().MoveUp = false;
+                    gameWorld.getHero().moveUp = false;
                     break;
                 case D:
-                    gameWorld.getHero().MoveRight = false;
+                    gameWorld.getHero().moveRight = false;
                     break;
                 case S:
-                    gameWorld.getHero().MoveDown = false;
+                    gameWorld.getHero().moveDown = false;
                     break;
+
             }
         }
     };
 
-    EventHandler<MouseEvent> mouseClickHandler = new EventHandler<MouseEvent>() {
+    EventHandler<MouseEvent> mousePressedHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
-            gameWorld.addBullet(
+            /*gameWorld.addBullet(
                     new Bullet(time, gameWorld.getHero().xPosHero, gameWorld.getHero().yPosHero, alfa));
             gameWorld.getHero().ShotState = true;
-            gameWorld.getHero().spentTimeShot = 3;
+            gameWorld.getHero().spentTimeShot = 3;*/
             //shot.play();
+            gameWorld.getHero().attack = true;
+        }
+    };
+
+    EventHandler<MouseEvent> mouseReleasedHandler = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent event) {
+            gameWorld.getHero().attack = false;
         }
     };
 
@@ -125,7 +136,8 @@ public class Main extends Application {
         theScene.setOnMouseDragged(mouseHandler);
         theScene.setOnKeyPressed(keyPressedHandler);
         theScene.setOnKeyReleased(keyReleasedHandler);
-        theScene.setOnMousePressed(mouseClickHandler);
+        theScene.setOnMousePressed(mousePressedHandler);
+        theScene.setOnMouseReleased(mouseReleasedHandler);
 
         // Invisible cursor
         theScene.setCursor(Cursor.NONE);

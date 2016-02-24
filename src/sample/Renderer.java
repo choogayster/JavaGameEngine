@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
 import sample.level.Level;
 import sample.spriteManagers.SpriteManager;
 
@@ -99,22 +100,7 @@ public class Renderer {
                     line.getEndY()- world.getHero().yPosHero + yWindowCenter + yDeltaPos);*/
         }
 
-
-        // HERO DRAWING
-        context.save();
-        // Set axis of rotation into center of hero sprite
-        context.translate((xWindowCenter + xDeltaPos) , (yWindowCenter + yDeltaPos) );
-        // Rotate hero sprite
-        context.rotate(alfa * 180/Math.PI);
-        if (world.getHero().ShotState) {
-            context.setFill(Color.GREEN);
-            context.fillRect(-30, -30, 60, 60);
-
-        } else {
-            context.setFill(Color.BLACK);
-            context.fillRect(-30, -30, 60, 60);
-        }
-        context.restore();
+        drawHero(windowWidth,windowHeight,time,alfa,xWindowCenter,yWindowCenter,xDeltaPos,yDeltaPos,xPos,yPos);
 
         // Draw walls
         for (Level.Wall wall : world.level.walls) {
@@ -130,5 +116,44 @@ public class Renderer {
                 spriteManagers.get(2).getSize()[0],
                 spriteManagers.get(2).getSize()[1]);
 
+    }
+
+    private void drawHero(
+            int windowWidth,
+            int windowHeight,
+            double time,
+            double alfa,
+            double xWindowCenter,
+            double yWindowCenter,
+            double xDeltaPos,
+            double yDeltaPos,
+            double xPos,
+            double yPos)
+    {
+        // Draw attack colider
+        double h = 50;
+        double w = 70;
+        double xpoints[] = {
+                (xWindowCenter + xDeltaPos) + h*Math.cos(alfa) + w/2*Math.cos(alfa + Math.PI/2),
+                (xWindowCenter + xDeltaPos) + h*Math.cos(alfa) + w/2*Math.cos(alfa - Math.PI/2),
+                (xWindowCenter + xDeltaPos) + w/2*Math.cos(alfa - Math.PI/2),
+                (xWindowCenter + xDeltaPos) + w/2*Math.cos(alfa + Math.PI/2)};
+        double ypoints[] = {
+                (yWindowCenter + yDeltaPos) + h*Math.sin(alfa) + w/2*Math.sin(alfa + Math.PI/2),
+                (yWindowCenter + yDeltaPos) + h*Math.sin(alfa) + w/2*Math.sin(alfa - Math.PI/2),
+                (yWindowCenter + yDeltaPos) + w/2*Math.sin(alfa - Math.PI/2),
+                (yWindowCenter + yDeltaPos) + w/2*Math.sin(alfa + Math.PI/2)};
+        context.setFill(Color.GREEN);
+        context.strokePolygon(xpoints, ypoints, xpoints.length);
+
+        // Draw hero
+        context.save();
+        // Set axis of rotation into center of hero sprite
+        context.translate((xWindowCenter + xDeltaPos) , (yWindowCenter + yDeltaPos) );
+        // Rotate hero sprite
+        context.rotate(alfa * 180/Math.PI);
+        context.setFill(Color.BLACK);
+        context.fillRect(-20, -20, 40, 40);
+        context.restore();
     }
 }
