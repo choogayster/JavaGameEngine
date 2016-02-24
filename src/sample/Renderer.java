@@ -5,6 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import sample.level.Level;
 import sample.spriteManagers.SpriteManager;
 
@@ -56,7 +57,7 @@ public class Renderer {
             double yPos)
     {
         // Draw background
-        context.drawImage(spriteManagers.get(0).getSprite(time), 0, -100, windowWidth, windowHeight+200);
+        context.drawImage(spriteManagers.get(0).getSprite(time), 0, -100, windowWidth, windowHeight+300);
 
         // Draw ground textures
         for (Level.Ground ground : world.level.grounds) {
@@ -86,11 +87,16 @@ public class Renderer {
         SnapshotParameters params = new SnapshotParameters();
 
         // Draw bullet
-        ImageView bulletView = new ImageView(staticImages.get(1));
         for (Bullet bullet_ : world.bullets) {
             context.drawImage(staticImages.get(1),
-                    bullet_.xPos  - world.getHero().xPosHero + xWindowCenter + xDeltaPos,
-                    bullet_.yPos  - world.getHero().yPosHero + yWindowCenter + yDeltaPos);
+                    bullet_.xPos - world.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                    bullet_.yPos - world.getHero().yPosHero + yWindowCenter + yDeltaPos);
+            context.setLineWidth(2);
+            /*Line line = bullet_.collider;
+            context.strokeLine(line.getStartX()- world.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                    line.getStartY()- world.getHero().yPosHero + yWindowCenter + yDeltaPos,
+                    line.getEndX()- world.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                    line.getEndY()- world.getHero().yPosHero + yWindowCenter + yDeltaPos);*/
         }
 
 

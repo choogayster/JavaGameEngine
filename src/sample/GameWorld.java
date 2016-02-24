@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.scene.image.Image;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import sample.level.Level;
 import sample.level.Level1;
@@ -40,6 +41,26 @@ public class GameWorld {
 
     //  UPDATE GAME WORLD!!!
     public void update(double time) {
+
+        // Enemy find hero around
+        for (Enemy enemy : level.enemies) {
+            // Create ray from enemy to hero
+            Line line = new Line(enemy.getxPos(), enemy.getyPos(), hero.xPosHero, hero.yPosHero);
+            // Intersection between ray (from enemy to hero) and wall
+            boolean isIntersection = false;
+            for (Level.Wall wall : level.walls) {
+                // Check intersection between ray and walls
+                if (line.getBoundsInParent().intersects(wall.getCollider().getBoundsInParent())) {
+                    isIntersection = true;
+                    break;
+                }
+            }
+            if (isIntersection) {
+                enemy.setInAttackState(false);
+            } else {
+                enemy.setInAttackState(true);
+            }
+        }
 
         for (Enemy enemy : level.enemies) {
             enemy.update();

@@ -109,7 +109,7 @@ public class Main extends Application {
                     new Bullet(time, gameWorld.getHero().xPosHero, gameWorld.getHero().yPosHero, alfa));
             gameWorld.getHero().ShotState = true;
             gameWorld.getHero().spentTimeShot = 3;
-            shot.play();
+            //shot.play();
         }
     };
 

@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
 import java.util.Random;
@@ -9,6 +10,7 @@ import java.util.Random;
  */
 public class Enemy {
     private EnemyRails enemyRails;
+    private EnemyRails pathToHero;
     private int currentNumberOfPoint = 0;
     private EnemyRails.Point currentPointOnRails;
     private double xPos;
@@ -23,6 +25,8 @@ public class Enemy {
     public boolean MoveUp;
     public boolean MoveRight;
     public boolean MoveDown;
+
+    private boolean inAttackState = false;
 
     public Enemy(int xPos, int yPos, int width, int height, EnemyRails enemyRails) {
         this.xPos = xPos;
@@ -45,52 +49,61 @@ public class Enemy {
     }
 
     public void update() {
-        if (Math.abs(currentPointOnRails.x - xPos) < 7) {
-            xPos = currentPointOnRails.x;
-        }
-        if (Math.abs(currentPointOnRails.y - yPos) < 7) {
-            yPos = currentPointOnRails.y;
-        }
-        if (xPos == currentPointOnRails.x && yPos == currentPointOnRails.y) {
+        // If enemy not attacks hero
+        if (!inAttackState) {
+            // Approximation of X enemy's coordinates
+            if (Math.abs(currentPointOnRails.x - xPos) < 7) {
+                xPos = currentPointOnRails.x;
+            }
+            // Approximation of Y enemy's coordinates
+            if (Math.abs(currentPointOnRails.y - yPos) < 7) {
+                yPos = currentPointOnRails.y;
+            }
             // If current point is reached, generate index of next point
-            Random rand = new Random();
-            int nextStep = rand.nextInt(2);
-            currentPointOnRails = currentPointOnRails.next.get(nextStep);
-
-        } else {
-            if (currentPointOnRails.x > xPos) {
-                MoveLeft = false;
-                MoveRight = true;
-            } else if (currentPointOnRails.x < xPos) {
-                MoveRight = false;
-                MoveLeft = true;
+            if (xPos == currentPointOnRails.x && yPos == currentPointOnRails.y) {
+                Random rand = new Random();
+                int nextStep = rand.nextInt(2);
+                currentPointOnRails = currentPointOnRails.next.get(nextStep);
             }
-            if (currentPointOnRails.y > yPos) {
-                MoveUp = false;
-                MoveDown = true;
+            // Change enemy's state to moving, if current point isn't reached
+            else {
+                if (currentPointOnRails.x > xPos) {
+                    MoveLeft = false;
+                    MoveRight = true;
+                } else if (currentPointOnRails.x < xPos) {
+                    MoveRight = false;
+                    MoveLeft = true;
+                }
+                if (currentPointOnRails.y > yPos) {
+                    MoveUp = false;
+                    MoveDown = true;
+                }
+                if (currentPointOnRails.y < yPos) {
+                    MoveDown = false;
+                    MoveUp = true;
+                }
             }
-            if (currentPointOnRails.y < yPos) {
-                MoveDown = false;
-                MoveUp = true;
+            // Change enemy's position
+            if (MoveLeft) {
+                xPos -= velocity;
             }
+            if (MoveUp) {
+                yPos -= velocity;
+            }
+            if (MoveRight) {
+                xPos += velocity;
+            }
+            if (MoveDown) {
+                yPos += velocity;
+            }
+            // Setting new collider's position
+            collider.setX(xPos - width);
+            collider.setY(yPos - height);
         }
-        if (MoveLeft) {
-            xPos-=velocity;
-        }
-        if (MoveUp) {
-            yPos-=velocity;
-        }
-        if (MoveRight) {
-            xPos+=velocity;
-        }
-        if (MoveDown) {
-            yPos+=velocity;
-        }
+        // If enemy attacks hero
+        else {
 
-        // Setting new collider's position
-        collider.setX(xPos-width);
-        collider.setY(yPos-height);
-
+        }
     }
 
     public double getyPos() {
@@ -111,5 +124,17 @@ public class Enemy {
 
     public Rectangle getCollider() {
         return collider;
+    }
+
+    public boolean isInAttackState() {
+        return inAttackState;
+    }
+
+    public void setInAttackState(boolean inAttackState) {
+        this.inAttackState = inAttackState;
+    }
+
+    public void buildPathToHero(double xPosHero, double yPosHero) {
+        // TODO
     }
 }
