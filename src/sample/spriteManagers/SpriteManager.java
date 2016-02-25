@@ -13,12 +13,15 @@ public abstract class SpriteManager {
     protected List<Image> sprites;
     protected double duration;
     protected int size[];
+    protected boolean singleAnimation;
 
     public SpriteManager() {
         sprites = new ArrayList<>();
         duration = 0.017;
         size = new int[2];
+        singleAnimation = false;
         loadImages();
+
     }
 
     // Extended classes must overide this method!!!
@@ -43,6 +46,10 @@ public abstract class SpriteManager {
         return sprites.get(index);
     }
 
+    public Image getSpriteById(int index) {
+        return sprites.get(index);
+    }
+
     public double getDuration() {
         return duration;
     }
@@ -58,6 +65,10 @@ public abstract class SpriteManager {
     public void setSize(int h, int w) {
         size[0] = h;
         size[1] = w;
+    }
+
+    public void setSingleAnimation(boolean singleAnimation) {
+        this.singleAnimation = singleAnimation;
     }
 
 }

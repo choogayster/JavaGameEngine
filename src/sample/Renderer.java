@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.collections.ObservableList;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -23,6 +24,21 @@ public class Renderer {
     private List<SpriteManager> spriteManagers;
     private List<Image> staticImages;
 
+    // properties of screen
+    private int windowWidth;
+    private int windowHeight;
+    private double time;
+    private double alfa;
+    private double xWindowCenter;
+    private double yWindowCenter;
+    private double xDeltaPos;
+    private double yDeltaPos;
+    private double xPos;
+    private double yPos;
+
+    private boolean inShake = false;
+    private boolean shakeSwitcher = true;
+
     public Renderer(GraphicsContext context, GameWorld world) {
         this.context = context;
         this.world = world;
@@ -45,29 +61,67 @@ public class Renderer {
 
     }
 
-    public void render(
-            int windowWidth,
-            int windowHeight,
-            double time,
-            double alfa,
-            double xWindowCenter,
-            double yWindowCenter,
-            double xDeltaPos,
-            double yDeltaPos,
-            double xPos,
-            double yPos)
+    // MAIN RENDERING FUNCTION
+    public void render( int windowWidth, int windowHeight, double time, double alfa,
+            double xWindowCenter, double yWindowCenter, double xDeltaPos, double yDeltaPos, double xPos, double yPos)
     {
-        // Draw background
-        context.drawImage(spriteManagers.get(0).getSprite(time), 0, -100, windowWidth, windowHeight+300);
+        setPropetries(windowWidth, windowHeight, time, alfa, xWindowCenter, yWindowCenter, xDeltaPos, yDeltaPos,xPos, yPos);
 
-        // Draw ground textures
+        drawBackground();
+
+        context.save();
+        if (inShake) {
+            if (shakeSwitcher == true) {
+                context.translate(0, 20);
+                shakeSwitcher = false;
+            } else {
+                context.translate(0, -20);
+                shakeSwitcher = true;
+            }
+        }
+
+        drawGrounds();
+        drawEnemies();
+        drawLightUnderHero();
+        drawBullets();
+        drawHero();
+        drawWalls();
+
+        context.restore();
+
+        drawAim();
+
+    }
+
+
+    private void setPropetries(int windowWidth, int windowHeight, double time, double alfa,
+                               double xWindowCenter, double yWindowCenter, double xDeltaPos, double yDeltaPos, double xPos, double yPos) {
+        this.windowWidth = windowWidth;
+        this.windowHeight = windowHeight;
+        this.time = time;
+        this.alfa = alfa;
+        this.xWindowCenter = xWindowCenter;
+        this.yWindowCenter = yWindowCenter;
+        this.xDeltaPos = xDeltaPos;
+        this.yDeltaPos = yDeltaPos;
+        this.xPos = xPos;
+        this.yPos = yPos;
+
+    }
+
+    private void drawBackground() {
+        context.drawImage(spriteManagers.get(0).getSprite(time), 0, -100, windowWidth, windowHeight+300);
+    }
+
+    private void drawGrounds() {
         for (Level.Ground ground : world.level.grounds) {
             context.drawImage(ground.getTexture(),
                     ground.getxCoord() - world.getHero().xPosHero + xWindowCenter + xDeltaPos,
                     ground.getyCoord() - world.getHero().yPosHero + yWindowCenter + yDeltaPos);
         }
+    }
 
-        // Draw enemies
+    private void drawEnemies() {
         for (Enemy enemy : world.level.enemies) {
             context.setFill(Color.YELLOWGREEN);
             context.fillRect(
@@ -76,18 +130,17 @@ public class Renderer {
                     enemy.getWidth(),
                     enemy.getHeight());
         }
+    }
 
-        // Draw the light under hero
+    private void drawLightUnderHero() {
         context.drawImage(staticImages.get(0),
                 (xWindowCenter + xDeltaPos) - staticImages.get(0).getWidth()*10/2,
                 (yWindowCenter + yDeltaPos) - staticImages.get(0).getHeight()*10/2,
                 staticImages.get(0).getWidth()*10,
                 staticImages.get(0).getHeight()*10);
+    }
 
-
-        SnapshotParameters params = new SnapshotParameters();
-
-        // Draw bullet
+    private void  drawBullets() {
         for (Bullet bullet_ : world.bullets) {
             context.drawImage(staticImages.get(1),
                     bullet_.xPos - world.getHero().xPosHero + xWindowCenter + xDeltaPos,
@@ -99,52 +152,23 @@ public class Renderer {
                     line.getEndX()- world.getHero().xPosHero + xWindowCenter + xDeltaPos,
                     line.getEndY()- world.getHero().yPosHero + yWindowCenter + yDeltaPos);*/
         }
-
-        drawHero(windowWidth,windowHeight,time,alfa,xWindowCenter,yWindowCenter,xDeltaPos,yDeltaPos,xPos,yPos);
-
-        // Draw walls
-        for (Level.Wall wall : world.level.walls) {
-            context.drawImage(wall.getTexture(),
-                    wall.getxCoord() - world.getHero().xPosHero + xWindowCenter + xDeltaPos,
-                    wall.getyCoord() - world.getHero().yPosHero + yWindowCenter + yDeltaPos);
-        }
-
-        // Draw aim
-        context.drawImage(spriteManagers.get(2).getSprite(time),
-                xPos - spriteManagers.get(2).getSize()[0] / 2,
-                yPos - spriteManagers.get(2).getSize()[1] / 2,
-                spriteManagers.get(2).getSize()[0],
-                spriteManagers.get(2).getSize()[1]);
-
     }
 
-    private void drawHero(
-            int windowWidth,
-            int windowHeight,
-            double time,
-            double alfa,
-            double xWindowCenter,
-            double yWindowCenter,
-            double xDeltaPos,
-            double yDeltaPos,
-            double xPos,
-            double yPos)
-    {
+    private void drawHero( ) {
         // Draw attack colider
-        double h = 50;
-        double w = 70;
-        double xpoints[] = {
-                (xWindowCenter + xDeltaPos) + h*Math.cos(alfa) + w/2*Math.cos(alfa + Math.PI/2),
-                (xWindowCenter + xDeltaPos) + h*Math.cos(alfa) + w/2*Math.cos(alfa - Math.PI/2),
-                (xWindowCenter + xDeltaPos) + w/2*Math.cos(alfa - Math.PI/2),
-                (xWindowCenter + xDeltaPos) + w/2*Math.cos(alfa + Math.PI/2)};
-        double ypoints[] = {
-                (yWindowCenter + yDeltaPos) + h*Math.sin(alfa) + w/2*Math.sin(alfa + Math.PI/2),
-                (yWindowCenter + yDeltaPos) + h*Math.sin(alfa) + w/2*Math.sin(alfa - Math.PI/2),
-                (yWindowCenter + yDeltaPos) + w/2*Math.sin(alfa - Math.PI/2),
-                (yWindowCenter + yDeltaPos) + w/2*Math.sin(alfa + Math.PI/2)};
-        context.setFill(Color.GREEN);
-        context.strokePolygon(xpoints, ypoints, xpoints.length);
+        ObservableList<Double> points = world.getHero().colliderWeapon.getPoints();
+        double xpoints1[] = {
+                points.get(0)- world.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                points.get(2)- world.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                points.get(4)- world.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                points.get(6)- world.getHero().xPosHero + xWindowCenter + xDeltaPos};
+        double ypoints1[] = {
+                points.get(1)- world.getHero().yPosHero + yWindowCenter + yDeltaPos,
+                points.get(3)- world.getHero().yPosHero + yWindowCenter + yDeltaPos,
+                points.get(5)- world.getHero().yPosHero + yWindowCenter + yDeltaPos,
+                points.get(7)- world.getHero().yPosHero + yWindowCenter + yDeltaPos};
+
+        context.strokePolygon(xpoints1, ypoints1, xpoints1.length);
 
         // Draw hero
         context.save();
@@ -156,4 +180,22 @@ public class Renderer {
         context.fillRect(-20, -20, 40, 40);
         context.restore();
     }
+
+    private void drawWalls() {
+        for (Level.Wall wall : world.level.walls) {
+            context.drawImage(wall.getTexture(),
+                    wall.getxCoord() - world.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                    wall.getyCoord() - world.getHero().yPosHero + yWindowCenter + yDeltaPos);
+        }
+    }
+
+    private void drawAim() {
+        context.drawImage(spriteManagers.get(2).getSprite(time),
+                xPos - spriteManagers.get(2).getSize()[0] / 2,
+                yPos - spriteManagers.get(2).getSize()[1] / 2,
+                spriteManagers.get(2).getSize()[0],
+                spriteManagers.get(2).getSize()[1]);
+    }
+
+
 }

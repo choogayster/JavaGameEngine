@@ -13,8 +13,17 @@ public class Weapon {
     private int holder;
     private double attackSpread;
     private double attackDelay;
-    private Rectangle collider; // Collider for melee attack weapon
+    private int colliderWidth; // Collider for melee attack weapon
+    private int colliderHeight; // Collider for melee attack weapon
     private double colliderLifetime;
+
+    public int getColliderHeight() {
+        return colliderHeight;
+    }
+
+    public int getColliderWidth() {
+        return colliderWidth;
+    }
 
     public Weapon(int type) {
         this.type = type;
@@ -31,7 +40,8 @@ public class Weapon {
                 holder = Integer.MAX_VALUE;
                 attackSpread = 0;
                 attackDelay = 0.8;
-                collider = new Rectangle(0, 0, 60, 40);
+                colliderWidth =  70;
+                colliderHeight = 50;
                 break;
             case 1:
                 // knife fighting
@@ -40,7 +50,8 @@ public class Weapon {
                 attackDelay = 0.5;
                 holder = Integer.MAX_VALUE;
                 attackSpread = 0;
-                collider = new Rectangle(0, 0, 70, 50);
+                colliderWidth =  70;
+                colliderHeight = 60;
                 break;
             case 2:
                 // baseball-bat
@@ -49,27 +60,32 @@ public class Weapon {
                 attackDelay = 0.7;
                 holder = Integer.MAX_VALUE;
                 attackSpread = 0;
-                collider = new Rectangle(0, 0, 80, 70);
-                break;
-            case 3:
-                // baseball-bat
-                meleeAttack = true;
-                rangeAttack = false;
-                attackDelay = 0.7;
-                holder = Integer.MAX_VALUE;
-                attackSpread = 0;
-                collider = new Rectangle(0, 0, 80, 70);
+                colliderWidth =  80;
+                colliderHeight = 70;
                 break;
             default:
-                // hand-to-hand fighting by default
+                // hand-to-hand fighting
                 meleeAttack = true;
                 rangeAttack = false;
-                nonKillingAttack = true;
                 holder = Integer.MAX_VALUE;
-                attackDelay = 0.8;
                 attackSpread = 0;
-                collider = new Rectangle(0, 0, 60, 40);
+                attackDelay = 0.8;
+                colliderWidth =  60;
+                colliderHeight = 40;
+                break;
 
         }
+    }
+
+    public double getAttackDelay() {
+        return attackDelay;
+    }
+
+    public boolean isRangeAttack() {
+        return rangeAttack;
+    }
+
+    public boolean isMeleeAttack() {
+        return meleeAttack;
     }
 }

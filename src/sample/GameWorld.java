@@ -46,6 +46,7 @@ public class GameWorld {
         checkHeroAroundEnemys();
         checkBulletCollision();
         checkHeroCollision();
+        checkHeroMeleeWeaponCollision();
 
         for (Bullet bullet : bullets) {
             bullet.move(time);
@@ -59,6 +60,17 @@ public class GameWorld {
 
         if (hero.attack == true) {
             createAttack(time);
+        }
+    }
+
+    private void checkHeroMeleeWeaponCollision() {
+        for (int j = 0; j < level.enemies.size(); j++) {
+            Rectangle rect = level.enemies.get(j).getCollider();
+            if (hero.colliderWeapon.getBoundsInParent().intersects(rect.getBoundsInParent())) {
+                level.enemies.remove(j);
+                //System.out.println("intersects");
+                //System.out.println(hero.colliderWeapon.getPoints());
+            }
         }
     }
 
@@ -196,7 +208,19 @@ public class GameWorld {
     }
 
     private void createAttack(double time) {
-        addBullet( new Bullet(time, hero.xPosHero, hero.yPosHero, hero.angle));
+        if (hero.timeOfLastAttack == -1 ||
+                time - hero.timeOfLastAttack > hero.weapon.getAttackDelay()) {
+            // If delay of attack ended do new attack
+
+            if (hero.weapon.isMeleeAttack()) {
+
+            }
+            if (hero.weapon.isRangeAttack()) {
+                addBullet(new Bullet(time, hero.xPosHero, hero.yPosHero, hero.angle));
+            }
+
+            hero.timeOfLastAttack = time;
+        }
     }
 
     public Hero getHero() {

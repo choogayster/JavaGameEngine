@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
 /**
@@ -22,16 +23,34 @@ public class Hero {
     public boolean stopMoveDown = false;
 
     public boolean attack;
+    public double timeOfLastAttack = -1;
 
     public Rectangle collider;
 
     public Weapon weapon;
+    public Polygon colliderWeapon;
 
     public Hero() {
         xPosHero = 500;
         yPosHero = 399;
         collider = new Rectangle(xPosHero-10, yPosHero-10, 25,35);
         weapon = new Weapon(0);
+        colliderWeapon = new Polygon();
+        setColliderWeapon();
+    }
+
+    private void setColliderWeapon() {
+        double w = weapon.getColliderWidth();
+        double h = weapon.getColliderHeight();
+        colliderWeapon = new Polygon(
+                xPosHero - h*Math.cos(angle) + w/2*Math.cos(angle + Math.PI/2),
+                yPosHero - h*Math.sin(angle) + w/2*Math.sin(angle + Math.PI/2),
+                xPosHero - h*Math.cos(angle) + w/2*Math.cos(angle - Math.PI/2),
+                yPosHero - h*Math.sin(angle) + w/2*Math.sin(angle - Math.PI/2),
+                xPosHero + w/2*Math.cos(angle - Math.PI/2),
+                yPosHero + w/2*Math.sin(angle - Math.PI/2),
+                xPosHero + w/2*Math.cos(angle + Math.PI/2),
+                yPosHero + w/2*Math.sin(angle + Math.PI/2));
     }
 
     public void update(int heroSpeed) {
@@ -57,6 +76,8 @@ public class Hero {
         // Setting new collider's position
         collider.setX(xPosHero-10);
         collider.setY(yPosHero-10);
+
+        setColliderWeapon();
 
     }
 }

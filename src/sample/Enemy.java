@@ -102,7 +102,9 @@ public class Enemy {
         }
         // If enemy attacks hero
         else {
-
+            // Setting new collider's position
+            collider.setX(xPos - width);
+            collider.setY(yPos - height);
         }
     }
 

@@ -58,7 +58,6 @@ public class Main extends Application {
             xDeltaPos = L * Math.cos(alfa);
             yDeltaPos = L * Math.sin(alfa);
             gameWorld.getHero().angle = alfa;
-            System.out.println(alfa);
         }
     };
 
