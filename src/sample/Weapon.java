@@ -15,7 +15,9 @@ public class Weapon {
     private double attackDelay;
     private int colliderWidth; // Collider for melee attack weapon
     private int colliderHeight; // Collider for melee attack weapon
-    private double colliderLifetime;
+
+
+    private double colliderActivityTime = 0.4;
 
     public int getColliderHeight() {
         return colliderHeight;
@@ -87,5 +89,9 @@ public class Weapon {
 
     public boolean isMeleeAttack() {
         return meleeAttack;
+    }
+
+    public double getColliderActivityTime() {
+        return colliderActivityTime;
     }
 }

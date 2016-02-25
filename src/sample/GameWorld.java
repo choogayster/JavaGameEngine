@@ -46,7 +46,6 @@ public class GameWorld {
         checkHeroAroundEnemys();
         checkBulletCollision();
         checkHeroCollision();
-        checkHeroMeleeWeaponCollision();
 
         for (Bullet bullet : bullets) {
             bullet.move(time);
@@ -58,19 +57,32 @@ public class GameWorld {
 
         hero.update(heroSpeed);
 
+        if (hero.lefMouseClicked == true) {
+            checkAttack(time);
+        }
+
         if (hero.attack == true) {
-            createAttack(time);
+            makeAttack(time);
         }
     }
 
-    private void checkHeroMeleeWeaponCollision() {
-        for (int j = 0; j < level.enemies.size(); j++) {
-            Rectangle rect = level.enemies.get(j).getCollider();
-            if (hero.colliderWeapon.getBoundsInParent().intersects(rect.getBoundsInParent())) {
-                level.enemies.remove(j);
-                //System.out.println("intersects");
-                //System.out.println(hero.colliderWeapon.getPoints());
-            }
+
+    private void checkAttack(double time) {
+        if (hero.timeOfLastAttack == -1 || (time - hero.timeOfLastAttack) > hero.weapon.getAttackDelay()) {
+            hero.attack = true;
+            hero.timeOfLastAttack = time;
+
+        } else if (time-hero.timeOfLastAttack > hero.weapon.getColliderActivityTime()) {
+            hero.attack = false;
+        }
+    }
+
+    private void makeAttack(double time) {
+        if (hero.weapon.isMeleeAttack()) {
+            checkHeroMeleeWeaponCollision();
+        }
+        if (hero.weapon.isRangeAttack()) {
+            addBullet(new Bullet(time, hero.xPosHero, hero.yPosHero, hero.angle));
         }
     }
 
@@ -133,6 +145,17 @@ public class GameWorld {
         checkUpCollision(heroColliderCheck);
         checkDownCollision(heroColliderCheck);
 
+    }
+
+    private void checkHeroMeleeWeaponCollision() {
+        for (int j = 0; j < level.enemies.size(); j++) {
+            Rectangle rect = level.enemies.get(j).getCollider();
+            if (hero.colliderWeapon.getBoundsInParent().intersects(rect.getBoundsInParent())) {
+                level.enemies.remove(j);
+                //System.out.println("intersects");
+                //System.out.println(hero.colliderWeapon.getPoints());
+            }
+        }
     }
 
     private void checkLeftCollision(Rectangle heroColliderCheck) {
@@ -207,21 +230,6 @@ public class GameWorld {
         }
     }
 
-    private void createAttack(double time) {
-        if (hero.timeOfLastAttack == -1 ||
-                time - hero.timeOfLastAttack > hero.weapon.getAttackDelay()) {
-            // If delay of attack ended do new attack
-
-            if (hero.weapon.isMeleeAttack()) {
-
-            }
-            if (hero.weapon.isRangeAttack()) {
-                addBullet(new Bullet(time, hero.xPosHero, hero.yPosHero, hero.angle));
-            }
-
-            hero.timeOfLastAttack = time;
-        }
-    }
 
     public Hero getHero() {
         return hero;

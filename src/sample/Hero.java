@@ -22,13 +22,15 @@ public class Hero {
     public boolean stopMoveRight = false;
     public boolean stopMoveDown = false;
 
-    public boolean attack;
+    //public boolean attack;
     public double timeOfLastAttack = -1;
 
     public Rectangle collider;
 
     public Weapon weapon;
     public Polygon colliderWeapon;
+    public boolean lefMouseClicked;
+    public boolean attack;
 
     public Hero() {
         xPosHero = 500;

@@ -99,7 +99,6 @@ public class Main extends Application {
                 case S:
                     gameWorld.getHero().moveDown = false;
                     break;
-
             }
         }
     };
@@ -107,19 +106,16 @@ public class Main extends Application {
     EventHandler<MouseEvent> mousePressedHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
-            /*gameWorld.addBullet(
-                    new Bullet(time, gameWorld.getHero().xPosHero, gameWorld.getHero().yPosHero, alfa));
-            gameWorld.getHero().ShotState = true;
-            gameWorld.getHero().spentTimeShot = 3;*/
             //shot.play();
-            gameWorld.getHero().attack = true;
+            gameWorld.getHero().lefMouseClicked = true;
         }
     };
 
     EventHandler<MouseEvent> mouseReleasedHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
-            gameWorld.getHero().attack = false;
+            //Create attack
+            gameWorld.getHero().lefMouseClicked = false;
         }
     };
 

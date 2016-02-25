@@ -177,7 +177,11 @@ public class Renderer {
         // Rotate hero sprite
         context.rotate(alfa * 180/Math.PI);
         context.setFill(Color.BLACK);
+        if (world.getHero().attack == true) {
+            context.setFill(Color.GREEN);
+        }
         context.fillRect(-20, -20, 40, 40);
+
         context.restore();
     }
 
