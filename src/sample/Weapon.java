@@ -79,11 +79,11 @@ public class Weapon {
                 // machine gun
                 meleeAttack = false;
                 rangeAttack = true;
-                attackDelay = 0.005;
+                attackDelay = 0.1;
                 holder = Integer.MAX_VALUE;
                 attackSpread = 0;
-                colliderWidth =  80;
-                colliderHeight = 70;
+                colliderWidth =  15;
+                colliderHeight = 40;
                 break;
             default:
                 // hand-to-hand fighting

@@ -144,34 +144,44 @@ public class Renderer {
 
     private void  drawBullets() {
         for (Bullet bullet_ : world.bullets) {
-            context.drawImage(staticImages.get(1),
+            // Draw collider
+            ObservableList<Double> points = bullet_.collider.getPoints();
+            double xpoints1[] = {
+                    points.get(0) - world.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                    points.get(2) - world.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                    points.get(4) - world.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                    points.get(6) - world.getHero().xPosHero + xWindowCenter + xDeltaPos};
+            double ypoints1[] = {
+                    points.get(1) - world.getHero().yPosHero + yWindowCenter + yDeltaPos,
+                    points.get(3) - world.getHero().yPosHero + yWindowCenter + yDeltaPos,
+                    points.get(5) - world.getHero().yPosHero + yWindowCenter + yDeltaPos,
+                    points.get(7) - world.getHero().yPosHero + yWindowCenter + yDeltaPos};
+            context.strokePolygon(xpoints1, ypoints1, xpoints1.length);
+
+            // Draw bullet
+            /*context.drawImage(staticImages.get(1),
                     bullet_.xPos - world.getHero().xPosHero + xWindowCenter + xDeltaPos,
-                    bullet_.yPos - world.getHero().yPosHero + yWindowCenter + yDeltaPos);
-            context.setLineWidth(2);
-            /*Line line = bullet_.collider;
-            context.strokeLine(line.getStartX()- world.getHero().xPosHero + xWindowCenter + xDeltaPos,
-                    line.getStartY()- world.getHero().yPosHero + yWindowCenter + yDeltaPos,
-                    line.getEndX()- world.getHero().xPosHero + xWindowCenter + xDeltaPos,
-                    line.getEndY()- world.getHero().yPosHero + yWindowCenter + yDeltaPos);*/
+                    bullet_.yPos - world.getHero().yPosHero + yWindowCenter + yDeltaPos);*/
         }
     }
 
     private void drawHero( ) {
-        // Draw attack colider
-        ObservableList<Double> points = world.getHero().colliderWeapon.getPoints();
-        double xpoints1[] = {
-                points.get(0)- world.getHero().xPosHero + xWindowCenter + xDeltaPos,
-                points.get(2)- world.getHero().xPosHero + xWindowCenter + xDeltaPos,
-                points.get(4)- world.getHero().xPosHero + xWindowCenter + xDeltaPos,
-                points.get(6)- world.getHero().xPosHero + xWindowCenter + xDeltaPos};
-        double ypoints1[] = {
-                points.get(1)- world.getHero().yPosHero + yWindowCenter + yDeltaPos,
-                points.get(3)- world.getHero().yPosHero + yWindowCenter + yDeltaPos,
-                points.get(5)- world.getHero().yPosHero + yWindowCenter + yDeltaPos,
-                points.get(7)- world.getHero().yPosHero + yWindowCenter + yDeltaPos};
+        if (world.getHero().weapon.isMeleeAttack()) {
+            // Draw attack colider
+            ObservableList<Double> points = world.getHero().colliderWeapon.getPoints();
+            double xpoints1[] = {
+                    points.get(0) - world.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                    points.get(2) - world.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                    points.get(4) - world.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                    points.get(6) - world.getHero().xPosHero + xWindowCenter + xDeltaPos};
+            double ypoints1[] = {
+                    points.get(1) - world.getHero().yPosHero + yWindowCenter + yDeltaPos,
+                    points.get(3) - world.getHero().yPosHero + yWindowCenter + yDeltaPos,
+                    points.get(5) - world.getHero().yPosHero + yWindowCenter + yDeltaPos,
+                    points.get(7) - world.getHero().yPosHero + yWindowCenter + yDeltaPos};
 
-        context.strokePolygon(xpoints1, ypoints1, xpoints1.length);
-
+            context.strokePolygon(xpoints1, ypoints1, xpoints1.length);
+        }
         // Draw hero
         context.save();
         // Set axis of rotation into center of hero sprite

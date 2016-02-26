@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
 /**
@@ -11,24 +12,38 @@ public class Bullet {
     public double angle;
     public double xPos;
     public double yPos;
-    public Line collider;
+    //public Line collider;
+    public Polygon collider;
+    private int h;
+    private int w;
     private double xPosHero;
     private double yPosHero;
     private double time;
     private final double velocity = 2000;
 
-    public Bullet (double time, double xPos, double yPos, double angle) {
+    public Bullet (double time, double xPos, double yPos, double angle, int w, int h) {
         this.time = time;
         this.xPosHero = xPos;
         this.yPosHero = yPos;
         this.xPos = xPos;
         this.yPos = yPos;
+        this.w = w;
+        this.h = h;
         this.angle = angle;
-        collider = new Line(
+        /*collider = new Line(
                 xPos + 50*Math.cos(angle),
                 yPos + 50*Math.sin(angle),
                 xPos - Math.cos(angle),
-                yPos - Math.sin(angle));
+                yPos - Math.sin(angle));*/
+        collider = new Polygon(
+                xPos - h/2*Math.cos(angle) + w/2*Math.cos(angle + Math.PI/2),
+                yPos - h/2*Math.sin(angle) + w/2*Math.sin(angle + Math.PI/2),
+                xPos - h/2*Math.cos(angle) + w/2*Math.cos(angle - Math.PI/2),
+                yPos - h/2*Math.sin(angle) + w/2*Math.sin(angle - Math.PI/2),
+                xPos + h/2*Math.cos(angle)  + w/2*Math.cos(angle - Math.PI/2),
+                yPos + h/2*Math.sin(angle) + w/2*Math.sin(angle - Math.PI/2),
+                xPos + h/2*Math.cos(angle) + w/2*Math.cos(angle + Math.PI/2),
+                yPos + h/2*Math.sin(angle) + w/2*Math.sin(angle + Math.PI/2));
     }
 
     public void move(double time) {
@@ -36,10 +51,19 @@ public class Bullet {
         xPos = xPosHero + velocity * (this.time - time) * Math.cos(angle);
         yPos = yPosHero + velocity * (this.time - time) * Math.sin(angle);
         // Set new collider's position
-        collider.setStartX(xPos + 50*Math.cos(angle));
+        /*collider.setStartX(xPos + 50*Math.cos(angle));
         collider.setStartY(yPos + 50*Math.sin(angle));
         collider.setEndX(xPos - Math.cos(angle));
-        collider.setEndY(yPos - Math.sin(angle));
+        collider.setEndY(yPos - Math.sin(angle));*/
+        collider = new Polygon(
+                xPos - h/2*Math.cos(angle) + w/2*Math.cos(angle + Math.PI/2),
+                yPos - h/2*Math.sin(angle) + w/2*Math.sin(angle + Math.PI/2),
+                xPos - h/2*Math.cos(angle) + w/2*Math.cos(angle - Math.PI/2),
+                yPos - h/2*Math.sin(angle) + w/2*Math.sin(angle - Math.PI/2),
+                xPos + h/2*Math.cos(angle)  + w/2*Math.cos(angle - Math.PI/2),
+                yPos + h/2*Math.sin(angle) + w/2*Math.sin(angle - Math.PI/2),
+                xPos + h/2*Math.cos(angle) + w/2*Math.cos(angle + Math.PI/2),
+                yPos + h/2*Math.sin(angle) + w/2*Math.sin(angle + Math.PI/2));
     }
 
 }

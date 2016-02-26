@@ -91,7 +91,7 @@ public class GameWorld {
         }
         if (hero.weapon.isRangeAttack()) {
             makeShake = true;
-            addBullet(new Bullet(time, hero.xPosHero, hero.yPosHero, hero.angle));
+            addBullet(new Bullet(time, hero.xPosHero, hero.yPosHero, hero.angle, hero.weapon.getColliderWidth(), hero.weapon.getColliderHeight()));
         }
     }
 
