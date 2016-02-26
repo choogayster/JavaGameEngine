@@ -17,7 +17,7 @@ public class Weapon {
     private int colliderHeight; // Collider for melee attack weapon
 
 
-    private double colliderActivityTime = 0.4;
+    private double colliderActivityTime = 0.25;
 
     public int getColliderHeight() {
         return colliderHeight;
@@ -60,6 +60,26 @@ public class Weapon {
                 meleeAttack = true;
                 rangeAttack = false;
                 attackDelay = 0.7;
+                holder = Integer.MAX_VALUE;
+                attackSpread = 0;
+                colliderWidth =  80;
+                colliderHeight = 70;
+                break;
+            case 3:
+                // gun
+                meleeAttack = false;
+                rangeAttack = true;
+                attackDelay = 0.3;
+                holder = Integer.MAX_VALUE;
+                attackSpread = 0;
+                colliderWidth =  80;
+                colliderHeight = 70;
+                break;
+            case 4:
+                // machine gun
+                meleeAttack = false;
+                rangeAttack = true;
+                attackDelay = 0.005;
                 holder = Integer.MAX_VALUE;
                 attackSpread = 0;
                 colliderWidth =  80;

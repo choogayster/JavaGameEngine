@@ -36,7 +36,7 @@ public class Hero {
         xPosHero = 500;
         yPosHero = 399;
         collider = new Rectangle(xPosHero-10, yPosHero-10, 25,35);
-        weapon = new Weapon(0);
+        weapon = new Weapon(4);
         colliderWeapon = new Polygon();
         setColliderWeapon();
     }

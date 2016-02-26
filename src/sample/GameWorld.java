@@ -21,7 +21,10 @@ public class GameWorld {
     private Rectangle heroCollider;
     private Hero hero;
 
+    public boolean makeShake = false;
+
     public List<Bullet> bullets;
+    public List<Event> events;
 
     public GameWorld() {
         level = new Level1();
@@ -61,8 +64,10 @@ public class GameWorld {
             checkAttack(time);
         }
 
-        if (hero.attack == true) {
-            makeAttack(time);
+        if (hero.weapon.isMeleeAttack()) {
+            if (hero.attack == true) {
+                makeAttack(time);
+            }
         }
     }
 
@@ -71,6 +76,9 @@ public class GameWorld {
         if (hero.timeOfLastAttack == -1 || (time - hero.timeOfLastAttack) > hero.weapon.getAttackDelay()) {
             hero.attack = true;
             hero.timeOfLastAttack = time;
+            if (hero.weapon.isRangeAttack()) {
+                makeAttack(time);
+            }
 
         } else if (time-hero.timeOfLastAttack > hero.weapon.getColliderActivityTime()) {
             hero.attack = false;
@@ -82,6 +90,7 @@ public class GameWorld {
             checkHeroMeleeWeaponCollision();
         }
         if (hero.weapon.isRangeAttack()) {
+            makeShake = true;
             addBullet(new Bullet(time, hero.xPosHero, hero.yPosHero, hero.angle));
         }
     }
@@ -235,4 +244,12 @@ public class GameWorld {
         return hero;
     }
 
+    private class Event {
+        private int id; // 1-
+        private int xPos;
+        private int yPos;
+        private double duration;
+        private double startTime;
+        public Event () {}
+    }
 }

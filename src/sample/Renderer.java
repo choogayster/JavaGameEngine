@@ -70,12 +70,12 @@ public class Renderer {
         drawBackground();
 
         context.save();
-        if (inShake) {
+        if (world.makeShake) {
             if (shakeSwitcher == true) {
-                context.translate(0, 20);
+                context.translate(5 * Math.cos(alfa), 5 * Math.sin(alfa));
                 shakeSwitcher = false;
             } else {
-                context.translate(0, -20);
+                context.translate(-5 * Math.cos(alfa), -5 * Math.sin(alfa));
                 shakeSwitcher = true;
             }
         }
@@ -90,6 +90,8 @@ public class Renderer {
         context.restore();
 
         drawAim();
+
+        world.makeShake = false;
 
     }
 
@@ -177,9 +179,9 @@ public class Renderer {
         // Rotate hero sprite
         context.rotate(alfa * 180/Math.PI);
         context.setFill(Color.BLACK);
-        if (world.getHero().attack == true) {
+        /*if (world.getHero().attack == true) {
             context.setFill(Color.GREEN);
-        }
+        }*/
         context.fillRect(-20, -20, 40, 40);
 
         context.restore();
