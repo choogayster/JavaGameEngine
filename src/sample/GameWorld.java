@@ -2,6 +2,7 @@ package sample;
 
 import javafx.scene.image.Image;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import sample.level.Level;
 import sample.level.Level1;
@@ -128,7 +129,7 @@ public class GameWorld {
             }
             // Check collision between bullet and enemies
             for (int j = 0; j < level.enemies.size(); j++) {
-                Rectangle rect = level.enemies.get(j).getCollider();
+                Polygon rect = level.enemies.get(j).getCollider();
                 if (bullets.get(i).collider.getBoundsInParent().intersects(rect.getBoundsInParent())) {
                     flagOfMustRemoved = true;
                     level.enemies.remove(j);
@@ -158,7 +159,7 @@ public class GameWorld {
 
     private void checkHeroMeleeWeaponCollision() {
         for (int j = 0; j < level.enemies.size(); j++) {
-            Rectangle rect = level.enemies.get(j).getCollider();
+            Polygon rect = level.enemies.get(j).getCollider();
             if (hero.colliderWeapon.getBoundsInParent().intersects(rect.getBoundsInParent())) {
                 level.enemies.remove(j);
                 //System.out.println("intersects");

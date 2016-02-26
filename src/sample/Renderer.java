@@ -131,7 +131,21 @@ public class Renderer {
                     (enemy.getyPos()-enemy.getHeight()/2) - world.getHero().yPosHero + yWindowCenter + yDeltaPos,
                     enemy.getWidth(),
                     enemy.getHeight());
+            ObservableList<Double> points = enemy.getCollider().getPoints();
+            double xpoints1[] = {
+                    points.get(0) - world.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                    points.get(2) - world.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                    points.get(4) - world.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                    points.get(6) - world.getHero().xPosHero + xWindowCenter + xDeltaPos};
+            double ypoints1[] = {
+                    points.get(1) - world.getHero().yPosHero + yWindowCenter + yDeltaPos,
+                    points.get(3) - world.getHero().yPosHero + yWindowCenter + yDeltaPos,
+                    points.get(5) - world.getHero().yPosHero + yWindowCenter + yDeltaPos,
+                    points.get(7) - world.getHero().yPosHero + yWindowCenter + yDeltaPos};
+            context.strokePolygon(xpoints1, ypoints1, xpoints1.length);
+
         }
+
     }
 
     private void drawLightUnderHero() {
