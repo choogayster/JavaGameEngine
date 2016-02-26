@@ -9,6 +9,7 @@ import javafx.scene.shape.Rectangle;
  */
 public class Bullet {
 
+    public boolean enemyBullet;
     public double angle;
     public double xPos;
     public double yPos;
@@ -19,9 +20,9 @@ public class Bullet {
     private double xPosHero;
     private double yPosHero;
     private double time;
-    private final double velocity = 2000;
+    private final double velocity = 1500;
 
-    public Bullet (double time, double xPos, double yPos, double angle, int w, int h) {
+    public Bullet (double time, double xPos, double yPos, double angle, int w, int h, boolean enemyBullet) {
         this.time = time;
         this.xPosHero = xPos;
         this.yPosHero = yPos;
@@ -30,11 +31,7 @@ public class Bullet {
         this.w = w;
         this.h = h;
         this.angle = angle;
-        /*collider = new Line(
-                xPos + 50*Math.cos(angle),
-                yPos + 50*Math.sin(angle),
-                xPos - Math.cos(angle),
-                yPos - Math.sin(angle));*/
+        this.enemyBullet = enemyBullet;
         collider = new Polygon(
                 xPos - h/2*Math.cos(angle) + w/2*Math.cos(angle + Math.PI/2),
                 yPos - h/2*Math.sin(angle) + w/2*Math.sin(angle + Math.PI/2),

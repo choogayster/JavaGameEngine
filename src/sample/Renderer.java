@@ -71,7 +71,7 @@ public class Renderer {
 
         context.save();
         if (world.makeShake) {
-            if (shakeSwitcher == true) {
+            if (shakeSwitcher) {
                 context.translate(5 * Math.cos(alfa), 5 * Math.sin(alfa));
                 shakeSwitcher = false;
             } else {
@@ -86,6 +86,7 @@ public class Renderer {
         drawBullets();
         drawHero();
         drawWalls();
+        drawEevents();
 
         context.restore();
 
@@ -93,6 +94,13 @@ public class Renderer {
 
         world.makeShake = false;
 
+    }
+
+    private void drawEevents() {
+        for (GameWorld.Event event:world.events) {
+        // TODO
+
+        }
     }
 
 

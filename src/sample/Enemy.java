@@ -12,13 +12,13 @@ import java.util.Random;
 public class Enemy {
     private EnemyRails enemyRails;
     private EnemyRails pathToHero;
-    private int currentNumberOfPoint = 0;
     private EnemyRails.Point currentPointOnRails;
+
     private double xPos;
     private double yPos;
+
     private double width;
     private double height;
-    //private Rectangle collider;
     private Polygon collider;
 
     private double velocity = 2;
@@ -28,7 +28,12 @@ public class Enemy {
     public boolean MoveRight;
     public boolean MoveDown;
 
-    private boolean inAttackState = false;
+    public double timeOfLastAttack = -1;
+    public boolean inAttackState = false;
+    public Weapon weapon;
+    public Polygon colliderWeapon;
+    public boolean lefMouseClicked;
+    public boolean attack;
 
     double angle = Math.PI / 2;
 
@@ -37,8 +42,6 @@ public class Enemy {
         this.yPos = yPos;
         this.width = w;
         this.height = h;
-        //collider = new Rectangle(xPos-width, yPos-height, width, height);
-
         collider = new Polygon(
                 xPos - h/2*Math.cos(angle) + w/2*Math.cos(angle + Math.PI/2),
                 yPos - h/2*Math.sin(angle) + w/2*Math.sin(angle + Math.PI/2),
@@ -49,6 +52,7 @@ public class Enemy {
                 xPos + h/2*Math.cos(angle) + w/2*Math.cos(angle + Math.PI/2),
                 yPos + h/2*Math.sin(angle) + w/2*Math.sin(angle + Math.PI/2));
 
+        weapon = new Weapon(4);
         this.enemyRails = enemyRails;
         currentPointOnRails = enemyRails.getPoint(0);
     }
@@ -56,7 +60,6 @@ public class Enemy {
     public Enemy(int w, int h, EnemyRails enemyRails) {
         this.width = w;
         this.height = h;
-        //collider = new Rectangle(xPos-width, yPos-height, width, height);
         collider = new Polygon(
                 xPos - h/2*Math.cos(angle) + w/2*Math.cos(angle + Math.PI/2),
                 yPos - h/2*Math.sin(angle) + w/2*Math.sin(angle + Math.PI/2),
@@ -66,6 +69,9 @@ public class Enemy {
                 yPos + h/2*Math.sin(angle) + w/2*Math.sin(angle - Math.PI/2),
                 xPos + h/2*Math.cos(angle) + w/2*Math.cos(angle + Math.PI/2),
                 yPos + h/2*Math.sin(angle) + w/2*Math.sin(angle + Math.PI/2));
+
+        weapon = new Weapon(4);
+
         this.enemyRails = enemyRails;
         currentPointOnRails = enemyRails.getPoint(0);
         this.xPos = currentPointOnRails.x;
@@ -94,17 +100,21 @@ public class Enemy {
                 if (currentPointOnRails.x > xPos) {
                     MoveLeft = false;
                     MoveRight = true;
+                    angle = Math.PI;
                 } else if (currentPointOnRails.x < xPos) {
                     MoveRight = false;
                     MoveLeft = true;
+                    angle = 0.0;
                 }
                 if (currentPointOnRails.y > yPos) {
                     MoveUp = false;
                     MoveDown = true;
+                    angle = -Math.PI/2;
                 }
                 if (currentPointOnRails.y < yPos) {
                     MoveDown = false;
                     MoveUp = true;
+                    angle = Math.PI/2;
                 }
             }
             // Change enemy's position
@@ -121,8 +131,6 @@ public class Enemy {
                 yPos += velocity;
             }
             // Setting new collider's position
-            /*collider.setX(xPos - width);
-            collider.setY(yPos - height);*/
             collider = new Polygon(
                     xPos - height/2*Math.cos(angle) + width/2*Math.cos(angle + Math.PI/2),
                     yPos - height/2*Math.sin(angle) + width/2*Math.sin(angle + Math.PI/2),
@@ -136,8 +144,7 @@ public class Enemy {
         // If enemy attacks hero
         else {
             // Setting new collider's position
-            /*collider.setX(xPos - width);
-            collider.setY(yPos - height);*/
+
             collider = new Polygon(
                     xPos - height/2*Math.cos(angle) + width/2*Math.cos(angle + Math.PI/2),
                     yPos - height/2*Math.sin(angle) + width/2*Math.sin(angle + Math.PI/2),
@@ -170,15 +177,8 @@ public class Enemy {
         return collider;
     }
 
-    public boolean isInAttackState() {
-        return inAttackState;
-    }
-
     public void setInAttackState(boolean inAttackState) {
         this.inAttackState = inAttackState;
     }
 
-    public void buildPathToHero(double xPosHero, double yPosHero) {
-        // TODO
-    }
 }

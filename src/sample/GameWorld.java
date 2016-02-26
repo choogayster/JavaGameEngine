@@ -37,6 +37,7 @@ public class GameWorld {
                 heroTexture.getWidth(),
                 heroTexture.getHeight());
         bullets = new ArrayList<>();
+        events = new ArrayList<>();
     }
 
     public void addBullet (Bullet bullet) {
@@ -57,6 +58,9 @@ public class GameWorld {
 
         for (Enemy enemy : level.enemies) {
             enemy.update();
+            if (enemy.inAttackState) {
+                checkEnemyAttack(enemy, time);
+            }
         }
 
         hero.update(heroSpeed);
@@ -69,6 +73,29 @@ public class GameWorld {
             if (hero.attack == true) {
                 makeAttack(time);
             }
+        }
+    }
+
+    private void checkEnemyAttack(Enemy enemy, double time) {
+        if (enemy.timeOfLastAttack == -1 || (time - enemy.timeOfLastAttack) > hero.weapon.getAttackDelay()) {
+            enemy.attack = true;
+            enemy.timeOfLastAttack = time;
+            if (enemy.weapon.isRangeAttack()) {
+                makeEnemyAttack(enemy, time);
+            }
+
+        } else if (time-enemy.timeOfLastAttack > enemy.weapon.getColliderActivityTime()) {
+            enemy.attack = false;
+        }
+    }
+
+    private void makeEnemyAttack(Enemy enemy, double time) {
+        if (enemy.weapon.isMeleeAttack()) {
+            checkHeroMeleeWeaponCollision();
+        }
+        if (enemy.weapon.isRangeAttack()) {
+            double angle = Math.PI*3/2 - Math.atan2(hero.xPosHero-enemy.getxPos(), hero.yPosHero-enemy.getyPos());
+            addBullet(new Bullet(time, enemy.getxPos(), enemy.getyPos(), angle, hero.weapon.getColliderWidth(), hero.weapon.getColliderHeight(), true));
         }
     }
 
@@ -92,7 +119,7 @@ public class GameWorld {
         }
         if (hero.weapon.isRangeAttack()) {
             makeShake = true;
-            addBullet(new Bullet(time, hero.xPosHero, hero.yPosHero, hero.angle, hero.weapon.getColliderWidth(), hero.weapon.getColliderHeight()));
+            addBullet(new Bullet(time, hero.xPosHero, hero.yPosHero, hero.angle, hero.weapon.getColliderWidth(), hero.weapon.getColliderHeight(), false));
         }
     }
 
@@ -128,11 +155,13 @@ public class GameWorld {
                 }
             }
             // Check collision between bullet and enemies
-            for (int j = 0; j < level.enemies.size(); j++) {
-                Polygon rect = level.enemies.get(j).getCollider();
-                if (bullets.get(i).collider.getBoundsInParent().intersects(rect.getBoundsInParent())) {
-                    flagOfMustRemoved = true;
-                    level.enemies.remove(j);
+            if (bullets.get(i).enemyBullet == false) {
+                for (int j = 0; j < level.enemies.size(); j++) {
+                    Polygon rect = level.enemies.get(j).getCollider();
+                    if (bullets.get(i).collider.getBoundsInParent().intersects(rect.getBoundsInParent())) {
+                        flagOfMustRemoved = true;
+                        level.enemies.remove(j);
+                    }
                 }
             }
 
@@ -245,8 +274,8 @@ public class GameWorld {
         return hero;
     }
 
-    private class Event {
-        private int id; // 1-
+    class Event {
+        private int id; // 1- explosion
         private int xPos;
         private int yPos;
         private double duration;
