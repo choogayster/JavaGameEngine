@@ -10,7 +10,7 @@ public class Weapon {
     private boolean meleeAttack;
     private boolean rangeAttack;
     private boolean nonKillingAttack; // In case hand-to-hand fighting
-    private int holder;
+    public int holder;
     private double attackSpread;
     private double attackDelay;
     private int colliderWidth; // Collider for melee attack weapon
@@ -80,7 +80,7 @@ public class Weapon {
                 meleeAttack = false;
                 rangeAttack = true;
                 attackDelay = 0.1;
-                holder = Integer.MAX_VALUE;
+                holder = 100;
                 attackSpread = 0;
                 colliderWidth =  15;
                 colliderHeight = 40;
