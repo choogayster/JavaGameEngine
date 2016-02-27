@@ -64,21 +64,26 @@ public class Main extends Application {
     EventHandler<KeyEvent> keyPressedHandler = new EventHandler<KeyEvent>() {
         @Override
         public void handle(KeyEvent event) {
-            if (event.getCode() == KeyCode.A) {
-                gameWorld.getHero().moveRight = false;
-                gameWorld.getHero().moveLeft = true;
-            }
-            if (event.getCode() == KeyCode.W) {
-                gameWorld.getHero().moveDown = false;
-                gameWorld.getHero().moveUp = true;
-            }
-            if (event.getCode() == KeyCode.D) {
-                gameWorld.getHero().moveLeft = false;
-                gameWorld.getHero().moveRight = true;
-            }
-            if (event.getCode() == KeyCode.S) {
-                gameWorld.getHero().moveUp = false;
-                gameWorld.getHero().moveDown = true;
+            switch (event.getCode()) {
+                case A:
+                    gameWorld.getHero().moveRight = false;
+                    gameWorld.getHero().moveLeft = true;
+                    break;
+                case W:
+                    gameWorld.getHero().moveDown = false;
+                    gameWorld.getHero().moveUp = true;
+                    break;
+                case D:
+                    gameWorld.getHero().moveLeft = false;
+                    gameWorld.getHero().moveRight = true;
+                    break;
+                case S:
+                    gameWorld.getHero().moveUp = false;
+                    gameWorld.getHero().moveDown = true;
+                    break;
+                case SPACE:
+                    gameWorld.getHero().pickUp = true;
+                    break;
             }
         }
     };
@@ -98,6 +103,9 @@ public class Main extends Application {
                     break;
                 case S:
                     gameWorld.getHero().moveDown = false;
+                    break;
+                case SPACE:
+                    gameWorld.getHero().pickUp = true;
                     break;
             }
         }
@@ -155,9 +163,7 @@ public class Main extends Application {
         renderer = new Renderer(gc, gameWorld);
 
         // Create sprite managers
-        renderer.addSpriteManager(new SpriteManagerBg(), 0.2);
-        renderer.addSpriteManager(new SpriteManagerShot1(), 0.8);
-        renderer.addSpriteManager(new SpriteManagerAim(), 0.1);
+
 
         //Playing audio
         //music.play();

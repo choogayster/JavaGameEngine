@@ -49,32 +49,32 @@ public class Level1 extends Level {
     @Override
     public void createWalls() {
 
-        walls.add(new Level.Wall(textureWalls.get(3), 120, 472, 30, 30, new Rectangle(123, 475, 24, 24) ));
-        walls.add(new Level.Wall(textureWalls.get(3), 360, 472, 30, 30, new Rectangle(363, 475, 24, 24) ));
-        walls.add(new Level.Wall(textureWalls.get(3), 360, 232, 30, 30, new Rectangle(363, 235, 24, 24) ));
-        walls.add(new Level.Wall(textureWalls.get(3), 840, 232, 30, 30, new Rectangle(843, 235, 24, 24) ));
-        walls.add(new Level.Wall(textureWalls.get(3), 840, 472, 30, 30, new Rectangle(843, 475, 24, 24) ));
-        walls.add(new Level.Wall(textureWalls.get(3), 600, 472, 30, 30, new Rectangle(603, 475, 24, 24) ));
-        walls.add(new Level.Wall(textureWalls.get(3), 600, 712, 30, 30, new Rectangle(603, 715, 24, 24) ));
-        walls.add(new Level.Wall(textureWalls.get(3), 120, 712, 30, 30, new Rectangle(123, 715, 24, 24) ));
+        walls.add(new Level.Wall(textureWalls.get(3), 120, 472, new Rectangle(123, 475, 24, 24) ));
+        walls.add(new Level.Wall(textureWalls.get(3), 360, 472, new Rectangle(363, 475, 24, 24) ));
+        walls.add(new Level.Wall(textureWalls.get(3), 360, 232, new Rectangle(363, 235, 24, 24) ));
+        walls.add(new Level.Wall(textureWalls.get(3), 840, 232, new Rectangle(843, 235, 24, 24) ));
+        walls.add(new Level.Wall(textureWalls.get(3), 840, 472, new Rectangle(843, 475, 24, 24) ));
+        walls.add(new Level.Wall(textureWalls.get(3), 600, 472, new Rectangle(603, 475, 24, 24) ));
+        walls.add(new Level.Wall(textureWalls.get(3), 600, 712, new Rectangle(603, 715, 24, 24) ));
+        walls.add(new Level.Wall(textureWalls.get(3), 120, 712, new Rectangle(123, 715, 24, 24) ));
 
-        walls.add(new Level.Wall(textureWalls.get(0), 390, 235, 450, 24, new Rectangle(390, 235, 450, 24) ));
-        walls.add(new Level.Wall(textureWalls.get(0), 150, 715, 450, 24, new Rectangle(150, 715, 450, 24) ));
+        walls.add(new Level.Wall(textureWalls.get(0), 390, 235, new Rectangle(390, 235, 450, 24) ));
+        walls.add(new Level.Wall(textureWalls.get(0), 150, 715, new Rectangle(150, 715, 450, 24) ));
 
-        walls.add(new Level.Wall(textureWalls.get(1), 150, 475, 210, 24, new Rectangle(150, 475, 210, 24) ));
-        walls.add(new Level.Wall(textureWalls.get(1), 630, 475, 210, 24, new Rectangle(630, 475, 210, 24) ));
+        walls.add(new Level.Wall(textureWalls.get(1), 150, 475, new Rectangle(150, 475, 210, 24) ));
+        walls.add(new Level.Wall(textureWalls.get(1), 630, 475, new Rectangle(630, 475, 210, 24) ));
 
-        walls.add(new Level.Wall(textureWalls.get(2), 123, 502, 24, 210, new Rectangle(123, 502, 24, 210) ));
-        walls.add(new Level.Wall(textureWalls.get(2), 363, 262, 24, 210, new Rectangle(363, 262, 24, 210) ));
-        walls.add(new Level.Wall(textureWalls.get(2), 603 , 502, 24, 210, new Rectangle(603, 502, 24, 210) ));
-        walls.add(new Level.Wall(textureWalls.get(2), 843, 262, 24, 210, new Rectangle(843, 262, 24, 210) ));
+        walls.add(new Level.Wall(textureWalls.get(2), 123, 502, new Rectangle(123, 502, 24, 210) ));
+        walls.add(new Level.Wall(textureWalls.get(2), 363, 262, new Rectangle(363, 262, 24, 210) ));
+        walls.add(new Level.Wall(textureWalls.get(2), 603, 502, new Rectangle(603, 502, 24, 210) ));
+        walls.add(new Level.Wall(textureWalls.get(2), 843, 262, new Rectangle(843, 262, 24, 210) ));
 
     }
 
     @Override
     public void createGrounds() {
 
-        grounds.add(new Level.Ground(textureGrounds.get(0), 135, 247, 720, 480 ));
+        grounds.add(new Level.Ground(textureGrounds.get(0), 135, 247));
 
     }
 }

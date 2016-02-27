@@ -17,6 +17,8 @@ public class Hero {
     public boolean moveRight;
     public boolean moveDown;
 
+    public boolean pickUp;
+
     public boolean stopMoveLeft = false;
     public boolean stopMoveUp = false;
     public boolean stopMoveRight = false;
@@ -29,6 +31,8 @@ public class Hero {
     public Polygon colliderWeapon;
     public boolean lefMouseClicked;
     public boolean attack;
+
+    public boolean drawShotState = false;
 
     public Hero() {
         xPosHero = 500;

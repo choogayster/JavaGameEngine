@@ -14,14 +14,15 @@ public abstract class SpriteManager {
     protected double duration;
     protected int size[];
     protected boolean singleAnimation;
+    public int index;
 
-    public SpriteManager() {
+    public SpriteManager(double duration) {
         sprites = new ArrayList<>();
-        duration = 0.017;
+        this.duration = duration;
         size = new int[2];
         singleAnimation = false;
         loadImages();
-
+        index = 0;
     }
 
     // Extended classes must overide this method!!!
@@ -42,8 +43,18 @@ public abstract class SpriteManager {
     }
 
     public Image getSprite(double time) {
-        int index = (int)((time % (sprites.size() * duration)) / duration);
-        return sprites.get(index);
+        if (!singleAnimation) {
+            int index = (int) ((time % (sprites.size() * duration)) / duration);
+            return sprites.get(index);
+        } else {
+            int index = (int) ((time % (sprites.size() * duration)) / duration);
+            return sprites.get(index);
+        }
+    }
+
+    public int indexOfCurrentSprite(double time) {
+        int index = (int) ((time % (sprites.size() * duration)) / duration);
+        return index;
     }
 
     public Image getSpriteById(int index) {
@@ -58,13 +69,8 @@ public abstract class SpriteManager {
         this.duration = duration;
     }
 
-    public int[] getSize() {
-        return size;
-    }
-
-    public void setSize(int h, int w) {
-        size[0] = h;
-        size[1] = w;
+    public int getCollectionSize() {
+        return sprites.size();
     }
 
     public void setSingleAnimation(boolean singleAnimation) {

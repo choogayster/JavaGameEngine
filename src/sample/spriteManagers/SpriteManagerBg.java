@@ -4,7 +4,8 @@ package sample.spriteManagers;
  * Created by Vlad on 10.02.2016.
  */
 public class SpriteManagerBg extends SpriteManager {
-    public SpriteManagerBg() {
+    public SpriteManagerBg(double duration) {
+        super(duration);
         size[0] = 700;
         size[1] = 700;
     }

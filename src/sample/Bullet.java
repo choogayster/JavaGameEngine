@@ -20,7 +20,7 @@ public class Bullet {
     private double xPosHero;
     private double yPosHero;
     private double time;
-    private final double velocity = 1500;
+    private double velocity = 1500;
 
     public Bullet (double time, double xPos, double yPos, double angle, int w, int h, boolean enemyBullet) {
         this.time = time;
@@ -48,10 +48,6 @@ public class Bullet {
         xPos = xPosHero + velocity * (this.time - time) * Math.cos(angle);
         yPos = yPosHero + velocity * (this.time - time) * Math.sin(angle);
         // Set new collider's position
-        /*collider.setStartX(xPos + 50*Math.cos(angle));
-        collider.setStartY(yPos + 50*Math.sin(angle));
-        collider.setEndX(xPos - Math.cos(angle));
-        collider.setEndY(yPos - Math.sin(angle));*/
         collider = new Polygon(
                 xPos - h/2*Math.cos(angle) + w/2*Math.cos(angle + Math.PI/2),
                 yPos - h/2*Math.sin(angle) + w/2*Math.sin(angle + Math.PI/2),
@@ -62,5 +58,4 @@ public class Bullet {
                 xPos + h/2*Math.cos(angle) + w/2*Math.cos(angle + Math.PI/2),
                 yPos + h/2*Math.sin(angle) + w/2*Math.sin(angle + Math.PI/2));
     }
-
 }

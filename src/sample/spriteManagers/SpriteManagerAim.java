@@ -7,7 +7,8 @@ import javafx.scene.image.Image;
  */
 public class SpriteManagerAim extends SpriteManager {
 
-    public SpriteManagerAim() {
+    public SpriteManagerAim(double duration) {
+        super(duration);
         size[0] = 40;
         size[1] = 40;
     }

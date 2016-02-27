@@ -62,12 +62,12 @@ public abstract class Level {
         private double width;
         private double height;
         private Image texture;
-        public Ground (Image texture, double xCoord, double yCoord, double width, double height) {
+        public Ground (Image texture, double xCoord, double yCoord ) {
             this.texture = texture;
             this.xCoord = xCoord;
             this.yCoord = yCoord;
-            this.width = width;
-            this.height = height;
+            this.width = texture.getWidth();
+            this.height = texture.getHeight();
         }
 
         public double getxCoord() {
@@ -117,12 +117,12 @@ public abstract class Level {
         private int height;
         private Image texture;
         private Rectangle collider;
-        public Wall (Image texture, int xCoord, int yCoord, int width, int height, Rectangle collider) {
+        public Wall (Image texture, int xCoord, int yCoord, Rectangle collider) {
             this.texture = texture;
             this.xCoord = xCoord;
             this.yCoord = yCoord;
-            this.width = width;
-            this.height = height;
+            this.width = (int) texture.getWidth();
+            this.height = (int) texture.getHeight();
             this.collider = collider;
         }
 

@@ -6,6 +6,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import sample.level.Level;
 import sample.level.Level1;
+import sample.level.Level2;
 
 import java.util.*;
 
@@ -26,7 +27,7 @@ public class GameWorld {
     public List<Event> events;
 
     public GameWorld() {
-        level = new Level1();
+        level = new Level2();
         hero = new Hero();
         bullets = new ArrayList<>();
         events = new ArrayList<>();
@@ -70,14 +71,15 @@ public class GameWorld {
 
     private void checkEnemyAttack(Enemy enemy, double time) {
         if (enemy.weapon.holder > 0) {
-            if (enemy.timeOfLastAttack == -1 || (time - enemy.timeOfLastAttack) > hero.weapon.getAttackDelay()) {
+            if (enemy.timeOfLastAttack == -1 || (time - enemy.timeOfLastAttack) > enemy.weapon.getAttackDelay()) {
                 enemy.attack = true;
                 enemy.timeOfLastAttack = time;
                 if (enemy.weapon.isRangeAttack()) {
                     makeEnemyAttack(enemy, time);
                 }
 
-            } else if (time - enemy.timeOfLastAttack > enemy.weapon.getColliderActivityTime()) {
+            }
+            if (time - enemy.timeOfLastAttack > enemy.weapon.getColliderActivityTime()) {
                 enemy.attack = false;
             }
         }
@@ -90,7 +92,7 @@ public class GameWorld {
         if (enemy.weapon.isRangeAttack()) {
             enemy.weapon.holder--;
             double angle = Math.PI*3/2 - Math.atan2(hero.xPosHero-enemy.getxPos(), hero.yPosHero-enemy.getyPos());
-            addBullet(new Bullet(time, enemy.getxPos(), enemy.getyPos(), angle, hero.weapon.getColliderWidth(), hero.weapon.getColliderHeight(), true));
+            addBullet(new Bullet(time, enemy.getxPos(), enemy.getyPos(), angle, enemy.weapon.getColliderWidth(), enemy.weapon.getColliderHeight(), true));
         }
     }
 
@@ -102,9 +104,10 @@ public class GameWorld {
                 hero.timeOfLastAttack = time;
                 if (hero.weapon.isRangeAttack()) {
                     makeAttack(time);
+                    hero.drawShotState = true;
                 }
-
-            } else if (time - hero.timeOfLastAttack > hero.weapon.getColliderActivityTime()) {
+            }
+            if (time - hero.timeOfLastAttack > hero.weapon.getColliderActivityTime()) {
                 hero.attack = false;
             }
         }
@@ -163,10 +166,6 @@ public class GameWorld {
                 }
             }
 
-            // Check collision between bullet and bounds of location
-            if (bullets.get(i).xPos > 1000 || bullets.get(i).yPos > 1000 || bullets.get(i).xPos < 0 || bullets.get(i).yPos < 0) {
-                flagOfMustRemoved = true;
-            }
             // Remove bullet if was collision
             if (flagOfMustRemoved) {
                 bullets.remove(i);

@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import sample.level.Level;
-import sample.spriteManagers.SpriteManager;
+import sample.spriteManagers.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,15 @@ public class Renderer {
         spriteManagers = new ArrayList<>();
         staticImages = new ArrayList<>();
         loadStaticImages();
+        loadSpriteManagers();
+    }
 
+    private void loadSpriteManagers() {
+        spriteManagers.add(new SpriteManagerBg(0.4));
+        spriteManagers.add(new SpriteManagerAim(0.3));
+        spriteManagers.add(new SpriteManagerHero(0.2));
+        spriteManagers.add(new SpriteManagerShot1(0.1));
+        spriteManagers.get(3).setSingleAnimation(true);
     }
 
     public void loadStaticImages() {
@@ -53,12 +61,6 @@ public class Renderer {
         staticImages.add(light);
         Image bullet = new Image(getClass().getResource( "textures/bullet.png").toExternalForm());
         staticImages.add(bullet);
-    }
-
-    public void addSpriteManager(SpriteManager manager, double duration) {
-        manager.setDuration(duration);
-        spriteManagers.add(manager);
-
     }
 
     // MAIN RENDERING FUNCTION
@@ -102,7 +104,6 @@ public class Renderer {
 
         }
     }
-
 
     private void setPropetries(int windowWidth, int windowHeight, double time, double alfa,
                                double xWindowCenter, double yWindowCenter, double xDeltaPos, double yDeltaPos, double xPos, double yPos) {
@@ -164,7 +165,7 @@ public class Renderer {
                 staticImages.get(0).getHeight()*10);
     }
 
-    private void  drawBullets() {
+    private void drawBullets() {
         for (Bullet bullet_ : world.bullets) {
             // Draw collider
             ObservableList<Double> points = bullet_.collider.getPoints();
@@ -210,11 +211,25 @@ public class Renderer {
         context.translate((xWindowCenter + xDeltaPos) , (yWindowCenter + yDeltaPos) );
         // Rotate hero sprite
         context.rotate(alfa * 180/Math.PI);
-        context.setFill(Color.BLACK);
+        if (world.getHero().drawShotState == false) {
+            Image img = spriteManagers.get(2).getSprite(time);
+            context.drawImage(img, -img.getWidth()/2, -img.getHeight()/2);
+        } else {
+            SpriteManager sm = spriteManagers.get(3);
+            Image img = sm.getSpriteById(sm.index++);
+            context.drawImage(img, -img.getWidth()/2, -img.getHeight()/2);
+            if (sm.index == sm.getCollectionSize()) {
+                world.getHero().drawShotState = false;
+                sm.index = 0;
+            }
+        }
+        System.out.println(world.getHero().attack);
+
+        //context.setFill(Color.BLACK);
         /*if (world.getHero().attack == true) {
             context.setFill(Color.GREEN);
         }*/
-        context.fillRect(-20, -20, 40, 40);
+        //context.fillRect(-20, -20, 40, 40);
 
         context.restore();
     }
@@ -228,11 +243,11 @@ public class Renderer {
     }
 
     private void drawAim() {
-        context.drawImage(spriteManagers.get(2).getSprite(time),
-                xPos - spriteManagers.get(2).getSize()[0] / 2,
-                yPos - spriteManagers.get(2).getSize()[1] / 2,
-                spriteManagers.get(2).getSize()[0],
-                spriteManagers.get(2).getSize()[1]);
+        context.drawImage(spriteManagers.get(1).getSprite(time),
+                xPos - 30 / 2,
+                yPos - 30 / 2,
+                30,
+                30);
     }
 
 
