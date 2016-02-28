@@ -35,9 +35,11 @@ public class Enemy {
     public boolean lefMouseClicked;
     public boolean attack;
 
+    public Hero target;
+
     double angle = Math.PI / 2;
 
-    public Enemy(int xPos, int yPos, int w, int h, EnemyRails enemyRails) {
+    public Enemy(int xPos, int yPos, int w, int h, EnemyRails enemyRails, int startPoint) {
         this.xPos = xPos;
         this.yPos = yPos;
         this.width = w;
@@ -54,10 +56,10 @@ public class Enemy {
 
         weapon = new Weapon(4);
         this.enemyRails = enemyRails;
-        currentPointOnRails = enemyRails.getPoint(0);
+        currentPointOnRails = enemyRails.getPoint(startPoint);
     }
 
-    public Enemy(int w, int h, EnemyRails enemyRails) {
+    public Enemy(int w, int h, EnemyRails enemyRails, int startPoint) {
         this.width = w;
         this.height = h;
         collider = new Polygon(
@@ -73,7 +75,7 @@ public class Enemy {
         weapon = new Weapon(4);
 
         this.enemyRails = enemyRails;
-        currentPointOnRails = enemyRails.getPoint(0);
+        currentPointOnRails = enemyRails.getPoint(startPoint);
         this.xPos = currentPointOnRails.x;
         this.yPos = currentPointOnRails.y;
     }
@@ -82,17 +84,17 @@ public class Enemy {
         // If enemy not attacks hero
         if (!inAttackState) {
             // Approximation of X enemy's coordinates
-            if (Math.abs(currentPointOnRails.x - xPos) < 7) {
+            if (Math.abs(currentPointOnRails.x - xPos) < 3) {
                 xPos = currentPointOnRails.x;
             }
             // Approximation of Y enemy's coordinates
-            if (Math.abs(currentPointOnRails.y - yPos) < 7) {
+            if (Math.abs(currentPointOnRails.y - yPos) < 3) {
                 yPos = currentPointOnRails.y;
             }
             // If current point is reached, generate index of next point
             if (xPos == currentPointOnRails.x && yPos == currentPointOnRails.y) {
                 Random rand = new Random();
-                int nextStep = rand.nextInt(2);
+                int nextStep = rand.nextInt(currentPointOnRails.next.size());
                 currentPointOnRails = currentPointOnRails.next.get(nextStep);
             }
             // Change enemy's state to moving, if current point isn't reached
@@ -144,6 +146,7 @@ public class Enemy {
         // If enemy attacks hero
         else {
             // Setting new collider's position
+            angle = Math.PI*3/2 - Math.atan2(target.xPosHero-xPos, target.yPosHero-yPos);
 
             collider = new Polygon(
                     xPos - height/2*Math.cos(angle) + width/2*Math.cos(angle + Math.PI/2),

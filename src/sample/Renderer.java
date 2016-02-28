@@ -59,8 +59,6 @@ public class Renderer {
     public void loadStaticImages() {
         Image light = new Image(getClass().getResource( "textures/light.png").toExternalForm());
         staticImages.add(light);
-        Image bullet = new Image(getClass().getResource( "textures/bullet.png").toExternalForm());
-        staticImages.add(bullet);
     }
 
     // MAIN RENDERING FUNCTION
@@ -134,12 +132,21 @@ public class Renderer {
 
     private void drawEnemies() {
         for (Enemy enemy : world.level.enemies) {
+            context.save();
+            context.translate(
+                    enemy.getxPos()- world.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                    enemy.getyPos() - world.getHero().yPosHero + yWindowCenter + yDeltaPos);
+            context.rotate(enemy.angle * 180/Math.PI);
             context.setFill(Color.YELLOWGREEN);
             context.fillRect(
-                    (enemy.getxPos()-enemy.getWidth()/2) - world.getHero().xPosHero + xWindowCenter + xDeltaPos,
-                    (enemy.getyPos()-enemy.getHeight()/2) - world.getHero().yPosHero + yWindowCenter + yDeltaPos,
+                    (-enemy.getWidth()/2) ,
+                    (-enemy.getHeight()/2),
                     enemy.getWidth(),
                     enemy.getHeight());
+
+            context.restore();
+
+            // Draw collider
             ObservableList<Double> points = enemy.getCollider().getPoints();
             double xpoints1[] = {
                     points.get(0) - world.getHero().xPosHero + xWindowCenter + xDeltaPos,
@@ -152,7 +159,6 @@ public class Renderer {
                     points.get(5) - world.getHero().yPosHero + yWindowCenter + yDeltaPos,
                     points.get(7) - world.getHero().yPosHero + yWindowCenter + yDeltaPos};
             context.strokePolygon(xpoints1, ypoints1, xpoints1.length);
-
         }
 
     }
@@ -223,8 +229,6 @@ public class Renderer {
                 sm.index = 0;
             }
         }
-        System.out.println(world.getHero().attack);
-
         //context.setFill(Color.BLACK);
         /*if (world.getHero().attack == true) {
             context.setFill(Color.GREEN);

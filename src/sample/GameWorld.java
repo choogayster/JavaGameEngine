@@ -31,6 +31,9 @@ public class GameWorld {
         hero = new Hero();
         bullets = new ArrayList<>();
         events = new ArrayList<>();
+        for (Enemy enemy : level.enemies) {
+            enemy.target = hero;
+        }
     }
 
     public void addBullet (Bullet bullet) {
@@ -120,7 +123,8 @@ public class GameWorld {
         if (hero.weapon.isRangeAttack()) {
             makeShake = true;
             hero.weapon.holder--;
-            addBullet(new Bullet(time, hero.xPosHero, hero.yPosHero, hero.angle, hero.weapon.getColliderWidth(), hero.weapon.getColliderHeight(), false));
+            addBullet(new Bullet(time, hero.xPosHero - 5*Math.cos(hero.angle), hero.yPosHero - 5*Math.sin(hero.angle), hero.angle,
+                    hero.weapon.getColliderWidth(), hero.weapon.getColliderHeight(), false));
         }
     }
 

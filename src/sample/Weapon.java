@@ -80,7 +80,7 @@ public class Weapon {
                 meleeAttack = false;
                 rangeAttack = true;
                 attackDelay = 0.1;
-                holder = 100;
+                holder = 1000;
                 attackSpread = 0;
                 colliderWidth =  15;
                 colliderHeight = 40;
