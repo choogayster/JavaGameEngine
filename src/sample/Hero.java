@@ -34,10 +34,15 @@ public class Hero {
 
     public boolean drawShotState = false;
 
+    // Shot animation parameters
+    public int indexOfAnimation = 0;
+    public int durationShotAnimation = 3;
+    public final int constDuration = 3;
+
     public Hero() {
         xPosHero = 500;
         yPosHero = 399;
-        collider = new Rectangle(xPosHero-10, yPosHero-10, 25,35);
+        collider = new Rectangle(xPosHero-10, yPosHero-10, 20, 20);
         weapon = new Weapon(4);
         colliderWeapon = new Polygon();
         setColliderWeapon();

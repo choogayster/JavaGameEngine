@@ -30,7 +30,7 @@ public class GameWorld {
         level = new Level2();
         hero = new Hero();
         bullets = new ArrayList<>();
-        events = new ArrayList<>();
+        events = new ArrayList<>(1000);
         for (Enemy enemy : level.enemies) {
             enemy.target = hero;
         }
@@ -43,14 +43,24 @@ public class GameWorld {
     /*This function update game world*/
     public void update(double time) {
 
+        long t0 = System.currentTimeMillis();
 
         checkHeroAroundEnemys();
-        checkBulletCollision();
+        long t1 = System.currentTimeMillis();
+
+        checkBulletCollision(time);
+        long t2 = System.currentTimeMillis();
+
         checkHeroCollision();
+        long t3 = System.currentTimeMillis();
+
+        checkInactiveEvents();
+        long t4 = System.currentTimeMillis();
 
         for (Bullet bullet : bullets) {
             bullet.move(time);
         }
+        long t5 = System.currentTimeMillis();
 
         for (Enemy enemy : level.enemies) {
             enemy.update();
@@ -58,16 +68,31 @@ public class GameWorld {
                 checkEnemyAttack(enemy, time);
             }
         }
+        long t6 = System.currentTimeMillis();
 
         hero.update(heroSpeed);
+        long t7 = System.currentTimeMillis();
 
         if (hero.lefMouseClicked == true) {
             checkAttack(time);
         }
+        long t8 = System.currentTimeMillis();
 
         if (hero.weapon.isMeleeAttack()) {
             if (hero.attack == true) {
                 makeAttack(time);
+            }
+        }
+        long t9 = System.currentTimeMillis();
+
+        System.out.println("[" + (t1-t0) + " " +(t2-t1)+ " " +(t3-t2)+ " "+(t4-t3)+ " "
+                +(t5-t4)+ " "+(t6-t5)+ " "+(t7-t6)+ " "+(t8-t7)+ " "+(t9-t8)+ "]");
+    }
+
+    private void checkInactiveEvents() {
+        for(int i = 0; i<events.size(); i++) {
+            if (events.get(i).active == false) {
+                events.remove(i);
             }
         }
     }
@@ -90,15 +115,16 @@ public class GameWorld {
 
     private void makeEnemyAttack(Enemy enemy, double time) {
         if (enemy.weapon.isMeleeAttack()) {
-            checkHeroMeleeWeaponCollision();
+            //
         }
         if (enemy.weapon.isRangeAttack()) {
             enemy.weapon.holder--;
             double angle = Math.PI*3/2 - Math.atan2(hero.xPosHero-enemy.getxPos(), hero.yPosHero-enemy.getyPos());
-            addBullet(new Bullet(time, enemy.getxPos(), enemy.getyPos(), angle, enemy.weapon.getColliderWidth(), enemy.weapon.getColliderHeight(), true));
+            addBullet(new Bullet(time, enemy.getxPos() - 10*Math.cos(enemy.angle), enemy.getyPos()- 10*Math.sin(enemy.angle), angle,
+                    enemy.weapon.getColliderWidth(), enemy.weapon.getColliderHeight(), true,
+                    enemy.weapon.getBulletVelocity(), enemy.weapon.getBulletDamage()));
         }
     }
-
 
     private void checkAttack(double time) {
         if (hero.weapon.holder > 0) {
@@ -123,8 +149,9 @@ public class GameWorld {
         if (hero.weapon.isRangeAttack()) {
             makeShake = true;
             hero.weapon.holder--;
-            addBullet(new Bullet(time, hero.xPosHero - 5*Math.cos(hero.angle), hero.yPosHero - 5*Math.sin(hero.angle), hero.angle,
-                    hero.weapon.getColliderWidth(), hero.weapon.getColliderHeight(), false));
+            addBullet(new Bullet(time, hero.xPosHero - 10*Math.cos(hero.angle), hero.yPosHero - 10*Math.sin(hero.angle), hero.angle,
+                    hero.weapon.getColliderWidth(), hero.weapon.getColliderHeight(), false,
+                    hero.weapon.getBulletVelocity(), hero.weapon.getBulletDamage()));
         }
     }
 
@@ -149,7 +176,7 @@ public class GameWorld {
         }
     }
 
-    private void checkBulletCollision() {
+    private void checkBulletCollision(double time) {
         for (int i = 0; i < bullets.size(); i++) {
             boolean flagOfMustRemoved = false;
             // Check collision between bullet and walls
@@ -157,6 +184,8 @@ public class GameWorld {
                 Rectangle rect = wall.getCollider();
                 if (bullets.get(i).collider.getBoundsInParent().intersects(rect.getBoundsInParent())) {
                     flagOfMustRemoved = true;
+                    events.add(new Event(1, (int)bullets.get(i).xPos, (int)bullets.get(i).yPos));
+                    break;
                 }
             }
             // Check collision between bullet and enemies
@@ -276,11 +305,18 @@ public class GameWorld {
     }
 
     class Event {
-        private int id; // 1- explosion
-        private int xPos;
-        private int yPos;
-        private double duration;
-        private double startTime;
-        public Event () {}
+        public int id; // 1- explosion
+        public int xPos;
+        public int yPos;
+        public boolean active;
+        public int indexOfAnimation = 0;
+        public int duration = 3;
+        public final int constDuration = 3;
+        public Event (int id, int x, int y) {
+            this.id = id;
+            this.xPos = x;
+            this.yPos = y;
+            active = true;
+        }
     }
 }

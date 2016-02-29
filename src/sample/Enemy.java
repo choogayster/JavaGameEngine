@@ -72,7 +72,7 @@ public class Enemy {
                 xPos + h/2*Math.cos(angle) + w/2*Math.cos(angle + Math.PI/2),
                 yPos + h/2*Math.sin(angle) + w/2*Math.sin(angle + Math.PI/2));
 
-        weapon = new Weapon(4);
+        weapon = new Weapon(3);
 
         this.enemyRails = enemyRails;
         currentPointOnRails = enemyRails.getPoint(startPoint);
@@ -102,22 +102,31 @@ public class Enemy {
                 if (currentPointOnRails.x > xPos) {
                     MoveLeft = false;
                     MoveRight = true;
-                    angle = Math.PI;
                 } else if (currentPointOnRails.x < xPos) {
                     MoveRight = false;
                     MoveLeft = true;
-                    angle = 0.0;
                 }
                 if (currentPointOnRails.y > yPos) {
                     MoveUp = false;
                     MoveDown = true;
-                    angle = -Math.PI/2;
                 }
                 if (currentPointOnRails.y < yPos) {
                     MoveDown = false;
                     MoveUp = true;
-                    angle = Math.PI/2;
                 }
+            }
+            // Set angle
+            if (MoveRight) {
+                angle = Math.PI;
+            }
+            if (MoveLeft) {
+                angle = 0.0;
+            }
+            if (MoveDown) {
+                angle = -Math.PI/2;
+            }
+            if (MoveUp) {
+                angle = Math.PI/2;
             }
             // Change enemy's position
             if (MoveLeft) {
@@ -147,6 +156,10 @@ public class Enemy {
         else {
             // Setting new collider's position
             angle = Math.PI*3/2 - Math.atan2(target.xPosHero-xPos, target.yPosHero-yPos);
+            if (weapon.isMeleeAttack()) {
+                xPos -= velocity*Math.cos(angle);
+                yPos -= velocity*Math.sin(angle);
+            }
 
             collider = new Polygon(
                     xPos - height/2*Math.cos(angle) + width/2*Math.cos(angle + Math.PI/2),

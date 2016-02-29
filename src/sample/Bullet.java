@@ -13,7 +13,6 @@ public class Bullet {
     public double angle;
     public double xPos;
     public double yPos;
-    //public Line collider;
     public Polygon collider;
     private int h;
     private int w;
@@ -21,8 +20,17 @@ public class Bullet {
     private double yPosHero;
     private double time;
     private double velocity = 1500;
+    private double damage;
+    // Parameters for updating bullet position and collider
+    private double h_d_2cos;
+    private double h_d_2sin;
+    private double w_d_2cosAnlePlusPI_d_2;
+    private double w_d_2sinAnlePlusPI_d_2;
+    private double w_d_2cosAnleMinusPI_d_2;
+    private double w_d_2sinAnleMinusPI_d_2;
 
-    public Bullet (double time, double xPos, double yPos, double angle, int w, int h, boolean enemyBullet) {
+
+    public Bullet (double time, double xPos, double yPos, double angle, int w, int h, boolean enemyBullet, double velocity, double damage ) {
         this.time = time;
         this.xPosHero = xPos;
         this.yPosHero = yPos;
@@ -32,7 +40,7 @@ public class Bullet {
         this.h = h;
         this.angle = angle;
         this.enemyBullet = enemyBullet;
-        collider = new Polygon(
+        /*collider = new Polygon(
                 xPos - h/2*Math.cos(angle) + w/2*Math.cos(angle + Math.PI/2),
                 yPos - h/2*Math.sin(angle) + w/2*Math.sin(angle + Math.PI/2),
                 xPos - h/2*Math.cos(angle) + w/2*Math.cos(angle - Math.PI/2),
@@ -40,7 +48,25 @@ public class Bullet {
                 xPos + h/2*Math.cos(angle)  + w/2*Math.cos(angle - Math.PI/2),
                 yPos + h/2*Math.sin(angle) + w/2*Math.sin(angle - Math.PI/2),
                 xPos + h/2*Math.cos(angle) + w/2*Math.cos(angle + Math.PI/2),
-                yPos + h/2*Math.sin(angle) + w/2*Math.sin(angle + Math.PI/2));
+                yPos + h/2*Math.sin(angle) + w/2*Math.sin(angle + Math.PI/2));*/
+        h_d_2cos = h/2*Math.cos(angle);
+        h_d_2sin = h/2*Math.sin(angle);
+        w_d_2cosAnlePlusPI_d_2 = w/2*Math.cos(angle + Math.PI/2);
+        w_d_2sinAnlePlusPI_d_2 = w/2*Math.sin(angle + Math.PI/2);
+        w_d_2cosAnleMinusPI_d_2 = w/2*Math.cos(angle - Math.PI/2);
+        w_d_2sinAnleMinusPI_d_2 = w/2*Math.sin(angle - Math.PI/2);
+        collider = new Polygon(
+                xPos - h_d_2cos + w_d_2cosAnlePlusPI_d_2,
+                yPos - h_d_2sin + w_d_2sinAnlePlusPI_d_2,
+                xPos - h_d_2cos + w_d_2cosAnleMinusPI_d_2,
+                yPos - h_d_2sin + w_d_2sinAnleMinusPI_d_2,
+                xPos + h_d_2cos + w_d_2cosAnleMinusPI_d_2,
+                yPos + h_d_2sin + w_d_2sinAnleMinusPI_d_2,
+                xPos + h_d_2cos + w_d_2cosAnlePlusPI_d_2,
+                yPos + h_d_2sin + w_d_2sinAnlePlusPI_d_2 );
+
+        this.velocity = velocity;
+        this.damage = damage;
     }
 
     public void move(double time) {
@@ -49,13 +75,13 @@ public class Bullet {
         yPos = yPosHero + velocity * (this.time - time) * Math.sin(angle);
         // Set new collider's position
         collider = new Polygon(
-                xPos - h/2*Math.cos(angle) + w/2*Math.cos(angle + Math.PI/2),
-                yPos - h/2*Math.sin(angle) + w/2*Math.sin(angle + Math.PI/2),
-                xPos - h/2*Math.cos(angle) + w/2*Math.cos(angle - Math.PI/2),
-                yPos - h/2*Math.sin(angle) + w/2*Math.sin(angle - Math.PI/2),
-                xPos + h/2*Math.cos(angle)  + w/2*Math.cos(angle - Math.PI/2),
-                yPos + h/2*Math.sin(angle) + w/2*Math.sin(angle - Math.PI/2),
-                xPos + h/2*Math.cos(angle) + w/2*Math.cos(angle + Math.PI/2),
-                yPos + h/2*Math.sin(angle) + w/2*Math.sin(angle + Math.PI/2));
+                xPos - h_d_2cos + w_d_2cosAnlePlusPI_d_2,
+                yPos - h_d_2sin + w_d_2sinAnlePlusPI_d_2,
+                xPos - h_d_2cos + w_d_2cosAnleMinusPI_d_2,
+                yPos - h_d_2sin + w_d_2sinAnleMinusPI_d_2,
+                xPos + h_d_2cos + w_d_2cosAnleMinusPI_d_2,
+                yPos + h_d_2sin + w_d_2sinAnleMinusPI_d_2,
+                xPos + h_d_2cos + w_d_2cosAnlePlusPI_d_2,
+                yPos + h_d_2sin + w_d_2sinAnlePlusPI_d_2 );
     }
 }

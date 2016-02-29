@@ -22,16 +22,7 @@ public class Level2 extends Level {
 
     @Override
     public void createEnemyRails() {
-        /*EnemyRails rail = new EnemyRails();
-        rail.addPoint(480, 300);
-        rail.addPoint(780, 300);
-        rail.addPoint(780, 420);
-        rail.addPoint(480, 420);
-        rail.bindById(0, 1);
-        rail.bindById(1, 2);
-        rail.bindById(2, 3);
-        rail.bindById(3, 0);
-        rails.add(rail);*/
+
         EnemyRails rail = new EnemyRails();
         // Room 1
         /*0*/ rail.addPoint(150, 152);
@@ -123,7 +114,7 @@ public class Level2 extends Level {
         //
         /*75*/ rail.addPoint(430, 1080);    rail.bindById(75, 65);
         /*76*/ rail.addPoint(530, 1080);    rail.bindById(76, 75); rail.bindById(76, 66); rail.bindById(76, 67);
-        /*77*/ rail.addPoint(620, 1060);    rail.bindById(77, 76); /*rail.bindById(77, 66);*/
+        /*77*/ rail.addPoint(620, 1060);    rail.bindById(77, 76);
         /*78*/ rail.addPoint(1280, 1060);   rail.bindById(78, 71);
         /*79*/ rail.addPoint(1440, 1060);   rail.bindById(79, 78); rail.bindById(79, 72);
         /*80*/ rail.addPoint(1550, 1060);   rail.bindById(80, 79); rail.bindById(80, 74);
@@ -168,12 +159,35 @@ public class Level2 extends Level {
         //
 
         //Green way points
-
+        /*115*/ rail.addPoint(750, 740); rail.bindById(115, 50); rail.bindById(115, 51); rail.bindById(115, 58); rail.bindById(115, 59);
+        /*116*/ rail.addPoint(915, 740); rail.bindById(116, 52); rail.bindById(116, 51); rail.bindById(116, 60); rail.bindById(116, 59);
+        /*117*/ rail.addPoint(915, 900); rail.bindById(117, 68); rail.bindById(117, 69); rail.bindById(117, 60); rail.bindById(117, 59);
+        /*118*/ rail.addPoint(1075, 900); rail.bindById(118, 70); rail.bindById(118, 69); rail.bindById(118, 60); rail.bindById(118, 61);
+        /*119*/ rail.addPoint(1215, 900); rail.bindById(119, 70); rail.bindById(119, 71); rail.bindById(119, 62); rail.bindById(119, 61);
+        /*120*/ rail.addPoint(900, 1060); rail.bindById(120, 69); rail.bindById(120, 68); rail.bindById(120, 83); rail.bindById(120, 84);
+        /*121*/ rail.addPoint(1075, 1060); rail.bindById(121, 69); rail.bindById(121, 70); rail.bindById(121, 85); rail.bindById(121, 84);
+        /*122*/ rail.addPoint(1215, 1060); rail.bindById(122, 71); rail.bindById(122, 70); rail.bindById(122, 85); rail.bindById(122, 86);
+        /*123*/ rail.addPoint(1060, 1240); rail.bindById(123, 93); rail.bindById(123, 94); rail.bindById(123, 85); rail.bindById(123, 86);
+        /*124*/ rail.addPoint(1060, 1240); rail.bindById(124, 95); rail.bindById(124, 94); rail.bindById(124, 87); rail.bindById(124, 86);
         rails.add(rail);
     }
 
     @Override
     public void createEnemies() {
+        enemies.add(new Enemy(40, 40, rails.get(0), 69));
+        enemies.add(new Enemy(40, 40, rails.get(0), 69));
+        enemies.add(new Enemy(40, 40, rails.get(0), 69));
+        enemies.add(new Enemy(40, 40, rails.get(0), 69));
+        enemies.add(new Enemy(40, 40, rails.get(0), 69));
+        enemies.add(new Enemy(40, 40, rails.get(0), 69));
+        enemies.add(new Enemy(40, 40, rails.get(0), 69));
+        enemies.add(new Enemy(40, 40, rails.get(0), 69));
+        enemies.add(new Enemy(40, 40, rails.get(0), 69));
+        enemies.add(new Enemy(40, 40, rails.get(0), 69));
+        enemies.add(new Enemy(40, 40, rails.get(0), 69));
+        enemies.add(new Enemy(40, 40, rails.get(0), 69));
+        enemies.add(new Enemy(40, 40, rails.get(0), 69));
+        enemies.add(new Enemy(40, 40, rails.get(0), 69));
         enemies.add(new Enemy(40, 40, rails.get(0), 69));
         enemies.add(new Enemy(40, 40, rails.get(0), 69));
         enemies.add(new Enemy(40, 40, rails.get(0), 69));

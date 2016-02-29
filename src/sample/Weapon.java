@@ -16,6 +16,16 @@ public class Weapon {
     private int colliderWidth; // Collider for melee attack weapon
     private int colliderHeight; // Collider for melee attack weapon
 
+    private double bulletVelocity = 0;
+    private double bulletDamage = 0;
+
+    public double getBulletVelocity() {
+        return bulletVelocity;
+    }
+
+    public double getBulletDamage() {
+        return bulletDamage;
+    }
 
     private double colliderActivityTime = 0.25;
 
@@ -66,17 +76,7 @@ public class Weapon {
                 colliderHeight = 70;
                 break;
             case 3:
-                // gun
-                meleeAttack = false;
-                rangeAttack = true;
-                attackDelay = 0.3;
-                holder = Integer.MAX_VALUE;
-                attackSpread = 0;
-                colliderWidth =  80;
-                colliderHeight = 70;
-                break;
-            case 4:
-                // machine gun
+                // weapon 1
                 meleeAttack = false;
                 rangeAttack = true;
                 attackDelay = 0.1;
@@ -84,16 +84,20 @@ public class Weapon {
                 attackSpread = 0;
                 colliderWidth =  15;
                 colliderHeight = 40;
+                bulletVelocity = 1500;
+                bulletDamage = 1;
                 break;
-            default:
-                // hand-to-hand fighting
-                meleeAttack = true;
-                rangeAttack = false;
-                holder = Integer.MAX_VALUE;
+            case 4:
+                // weapon 2
+                meleeAttack = false;
+                rangeAttack = true;
+                attackDelay = 0.1;
+                holder = 1000;
                 attackSpread = 0;
-                attackDelay = 0.8;
-                colliderWidth =  60;
+                colliderWidth =  15;
                 colliderHeight = 40;
+                bulletVelocity = 1500;
+                bulletDamage = 1;
                 break;
 
         }
