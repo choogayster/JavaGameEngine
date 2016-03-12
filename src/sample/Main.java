@@ -42,10 +42,10 @@ public class Main extends Application {
     double L = 115; // range between center of camera and user
 
     String musicFile = "src/sample/sounds/KDrew - Bullseye.mp3";
-    AudioClip music = new AudioClip(new File(musicFile).toURI().toString());
+    //AudioClip music = new AudioClip(new File(musicFile).toURI().toString());
 
     String shotFile = "src/sample/sounds/sub_machine_gun_single_shot.mp3";
-    AudioClip shot = new AudioClip(new File(shotFile).toURI().toString());
+    //AudioClip shot = new AudioClip(new File(shotFile).toURI().toString());
 
     double time;
 

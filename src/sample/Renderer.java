@@ -53,6 +53,7 @@ public class Renderer {
         spriteManagers.add(new SpriteManagerAim(0.3));
         spriteManagers.add(new SpriteManagerHero(0.2));
         spriteManagers.add(new SpriteManagerShot1(0.1));
+        spriteManagers.add(new SpriteManagerExplosion(0.1));
         spriteManagers.get(3).setSingleAnimation(true);
     }
 
@@ -98,8 +99,23 @@ public class Renderer {
 
     private void drawEevents() {
         for (GameWorld.Event event:world.events) {
-        // TODO
-
+            if (event.id == 1) {
+                if (event.active) {
+                    SpriteManager sm = spriteManagers.get(4);
+                    if (event.duration == 0) {
+                        event.indexOfAnimation++;
+                        event.duration = event.constDuration;
+                    }
+                    Image img = sm.getSpriteById(event.indexOfAnimation);
+                    event.duration--;
+                    context.drawImage(img,
+                            event.xPos- world.getHero().xPosHero + xWindowCenter + xDeltaPos-img.getWidth() / 2,
+                            event.yPos- world.getHero().yPosHero + yWindowCenter + yDeltaPos-img.getHeight() / 2);
+                    if (event.indexOfAnimation == sm.getCollectionSize() - 1) {
+                        event.active = false;
+                    }
+                }
+            }
         }
     }
 
@@ -222,11 +238,16 @@ public class Renderer {
             context.drawImage(img, -img.getWidth()/2, -img.getHeight()/2);
         } else {
             SpriteManager sm = spriteManagers.get(3);
-            Image img = sm.getSpriteById(sm.index++);
+            if (world.getHero().durationShotAnimation == 0) {
+                world.getHero().indexOfAnimation++;
+                world.getHero().durationShotAnimation = world.getHero().constDuration;
+            }
+            Image img = sm.getSpriteById(world.getHero().indexOfAnimation);
+            world.getHero().durationShotAnimation--;
             context.drawImage(img, -img.getWidth()/2, -img.getHeight()/2);
-            if (sm.index == sm.getCollectionSize()) {
+            if (world.getHero().indexOfAnimation == sm.getCollectionSize() - 1) {
                 world.getHero().drawShotState = false;
-                sm.index = 0;
+                world.getHero().indexOfAnimation = 0;
             }
         }
         //context.setFill(Color.BLACK);
