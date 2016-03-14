@@ -17,7 +17,7 @@ public abstract class Level {
     public List<Ground> grounds;
     public List<Wall> walls;
     public List<EnemyRails> rails;
-    public List<Enemy> enemies;
+    //public List<Enemy> enemies;
 
     public Level () {
         textureWalls = new ArrayList<>();
@@ -25,13 +25,13 @@ public abstract class Level {
         grounds = new ArrayList<>();
         walls = new ArrayList<>();
         rails = new ArrayList<>();
-        enemies = new ArrayList<>();
+        //enemies = new ArrayList<>();
         loadGroundTextures();
         loadWallTextures();
         createWalls();
         createGrounds();
         createEnemyRails();
-        createEnemies();
+        //createEnemies();
     }
 
     public abstract void loadGroundTextures();
@@ -44,7 +44,7 @@ public abstract class Level {
 
     public abstract void createEnemyRails();
 
-    public abstract void createEnemies();
+    //public abstract void createEnemies();
 
     public void loadGroundTexture(String textureName) {
         Image image = new Image(getClass().getResource( textureName ).toExternalForm());

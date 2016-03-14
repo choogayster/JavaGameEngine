@@ -39,27 +39,8 @@ public class Enemy {
 
     double angle = Math.PI / 2;
 
-    public Enemy(int xPos, int yPos, int w, int h, EnemyRails enemyRails, int startPoint) {
-        this.xPos = xPos;
-        this.yPos = yPos;
-        this.width = w;
-        this.height = h;
-        collider = new Polygon(
-                xPos - h/2*Math.cos(angle) + w/2*Math.cos(angle + Math.PI/2),
-                yPos - h/2*Math.sin(angle) + w/2*Math.sin(angle + Math.PI/2),
-                xPos - h/2*Math.cos(angle) + w/2*Math.cos(angle - Math.PI/2),
-                yPos - h/2*Math.sin(angle) + w/2*Math.sin(angle - Math.PI/2),
-                xPos + h/2*Math.cos(angle)  + w/2*Math.cos(angle - Math.PI/2),
-                yPos + h/2*Math.sin(angle) + w/2*Math.sin(angle - Math.PI/2),
-                xPos + h/2*Math.cos(angle) + w/2*Math.cos(angle + Math.PI/2),
-                yPos + h/2*Math.sin(angle) + w/2*Math.sin(angle + Math.PI/2));
 
-        weapon = new Weapon(4);
-        this.enemyRails = enemyRails;
-        currentPointOnRails = enemyRails.getPoint(startPoint);
-    }
-
-    public Enemy(int w, int h, EnemyRails enemyRails, int startPoint) {
+    public Enemy(int w, int h, EnemyRails enemyRails, int startPoint, Hero target) {
         this.width = w;
         this.height = h;
         collider = new Polygon(
@@ -78,6 +59,7 @@ public class Enemy {
         currentPointOnRails = enemyRails.getPoint(startPoint);
         this.xPos = currentPointOnRails.x;
         this.yPos = currentPointOnRails.y;
+        this.target = target;
     }
 
     public void update() {

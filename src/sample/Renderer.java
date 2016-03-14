@@ -58,8 +58,8 @@ public class Renderer {
     }
 
     public void loadStaticImages() {
-        Image light = new Image(getClass().getResource( "textures/light.png").toExternalForm());
-        staticImages.add(light);
+        staticImages.add(new Image(getClass().getResource( "textures/light.png").toExternalForm()));
+        staticImages.add(new Image(getClass().getResource( "textures/bullets/bullet1.png").toExternalForm()));
     }
 
     // MAIN RENDERING FUNCTION
@@ -82,9 +82,9 @@ public class Renderer {
         }
 
         drawGrounds();
-        drawEnemies();
         drawLightUnderHero();
         drawBullets();
+        drawEnemies();
         drawHero();
         drawWalls();
         drawEevents();
@@ -147,7 +147,7 @@ public class Renderer {
     }
 
     private void drawEnemies() {
-        for (Enemy enemy : world.level.enemies) {
+        for (Enemy enemy : world.enemies) {
             context.save();
             context.translate(
                     enemy.getxPos()- world.getHero().xPosHero + xWindowCenter + xDeltaPos,
@@ -190,7 +190,7 @@ public class Renderer {
     private void drawBullets() {
         for (Bullet bullet_ : world.bullets) {
             // Draw collider
-            ObservableList<Double> points = bullet_.collider.getPoints();
+            /*ObservableList<Double> points = bullet_.collider.getPoints();
             double xpoints1[] = {
                     points.get(0) - world.getHero().xPosHero + xWindowCenter + xDeltaPos,
                     points.get(2) - world.getHero().xPosHero + xWindowCenter + xDeltaPos,
@@ -201,7 +201,22 @@ public class Renderer {
                     points.get(3) - world.getHero().yPosHero + yWindowCenter + yDeltaPos,
                     points.get(5) - world.getHero().yPosHero + yWindowCenter + yDeltaPos,
                     points.get(7) - world.getHero().yPosHero + yWindowCenter + yDeltaPos};
-            context.strokePolygon(xpoints1, ypoints1, xpoints1.length);
+            context.strokePolygon(xpoints1, ypoints1, xpoints1.length);*/
+
+            context.save();
+            context.translate(
+                    bullet_.xPos - world.getHero().xPosHero + xWindowCenter + xDeltaPos,
+                    bullet_.yPos - world.getHero().yPosHero + yWindowCenter + yDeltaPos);
+            context.rotate(bullet_.angle * 180/Math.PI);
+            //context.setFill(Color.YELLOWGREEN);
+            /*context.fillRect(
+                    (-enemy.getWidth()/2) ,
+                    (-enemy.getHeight()/2),
+                    enemy.getWidth(),
+                    enemy.getHeight());*/
+            context.drawImage(staticImages.get(1), -staticImages.get(1).getWidth()/2, -staticImages.get(1).getHeight()/2);
+
+            context.restore();
 
             // Draw bullet
             /*context.drawImage(staticImages.get(1),

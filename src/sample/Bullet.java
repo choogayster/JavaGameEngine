@@ -14,8 +14,8 @@ public class Bullet {
     public double xPos;
     public double yPos;
     public Polygon collider;
-    private int h;
-    private int w;
+    public int h;
+    public int w;
     private double xPosHero;
     private double yPosHero;
     private double time;

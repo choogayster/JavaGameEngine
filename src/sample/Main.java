@@ -157,10 +157,7 @@ public class Main extends Application {
         // Init graphics context
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        // Init gameworld
-        gameWorld = new GameWorld();
-        // Init renderer
-        renderer = new Renderer(gc, gameWorld);
+
 
         // Create sprite managers
 
@@ -169,7 +166,11 @@ public class Main extends Application {
         //music.play();
 
         final long startNanoTime = System.nanoTime();
-        ImageView textureView = new ImageView();
+
+        // Init gameworld
+        gameWorld = new GameWorld(startNanoTime);
+        // Init renderer
+        renderer = new Renderer(gc, gameWorld);
 
         // Main Game Loop
         new AnimationTimer() {

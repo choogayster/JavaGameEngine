@@ -79,12 +79,12 @@ public class Weapon {
                 // weapon 1
                 meleeAttack = false;
                 rangeAttack = true;
-                attackDelay = 0.1;
+                attackDelay = 0.4;
                 holder = 1000;
                 attackSpread = 0;
                 colliderWidth =  15;
                 colliderHeight = 40;
-                bulletVelocity = 1500;
+                bulletVelocity = 700;
                 bulletDamage = 1;
                 break;
             case 4:

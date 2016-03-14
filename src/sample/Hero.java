@@ -36,8 +36,8 @@ public class Hero {
 
     // Shot animation parameters
     public int indexOfAnimation = 0;
-    public int durationShotAnimation = 3;
-    public final int constDuration = 3;
+    public int durationShotAnimation = 1;
+    public final int constDuration = 1;
 
     public Hero() {
         xPosHero = 500;

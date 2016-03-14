@@ -172,7 +172,7 @@ public class Level2 extends Level {
         rails.add(rail);
     }
 
-    @Override
+    /*@Override
     public void createEnemies() {
         enemies.add(new Enemy(40, 40, rails.get(0), 69));
         enemies.add(new Enemy(40, 40, rails.get(0), 69));
@@ -204,7 +204,7 @@ public class Level2 extends Level {
         enemies.add(new Enemy(40, 40, rails.get(0), 69));
         enemies.add(new Enemy(40, 40, rails.get(0), 69));
         enemies.add(new Enemy(40, 40, rails.get(0), 69));
-    }
+    }*/
 
     @Override
     public void createWalls() {

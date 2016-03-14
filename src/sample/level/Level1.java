@@ -40,11 +40,11 @@ public class Level1 extends Level {
         rails.add(rail);
     }
 
-    @Override
+    /*@Override
     public void createEnemies() {
         Enemy enemy = new Enemy(40, 40, rails.get(0), 0);
         enemies.add(enemy);
-    }
+    }*/
 
     @Override
     public void createWalls() {

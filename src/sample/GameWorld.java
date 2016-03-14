@@ -25,15 +25,20 @@ public class GameWorld {
 
     public List<Bullet> bullets;
     public List<Event> events;
+    public List<Enemy> enemies;
+    public List<Armor> armors;
+    public List<MedicalKit> medkits;
 
-    public GameWorld() {
+    GameBehavior behavior;
+
+    public GameWorld(double startTime) {
         level = new Level2();
         hero = new Hero();
         bullets = new ArrayList<>();
         events = new ArrayList<>(1000);
-        for (Enemy enemy : level.enemies) {
-            enemy.target = hero;
-        }
+        enemies = new ArrayList<>();
+        behavior = new GameBehavior(this, startTime);
+        //enemies.add(new Enemy(40, 40, level.rails.get(0), 69, getHero()));
     }
 
     public void addBullet (Bullet bullet) {
@@ -43,50 +48,51 @@ public class GameWorld {
     /*This function update game world*/
     public void update(double time) {
 
-        long t0 = System.currentTimeMillis();
+        //long t0 = System.currentTimeMillis();
 
         checkHeroAroundEnemys();
-        long t1 = System.currentTimeMillis();
+        //long t1 = System.currentTimeMillis();
 
         checkBulletCollision(time);
-        long t2 = System.currentTimeMillis();
+        //long t2 = System.currentTimeMillis();
 
         checkHeroCollision();
-        long t3 = System.currentTimeMillis();
+        //long t3 = System.currentTimeMillis();
 
         checkInactiveEvents();
-        long t4 = System.currentTimeMillis();
+        //long t4 = System.currentTimeMillis();
 
         for (Bullet bullet : bullets) {
             bullet.move(time);
         }
-        long t5 = System.currentTimeMillis();
+        //long t5 = System.currentTimeMillis();
 
-        for (Enemy enemy : level.enemies) {
+        for (Enemy enemy : enemies) {
             enemy.update();
             if (enemy.inAttackState) {
                 checkEnemyAttack(enemy, time);
             }
         }
-        long t6 = System.currentTimeMillis();
+        //long t6 = System.currentTimeMillis();
 
         hero.update(heroSpeed);
-        long t7 = System.currentTimeMillis();
+        //long t7 = System.currentTimeMillis();
 
         if (hero.lefMouseClicked == true) {
             checkAttack(time);
         }
-        long t8 = System.currentTimeMillis();
+        //long t8 = System.currentTimeMillis();
 
         if (hero.weapon.isMeleeAttack()) {
             if (hero.attack == true) {
                 makeAttack(time);
             }
         }
-        long t9 = System.currentTimeMillis();
+        //long t9 = System.currentTimeMillis();
 
-        System.out.println("[" + (t1-t0) + " " +(t2-t1)+ " " +(t3-t2)+ " "+(t4-t3)+ " "
-                +(t5-t4)+ " "+(t6-t5)+ " "+(t7-t6)+ " "+(t8-t7)+ " "+(t9-t8)+ "]");
+        /*System.out.println("[" + (t1-t0) + " " +(t2-t1)+ " " +(t3-t2)+ " "+(t4-t3)+ " "
+s                +(t5-t4)+ " "+(t6-t5)+ " "+(t7-t6)+ " "+(t8-t7)+ " "+(t9-t8)+ "]");*/
+        behavior.doBehavior(time);
     }
 
     private void checkInactiveEvents() {
@@ -149,14 +155,14 @@ public class GameWorld {
         if (hero.weapon.isRangeAttack()) {
             makeShake = true;
             hero.weapon.holder--;
-            addBullet(new Bullet(time, hero.xPosHero - 10*Math.cos(hero.angle), hero.yPosHero - 10*Math.sin(hero.angle), hero.angle,
+            addBullet(new Bullet(time, hero.xPosHero - 20*Math.cos(hero.angle), hero.yPosHero - 20*Math.sin(hero.angle), hero.angle,
                     hero.weapon.getColliderWidth(), hero.weapon.getColliderHeight(), false,
                     hero.weapon.getBulletVelocity(), hero.weapon.getBulletDamage()));
         }
     }
 
     private void checkHeroAroundEnemys() {
-        for (Enemy enemy : level.enemies) {
+        for (Enemy enemy : enemies) {
             // Create ray from enemy to hero
             Line line = new Line(enemy.getxPos(), enemy.getyPos(), hero.xPosHero, hero.yPosHero);
             // Intersection between ray (from enemy to hero) and wall
@@ -190,11 +196,11 @@ public class GameWorld {
             }
             // Check collision between bullet and enemies
             if (bullets.get(i).enemyBullet == false) {
-                for (int j = 0; j < level.enemies.size(); j++) {
-                    Polygon rect = level.enemies.get(j).getCollider();
+                for (int j = 0; j < enemies.size(); j++) {
+                    Polygon rect = enemies.get(j).getCollider();
                     if (bullets.get(i).collider.getBoundsInParent().intersects(rect.getBoundsInParent())) {
                         flagOfMustRemoved = true;
-                        level.enemies.remove(j);
+                        enemies.remove(j);
                     }
                 }
             }
@@ -217,10 +223,10 @@ public class GameWorld {
     }
 
     private void checkHeroMeleeWeaponCollision() {
-        for (int j = 0; j < level.enemies.size(); j++) {
-            Polygon rect = level.enemies.get(j).getCollider();
+        for (int j = 0; j < enemies.size(); j++) {
+            Polygon rect = enemies.get(j).getCollider();
             if (hero.colliderWeapon.getBoundsInParent().intersects(rect.getBoundsInParent())) {
-                level.enemies.remove(j);
+                enemies.remove(j);
                 //System.out.println("intersects");
                 //System.out.println(hero.colliderWeapon.getPoints());
             }
