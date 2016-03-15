@@ -9,16 +9,19 @@ public class SpriteManagerAim extends SpriteManager {
 
     public SpriteManagerAim(double duration) {
         super(duration);
-        size[0] = 40;
-        size[1] = 40;
     }
 
     @Override
     public void loadImages() {
         Image image;
-        addSprite("aim/aim.png");
-        addSprite("aim/aim1.png");
-        addSprite("aim/aim2.png");
-        addSprite("aim/aim1.png");
+        addSprite("aim/1.png");
+        addSprite("aim/2.png");
+        addSprite("aim/3.png");
+        addSprite("aim/4.png");
+        addSprite("aim/5.png");
+        addSprite("aim/4.png");
+        addSprite("aim/3.png");
+        addSprite("aim/2.png");
+
     }
 }

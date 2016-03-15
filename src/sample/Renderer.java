@@ -1,13 +1,9 @@
 package sample;
 
 import javafx.collections.ObservableList;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Polygon;
 import sample.level.Level;
 import sample.spriteManagers.*;
 
@@ -50,16 +46,22 @@ public class Renderer {
 
     private void loadSpriteManagers() {
         spriteManagers.add(new SpriteManagerBg(0.4));
-        spriteManagers.add(new SpriteManagerAim(0.3));
-        spriteManagers.add(new SpriteManagerHero(0.2));
-        spriteManagers.add(new SpriteManagerShot1(0.1));
+        spriteManagers.add(new SpriteManagerAim(0.05));
+        spriteManagers.add(new SpriteManagerHero(0.05));
+        spriteManagers.add(new SpriteManagerShot1(0.05));
         spriteManagers.add(new SpriteManagerExplosion(0.1));
         spriteManagers.get(3).setSingleAnimation(true);
+        spriteManagers.add(new SpriteManagerGanja(0.1));
+        spriteManagers.add(new SpriteManagerHeroShadow(0.05));
     }
 
     public void loadStaticImages() {
         staticImages.add(new Image(getClass().getResource( "textures/light.png").toExternalForm()));
         staticImages.add(new Image(getClass().getResource( "textures/bullets/bullet1.png").toExternalForm()));
+        staticImages.add(new Image(getClass().getResource( "textures/kitShadow.png").toExternalForm()));
+        staticImages.add(new Image(getClass().getResource( "textures/medkit1.png").toExternalForm()));
+        staticImages.add(new Image(getClass().getResource( "textures/armorkit1.png").toExternalForm()));
+        staticImages.add(new Image(getClass().getResource( "textures/bulletkit1.png").toExternalForm()));
     }
 
     // MAIN RENDERING FUNCTION
@@ -73,16 +75,17 @@ public class Renderer {
         context.save();
         if (world.makeShake) {
             if (shakeSwitcher) {
-                context.translate(5 * Math.cos(alfa), 5 * Math.sin(alfa));
+                context.translate(7 * Math.cos(alfa), 7 * Math.sin(alfa));
                 shakeSwitcher = false;
             } else {
-                context.translate(-5 * Math.cos(alfa), -5 * Math.sin(alfa));
+                context.translate(-7 * Math.cos(alfa), -7 * Math.sin(alfa));
                 shakeSwitcher = true;
             }
         }
 
         drawGrounds();
-        drawLightUnderHero();
+        //drawLightUnderHero();
+        drawAmmo(time);
         drawBullets();
         drawEnemies();
         drawHero();
@@ -95,6 +98,127 @@ public class Renderer {
 
         world.makeShake = false;
 
+    }
+
+    private void drawAmmo(double time) {
+        drawMedicalKits();
+        drawArmorKits();
+        drawBulletKits();
+        drawGanja(time);
+    }
+
+    private void drawGanja(double time) {
+        for (Ganja ganj : world.ganjas) {
+            Image img = spriteManagers.get(5).getSprite(time);
+            context.drawImage(img,
+                    ganj.xPos - world.getHero().xPosHero + xWindowCenter + xDeltaPos-img.getWidth() / 2 - ganj.step,
+                    ganj.yPos - world.getHero().yPosHero + yWindowCenter + yDeltaPos-img.getHeight() / 2 - ganj.step);
+
+            if (ganj.duration == 0) {
+                if (ganj.direction) {
+                    ganj.step++;
+                    if (ganj.step >= 3) {
+                        ganj.direction = false;
+                    }
+                } else {
+                    ganj.step--;
+                    if (ganj.step <= 0) {
+                        ganj.direction = true;
+                    }
+                }
+                ganj.duration  = 3;
+            } ganj.duration --;
+        }
+    }
+
+    private void drawBulletKits() {
+        for (BulletsKit bulkit : world.bulletsKits) {
+            // draw shadow of kits
+            Image img = staticImages.get(2);
+            context.drawImage(img,
+                    bulkit.xPos - world.getHero().xPosHero + xWindowCenter + xDeltaPos-img.getWidth() / 2 + bulkit.step,
+                    bulkit.yPos - world.getHero().yPosHero + yWindowCenter + yDeltaPos-img.getHeight() / 2 + bulkit.step);
+            // draw med kits
+            img = staticImages.get(5);
+            context.drawImage(img,
+                    bulkit.xPos - world.getHero().xPosHero + xWindowCenter + xDeltaPos-img.getWidth() / 2 - bulkit.step,
+                    bulkit.yPos - world.getHero().yPosHero + yWindowCenter + yDeltaPos-img.getHeight() / 2 - bulkit.step);
+
+            if (bulkit.duration == 0) {
+                if (bulkit.direction) {
+                    bulkit.step++;
+                    if (bulkit.step >= 3) {
+                        bulkit.direction = false;
+                    }
+                } else {
+                    bulkit.step--;
+                    if (bulkit.step <= 0) {
+                        bulkit.direction = true;
+                    }
+                }
+                bulkit.duration  = 4;
+            } bulkit.duration --;
+        }
+    }
+
+    private void drawArmorKits() {
+        for (Armor arm : world.armors) {
+            // draw shadow of kits
+            Image img = staticImages.get(2);
+            context.drawImage(img,
+                    arm.xPos - world.getHero().xPosHero + xWindowCenter + xDeltaPos-img.getWidth() / 2 + arm.step,
+                    arm.yPos - world.getHero().yPosHero + yWindowCenter + yDeltaPos-img.getHeight() / 2 + arm.step);
+            // draw med kits
+            img = staticImages.get(4);
+            context.drawImage(img,
+                    arm.xPos - world.getHero().xPosHero + xWindowCenter + xDeltaPos-img.getWidth() / 2 - arm.step,
+                    arm.yPos - world.getHero().yPosHero + yWindowCenter + yDeltaPos-img.getHeight() / 2 - arm.step);
+
+            if (arm.duration == 0) {
+                if (arm.direction) {
+                    arm.step++;
+                    if (arm.step >= 3) {
+                        arm.direction = false;
+                    }
+                } else {
+                    arm.step--;
+                    if (arm.step <= 0) {
+                        arm.direction = true;
+                    }
+                }
+                arm.duration  = 4;
+            } arm.duration --;
+        }
+    }
+
+    private void drawMedicalKits () {
+        for (MedicalKit med : world.medKits) {
+            // draw shadow of kits
+            Image img = staticImages.get(2);
+            context.drawImage(img,
+                    med.xPos - world.getHero().xPosHero + xWindowCenter + xDeltaPos-img.getWidth() / 2 + med.step,
+                    med.yPos - world.getHero().yPosHero + yWindowCenter + yDeltaPos-img.getHeight() / 2 + med.step);
+            // draw med kits
+            img = staticImages.get(3);
+            context.drawImage(img,
+                    med.xPos - world.getHero().xPosHero + xWindowCenter + xDeltaPos-img.getWidth() / 2 - med.step,
+                    med.yPos - world.getHero().yPosHero + yWindowCenter + yDeltaPos-img.getHeight() / 2 - med.step);
+
+            if (med.duration == 0) {
+                if (med.direction) {
+                    med.step++;
+                    if (med.step >= 3) {
+                        med.direction = false;
+                    }
+                } else {
+                    med.step--;
+                    if (med.step <= 0) {
+                        med.direction = true;
+                    }
+                }
+                med.duration  = 3;
+            } med.duration --;
+        }
     }
 
     private void drawEevents() {
@@ -246,10 +370,27 @@ public class Renderer {
         context.save();
         // Set axis of rotation into center of hero sprite
         context.translate((xWindowCenter + xDeltaPos) , (yWindowCenter + yDeltaPos) );
+        // Draw hero shadow
+
         // Rotate hero sprite
-        context.rotate(alfa * 180/Math.PI);
+        context.rotate(alfa * 180/Math.PI - 90);
+        // Draw hero
+        Image img = spriteManagers.get(6).getSprite(time);
+        int currentIndexOfwakSprite = spriteManagers.get(2).indexOfCurrentSprite(time);
+        int step = -10;
+        switch (currentIndexOfwakSprite) {
+            case 0: step = -18; break;
+            case 1: step = -16; break;
+            case 2: step = -14; break;
+            case 3: step = -12; break;
+            case 4: step = -10; break;
+            case 5: step = -12; break;
+            case 6: step = -14; break;
+            case 7: step = -16; break;
+        }
+        context.drawImage(img, -img.getWidth()/2+step, -img.getHeight()/2+5);
         if (world.getHero().drawShotState == false) {
-            Image img = spriteManagers.get(2).getSprite(time);
+            img = spriteManagers.get(2).getSprite(time);
             context.drawImage(img, -img.getWidth()/2, -img.getHeight()/2);
         } else {
             SpriteManager sm = spriteManagers.get(3);
@@ -257,7 +398,7 @@ public class Renderer {
                 world.getHero().indexOfAnimation++;
                 world.getHero().durationShotAnimation = world.getHero().constDuration;
             }
-            Image img = sm.getSpriteById(world.getHero().indexOfAnimation);
+            img = sm.getSpriteById(world.getHero().indexOfAnimation);
             world.getHero().durationShotAnimation--;
             context.drawImage(img, -img.getWidth()/2, -img.getHeight()/2);
             if (world.getHero().indexOfAnimation == sm.getCollectionSize() - 1) {
@@ -265,11 +406,7 @@ public class Renderer {
                 world.getHero().indexOfAnimation = 0;
             }
         }
-        //context.setFill(Color.BLACK);
-        /*if (world.getHero().attack == true) {
-            context.setFill(Color.GREEN);
-        }*/
-        //context.fillRect(-20, -20, 40, 40);
+
 
         context.restore();
     }
@@ -284,10 +421,8 @@ public class Renderer {
 
     private void drawAim() {
         context.drawImage(spriteManagers.get(1).getSprite(time),
-                xPos - 30 / 2,
-                yPos - 30 / 2,
-                30,
-                30);
+                xPos - 50,
+                yPos - 50);
     }
 
 

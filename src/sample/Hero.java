@@ -42,7 +42,7 @@ public class Hero {
     public Hero() {
         xPosHero = 500;
         yPosHero = 399;
-        collider = new Rectangle(xPosHero-10, yPosHero-10, 20, 20);
+        collider = new Rectangle(xPosHero-35, yPosHero-35, 60, 60);
         weapon = new Weapon(4);
         colliderWeapon = new Polygon();
         setColliderWeapon();
@@ -83,8 +83,8 @@ public class Hero {
         }
 
         // Setting new collider's position
-        collider.setX(xPosHero-10);
-        collider.setY(yPosHero-10);
+        collider.setX(xPosHero-35);
+        collider.setY(yPosHero-35);
 
         setColliderWeapon();
 

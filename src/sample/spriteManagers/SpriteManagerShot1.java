@@ -10,11 +10,11 @@ public class SpriteManagerShot1 extends SpriteManager {
     }
     @Override
     public void loadImages() {
-        addSprite("heroDefault/hero11.png");
-        addSprite("heroDefault/hero12.png");
-        addSprite("heroDefault/hero13.png");
-        addSprite("heroDefault/hero14.png");
-        addSprite("heroDefault/hero15.png");
-        addSprite("heroDefault/hero16.png");
+        addSprite("heroshot/1.png");
+        addSprite("heroshot/2.png");
+        addSprite("heroshot/3.png");
+        addSprite("heroshot/4.png");
+        addSprite("heroshot/5.png");
+        addSprite("heroshot/6.png");
     }
 }

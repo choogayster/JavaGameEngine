@@ -3,9 +3,9 @@ package sample;
 import javafx.scene.shape.Rectangle;
 
 /**
- * Created by vlad on 14.03.2016.
+ * Created by vlad on 15.03.2016.
  */
-public class BulletsKit {
+public class Ganja {
     public double xPos;
     public double yPos;
     public Rectangle collider;
@@ -17,8 +17,7 @@ public class BulletsKit {
     public int step = 0;
     public boolean direction = true;
 
-    /*regenerate 30% bullets*/
-    public BulletsKit (double xPos, double yPos) {
+    public Ganja(double xPos, double yPos) {
         this.xPos = xPos;
         this.yPos = yPos;
         collider = new Rectangle(xPos - colliderWidth / 2, yPos - colliderHeight / 2, colliderWidth, colliderHeight);

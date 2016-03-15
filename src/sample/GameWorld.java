@@ -26,8 +26,11 @@ public class GameWorld {
     public List<Bullet> bullets;
     public List<Event> events;
     public List<Enemy> enemies;
+    // Ammunition
+    public List<MedicalKit> medKits;
     public List<Armor> armors;
-    public List<MedicalKit> medkits;
+    public List<BulletsKit> bulletsKits;
+    public List<Ganja> ganjas;
 
     GameBehavior behavior;
 
@@ -37,14 +40,14 @@ public class GameWorld {
         bullets = new ArrayList<>();
         events = new ArrayList<>(1000);
         enemies = new ArrayList<>();
+        // Ammo init
+        medKits = new ArrayList<>();
+        armors = new ArrayList<>();
+        bulletsKits = new ArrayList<>();
+        ganjas = new ArrayList<>();
+        // Game behavir intit
         behavior = new GameBehavior(this, startTime);
-        //enemies.add(new Enemy(40, 40, level.rails.get(0), 69, getHero()));
     }
-
-    public void addBullet (Bullet bullet) {
-        bullets.add(bullet);
-    }
-
     /*This function update game world*/
     public void update(double time) {
 
@@ -93,6 +96,10 @@ public class GameWorld {
         /*System.out.println("[" + (t1-t0) + " " +(t2-t1)+ " " +(t3-t2)+ " "+(t4-t3)+ " "
 s                +(t5-t4)+ " "+(t6-t5)+ " "+(t7-t6)+ " "+(t8-t7)+ " "+(t9-t8)+ "]");*/
         behavior.doBehavior(time);
+    }
+
+    public void addBullet (Bullet bullet) {
+        bullets.add(bullet);
     }
 
     private void checkInactiveEvents() {
@@ -155,9 +162,14 @@ s                +(t5-t4)+ " "+(t6-t5)+ " "+(t7-t6)+ " "+(t8-t7)+ " "+(t9-t8)+ "
         if (hero.weapon.isRangeAttack()) {
             makeShake = true;
             hero.weapon.holder--;
-            addBullet(new Bullet(time, hero.xPosHero - 20*Math.cos(hero.angle), hero.yPosHero - 20*Math.sin(hero.angle), hero.angle,
+            addBullet(new Bullet(time,
+                    hero.xPosHero - 20*Math.cos(hero.angle),
+                    hero.yPosHero - 20*Math.sin(hero.angle), hero.angle,
                     hero.weapon.getColliderWidth(), hero.weapon.getColliderHeight(), false,
                     hero.weapon.getBulletVelocity(), hero.weapon.getBulletDamage()));
+            events.add(new Event(1,
+                    (int)(hero.xPosHero - 20*Math.cos(hero.angle)),
+                    (int)(hero.yPosHero - 20*Math.sin(hero.angle))));
         }
     }
 
@@ -220,6 +232,43 @@ s                +(t5-t4)+ " "+(t6-t5)+ " "+(t7-t6)+ " "+(t8-t7)+ " "+(t9-t8)+ "
         checkUpCollision(heroColliderCheck);
         checkDownCollision(heroColliderCheck);
 
+        checkCollisionWithAmmo();
+
+    }
+
+    private void checkCollisionWithAmmo() {
+        // Check collision with medkits
+        for (int i = 0; i < medKits.size(); i++) {
+            Rectangle r = medKits.get(i).collider;
+            if (hero.collider.getBoundsInParent().intersects(r.getBoundsInParent())) {
+                medKits.remove(i);
+
+            }
+        }
+        // Check collision with armorkits
+        for (int i = 0; i < armors.size(); i++) {
+            Rectangle r = armors.get(i).collider;
+            if (hero.collider.getBoundsInParent().intersects(r.getBoundsInParent())) {
+                armors.remove(i);
+
+            }
+        }
+        // Check collision with bulletkits
+        for (int i = 0; i < bulletsKits.size(); i++) {
+            Rectangle r = bulletsKits.get(i).collider;
+            if (hero.collider.getBoundsInParent().intersects(r.getBoundsInParent())) {
+                bulletsKits.remove(i);
+
+            }
+        }
+        // Check collision with ganja
+        for (int i = 0; i < ganjas.size(); i++) {
+            Rectangle r = ganjas.get(i).collider;
+            if (hero.collider.getBoundsInParent().intersects(r.getBoundsInParent())) {
+                ganjas.remove(i);
+
+            }
+        }
     }
 
     private void checkHeroMeleeWeaponCollision() {

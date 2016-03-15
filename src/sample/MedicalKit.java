@@ -14,6 +14,12 @@ public class MedicalKit {
     final public int colliderWidth = 40;
     final public int colliderHeight = 40;
 
+    // Properties for animation
+    public int duration = 3;
+    public int step = 0;
+    public boolean direction = true;
+
+
     public MedicalKit(double xPos, double yPos, int id) {
         this.xPos = xPos;
         this.yPos = yPos;
